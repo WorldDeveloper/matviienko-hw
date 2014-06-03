@@ -20,12 +20,14 @@ String::String()
 {
 	maxLen = 80;
 	newChar();
+	strcpy(value, "\0");
 }
 
 String::String(int length)
 {
 	maxLen = length;
 	newChar();
+	strcpy(value, "\0");
 }
 
 String::String(char *initString)
@@ -49,10 +51,11 @@ String::~String()
 
 void String::setString(char *initString)
 {
-	if (maxLen < strlen(initString + 1))
+	int initSize = strlen(initString) + 1;
+	if (maxLen < initSize)
 	{
 		delete[] value;
-		maxLen = strlen(initString) + 1;
+		maxLen = initSize;
 		newChar();
 	}
 	strcpy(value, initString);
