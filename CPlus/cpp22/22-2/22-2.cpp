@@ -13,6 +13,7 @@ void main()
 {
 	cout << "Test A:\n";
 	String a;
+	cout << a;
 	a.setString("...test A is passed");
 	cout << a;
 
