@@ -11,13 +11,13 @@ using namespace std;
 
 void main()
 {
-	Date firstDate(1, 1, 2000);
+	Date firstDate(2, 1, 2013);
 	cout << "First Date (d,m,y):" << firstDate;
 
-	Date secondDate(20, 2, 2014);
+	Date secondDate(1, 1, 2014);
 	cout << "Second Date (d,m,y):" << secondDate;
 
-	cout << endl << "Second date - First date= " << secondDate-firstDate;
+	cout << endl << "Second date - First date= " << secondDate-firstDate<<" days";
 
 	while (true)
 	{
