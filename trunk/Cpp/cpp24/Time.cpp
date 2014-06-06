@@ -6,8 +6,10 @@ bool Time::SetTime(short hour, short min, short sec, bool american)
 	{
 		mHour = hour; 
 	}
-
-	else { return false; }
+	else
+	{ 
+		return false;
+	}
 
 	if (min >= 0 && min < 60) { mMin = min; }
 	else { return false; }
