@@ -6,23 +6,25 @@ template <typename T>
 class darray
 {
 	T *array;
+	int capacity;
 	int size;
 public:
 	void newArray();
-	darray(T iSize);
+	darray(T iCapacity);
 	~darray();
 	darray(const darray &source);
 
 	T &operator[](int index);
-	darray operator=(darray result);
-	darray operator+(darray operator2);
-	darray operator-(darray operator2);
-	darray operator++();
+	darray& operator=(const darray& result);	
+	darray operator+(const darray& operator2);
+	darray operator-(const darray& operator2);
+	darray &operator++(); //использовать ссылку, чтобы вернуть "самого себя"?
 	darray operator++(int);
-	darray operator--();
+	darray &operator--();//использовать ссылку, чтобы вернуть "самого себя"?
 	darray operator--(int);
 
 	int end(){ return size; }
+	void pushBack(const T value);
 };
 
 template <typename T>
@@ -30,30 +32,28 @@ void darray<T>::newArray()
 {
 	try
 	{
-		array = new T[size];
+		array = new T[capacity];
 	}
 	catch (bad_alloc error)
 	{
 		cout << endl << "Error: out of memory!" << endl;
 		exit(1);
 	}
+	size = 0;
 }
 
+
 template <typename T>
-darray<T>::darray(T iSize)
+darray<T>::darray(T iCapacity)
 {
-	size = iSize;
+	capacity = iCapacity;
 	newArray();
-	for (int i = 0; i < size; ++i)
-	{
-		array[i] = 0;
-	}
 }
 
 template <typename T>
 darray<T>::~darray()
 {
-	if (array) { delete[] array; }
+	 delete[] array; 
 }
 
 template <typename T>
@@ -73,95 +73,100 @@ T &darray<T>::operator[](int index)
 template <typename T>
 darray<T>::darray(const darray &source)
 {
-	size = source.size;
+	capacity = source.capacity;
 	newArray();
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < source.size; ++i)
 	{
-		array[i] = source.array[i];
+		pushBack(source.array[i]);
 	}
 }
 
 template <typename T>
-darray<T> darray<T>::operator=(darray<T> result)
+darray<T> &darray<T>::operator=(const darray<T>& result)
 {
-	if (size != result.size)
+	if (this == &result)
 	{
-		size = result.size;
+		return *this;		
+	}
+
+	if (capacity != result.capacity)
+	{
+		capacity = result.capacity;
 		delete[] array;
 		newArray();
 	}
-	for (int i = 0; i < size; ++i)
+
+	size = 0;
+	for (int i = 0; i < result.size; ++i)
 	{
-		array[i] = result[i];
+		pushBack(result.array[i]);
 	}
 	return *this;
 }
 
 template <typename T>
-darray<T> darray<T>::operator+(darray<T> operator2)
+darray<T> darray<T>::operator+(const darray<T>& operator2)
 {
-	int tmpSize;
+	int tmpCapacity;
 	if (size > operator2.size)
 	{
-		tmpSize = size;
+		tmpCapacity = size;
 	}
 	else
 	{
-		tmpSize = operator2.size;
+		tmpCapacity = operator2.size;
 	}
-	darray<T> tmp(tmpSize);
+	darray<T> tmp(tmpCapacity);
 
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < tmpCapacity; ++i)
 	{
-		tmp[i] = array[i];
-	}
-
-	for (int i = 0; i < operator2.size; ++i)
-	{
-		tmp[i] += operator2[i];
+		int o1 = 0;
+		if (i < size) o1 = array[i];
+		int o2 = 0;
+		if (i < operator2.size) o2 = operator2.array[i];
+		tmp.pushBack(o1 + o2);	
 	}
 
 	return tmp;
 }
 
 template <typename T>
-darray<T> darray<T>::operator-(darray<T> operator2)
+darray<T> darray<T>::operator-(const darray<T>& operator2)
 {
-	int tmpSize;
+	int tmpCapacity;
 	if (size > operator2.size)
 	{
-		tmpSize = size;
+		tmpCapacity = size;
 	}
 	else
 	{
-		tmpSize = operator2.size;
+		tmpCapacity = operator2.size;
 	}
-	darray<T> tmp(tmpSize);
-	for (int i = 0; i < size; ++i)
-	{
-		tmp[i] = array[i];
-	}
+	darray<T> tmp(tmpCapacity);
 
-	for (int i = 0; i < operator2.size; ++i)
+	for (int i = 0; i < tmpCapacity; ++i)
 	{
-		tmp[i] -= operator2[i];
+		int o1 = 0;
+		if (i < size) o1 = array[i];
+		int o2 = 0;
+		if (i < operator2.size) o2 = operator2.array[i];
+		tmp.pushBack(o1 - o2);
 	}
 
 	return tmp;
 }
 
 template <typename T>
-darray<T> darray<T>::operator++()
+darray<T>& darray<T>::operator++()
 {
-	size++;
-	darray<T> tmp(size);
+	capacity++;
+	darray<T> tmp(capacity);
 	tmp = *this;
 
 	delete[] array;
 	newArray();
 
 	*this = tmp;
-	array[size - 1] = 0;
 
 	return *this;
 }
@@ -169,17 +174,18 @@ darray<T> darray<T>::operator++()
 template <typename T>
 darray<T> darray<T>::operator++(int)
 {	
-	darray<T> tmp(size);
+	darray<T> tmp(capacity);
 	tmp = *this;
 	++(*this);
 	return tmp;
 }
 
 template <typename T>
-darray<T> darray<T>::operator--()
+darray<T>& darray<T>::operator--()
 {
+	capacity--;
 	size--;
-	darray<T> tmp(size);
+	darray<T> tmp(capacity);
 	tmp = *this;
 	
 	delete[] array;	
@@ -193,8 +199,19 @@ darray<T> darray<T>::operator--()
 template <typename T>
 darray<T> darray<T>::operator--(int)
 {
-	darray<T> tmp(size);
+	darray<T> tmp(capacity);
 	tmp = *this;
 	--(*this);
 	return tmp;
+}
+
+template <typename T>
+void darray<T>::pushBack(const T value)
+{
+	if (size >= capacity)
+	{
+		array++;
+	}
+	array[size] = value;
+	size++;
 }
