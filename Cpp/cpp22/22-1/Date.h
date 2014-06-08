@@ -11,7 +11,7 @@ public:
 	Date();
 	Date(int iDay, int iMonth, int iYear);
 	Date operator+(int addedDays);
-	int operator-(Date secondOperand);
+	int operator-(Date date2);
 	friend ostream &operator<<(ostream &stream, Date tmp);
 };
 

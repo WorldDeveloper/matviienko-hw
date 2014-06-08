@@ -37,7 +37,7 @@ Date Date::operator+(int addedDays)
 	return tmp;
 }
 
-int Date::operator-(Date secondOperand)
+int Date::operator-(Date date2)
 {	
 	struct tm operand1 = { 0 };
 	operand1.tm_year = year-1900;
@@ -45,9 +45,9 @@ int Date::operator-(Date secondOperand)
 	operand1.tm_mday = day;
 
 	struct tm operand2 = { 0 };
-	operand2.tm_year = secondOperand.year-1900;
-	operand2.tm_mon = secondOperand.month-1;
-	operand2.tm_mday = secondOperand.day;
+	operand2.tm_year = date2.year-1900;
+	operand2.tm_mon = date2.month-1;
+	operand2.tm_mday = date2.day;
 	
 	time_t d1 = mktime(&operand1);
 	time_t d2 = mktime(&operand2);
