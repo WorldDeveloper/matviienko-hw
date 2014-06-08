@@ -1,4 +1,4 @@
-#include <new>
+п»ї#include <new>
 #include <iostream>
 using namespace std;
 
@@ -18,9 +18,9 @@ public:
 	darray& operator=(const darray& result);	
 	darray operator+(const darray& operator2);
 	darray operator-(const darray& operator2);
-	darray &operator++(); //использовать ссылку, чтобы вернуть "самого себя"?
+	darray &operator++(); //РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃСЃС‹Р»РєСѓ, С‡С‚РѕР±С‹ РІРµСЂРЅСѓС‚СЊ "СЃР°РјРѕРіРѕ СЃРµР±СЏ"?
 	darray operator++(int);
-	darray &operator--();//использовать ссылку, чтобы вернуть "самого себя"?
+	darray &operator--();//РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃСЃС‹Р»РєСѓ, С‡С‚РѕР±С‹ РІРµСЂРЅСѓС‚СЊ "СЃР°РјРѕРіРѕ СЃРµР±СЏ"?
 	darray operator--(int);
 
 	int end(){ return size; }
