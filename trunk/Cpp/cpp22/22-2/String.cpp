@@ -3,7 +3,7 @@
 #include <new>
 using namespace std;
 
-void String::newChar()
+void String::allocateString()
 {
 	try
 	{
@@ -19,61 +19,57 @@ void String::newChar()
 String::String()
 {
 	maxLen = 80;
-	newChar();
+	curLen = 0;
+	allocateString();
 	strcpy(value, "\0");
 }
 
 String::String(int length)
 {
-	maxLen = length;
-	newChar();
+	maxLen = length+1;
+	curLen = 0;
+	allocateString();
 	strcpy(value, "\0");
 }
 
 String::String(char *initString)
 {
-	maxLen = strlen(initString) + 1;
-	newChar();
+	curLen = strlen(initString);
+	maxLen = curLen+1;
+	allocateString();
 	strcpy(value, initString);
 }
 
 String::String(const String &string)
 {
 	maxLen = string.maxLen;
-	newChar();
+	curLen = string.curLen;
+	allocateString();
 	strcpy(value, string.value);
 }
 
 String::~String()
 {
-	if (value) delete[] value;
+	 delete[] value;
 }
 
 void String::setString(char *initString)
 {
-	int initSize = strlen(initString) + 1;
-	if (maxLen < initSize)
+	int initLen = strlen(initString)+ 1;
+	if (maxLen < initLen)
 	{
 		delete[] value;
-		maxLen = initSize;
-		newChar();
+		maxLen = initLen;		
+		allocateString();
 	}
+	curLen = initLen-1;
 	strcpy(value, initString);
 }
 
 
-String String::operator*(String string)
+String String::operator*(const String& string)
 {
-	int tmpLen;
-	if (strlen(value) > strlen(string.value))
-	{
-		tmpLen = strlen(value)+1;
-	}
-	else
-	{
-		tmpLen = strlen(string.value)+1;
-	}
-	String tmp(tmpLen);	
+	String tmp(curLen);	
 	char *result = tmp.value;
 	*result = '\0';
 
@@ -99,15 +95,21 @@ String String::operator*(String string)
 	return tmp;
 }
 
-String String::operator=(String string)
+String &String::operator=( const String& string)
 {	
-	if (maxLen < strlen(string.value + 1))
+	if (this == &string)
+	{
+		return *this;
+	}
+
+	if (maxLen < string.curLen+1)
 	{
 		delete[] value;
-		maxLen = strlen(string.value) + 1;
-		newChar();
+		maxLen = string.curLen + 1;
+		allocateString();
 	}
 	maxLen = string.maxLen;
+	curLen = string.curLen;
 	strcpy(value, string.value);
 
 	return *this;
