@@ -7,7 +7,7 @@ class String
 {
 	char *value;
 	int maxLen;
-	int curLen;
+	int realLen;
 public:
 	void allocateString();
 	String();
@@ -16,6 +16,7 @@ public:
 	String(const String &string);
 	~String();	
 	void setString(char *initString);
+	int getLength(){ return realLen; }
 	String operator*(const String& string);
 	String &operator=( const String& string);
 	friend ostream &operator<<(ostream &stream, String string);
