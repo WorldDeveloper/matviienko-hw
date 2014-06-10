@@ -19,7 +19,7 @@ void String::allocateString()
 String::String()
 {
 	maxLen = 80;
-	curLen = 0;
+	realLen = 0;
 	allocateString();
 	strcpy(value, "\0");
 }
@@ -27,15 +27,15 @@ String::String()
 String::String(int length)
 {
 	maxLen = length+1;
-	curLen = 0;
+	realLen = 0;
 	allocateString();
 	strcpy(value, "\0");
 }
 
 String::String(char *initString)
 {
-	curLen = strlen(initString);
-	maxLen = curLen+1;
+	realLen = strlen(initString);
+	maxLen = realLen+1;
 	allocateString();
 	strcpy(value, initString);
 }
@@ -43,7 +43,7 @@ String::String(char *initString)
 String::String(const String &string)
 {
 	maxLen = string.maxLen;
-	curLen = string.curLen;
+	realLen = string.realLen;
 	allocateString();
 	strcpy(value, string.value);
 }
@@ -55,21 +55,21 @@ String::~String()
 
 void String::setString(char *initString)
 {
-	int initLen = strlen(initString)+ 1;
+	int initLen = strlen(initString)+1;
 	if (maxLen < initLen)
 	{
 		delete[] value;
 		maxLen = initLen;		
 		allocateString();
 	}
-	curLen = initLen-1;
+	realLen = initLen-1;
 	strcpy(value, initString);
 }
 
 
 String String::operator*(const String& string)
 {
-	String tmp(curLen);	
+	String tmp(realLen);	
 	char *result = tmp.value;
 	*result = '\0';
 
@@ -88,6 +88,7 @@ String String::operator*(const String& string)
 				*result = *s1;
 				++result;
 				*result = '\0';
+				++tmp.realLen;
 				break;
 			}
 		}
@@ -102,14 +103,13 @@ String &String::operator=( const String& string)
 		return *this;
 	}
 
-	if (maxLen < string.curLen+1)
+	if (maxLen < string.maxLen)
 	{
 		delete[] value;
-		maxLen = string.curLen + 1;
+		maxLen = string.maxLen;
 		allocateString();
 	}
-	maxLen = string.maxLen;
-	curLen = string.curLen;
+	realLen = string.realLen;
 	strcpy(value, string.value);
 
 	return *this;
@@ -122,6 +122,8 @@ ostream &operator<<(ostream &stream, String string)
 }
 istream &operator>>(istream &stream, String &string)
 {
+	fflush(stdin);
 	stream.get(string.value, string.maxLen);
+	string.realLen = strlen(string.value);
 	return stream;
 }
