@@ -1,12 +1,22 @@
-/*
-Создайте класс динамического массива, в котором реализована проверка
-выхода за границы массива. Перегрузите операторы: [], =, +, -, ++
-(добавление элемента в конец массива), -- (удаление элемента из конца массива).
+п»ї/*
+РЎРѕР·РґР°Р№С‚Рµ РєР»Р°СЃСЃ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ РјР°СЃСЃРёРІР°, РІ РєРѕС‚РѕСЂРѕРј СЂРµР°Р»РёР·РѕРІР°РЅР° РїСЂРѕРІРµСЂРєР°
+РІС‹С…РѕРґР° Р·Р° РіСЂР°РЅРёС†С‹ РјР°СЃСЃРёРІР°. РџРµСЂРµРіСЂСѓР·РёС‚Рµ РѕРїРµСЂР°С‚РѕСЂС‹: [], =, +, -, ++
+(РґРѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ РєРѕРЅРµС† РјР°СЃСЃРёРІР°), -- (СѓРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РёР· РєРѕРЅС†Р° РјР°СЃСЃРёРІР°).
 */
 
 #include <iostream>
 #include "darray.h"
 using namespace std;
+
+
+ostream &operator<<(ostream &stream, darray<char> out)
+{
+	for (int i = 0; i < out.end(); ++i)
+	{
+		stream << out[i];
+	}
+	return stream;
+}
 
 template <typename T>
 ostream &operator<<(ostream &stream, darray<T> out)
@@ -79,9 +89,17 @@ void main()
 	cout << "--B:\t" << --b;
 	cout << "\n\n";
 
-	cout << "B[2]:\t";
-	cout << b[2] << "\n\n"; 
+	const int stringSize = 5;
+	darray<char> string(stringSize);
+	for (int i = 0; i < stringSize+5; ++i)
+	{
+		string.pushBack('a'+i);
+	}
+	cout <<"String:\t"<< string<<endl << endl;
+
+	cout << "String[9]:\t";
+	cout << string[9] << "\n\n"; 
 	
-	cout << "B[4]:\t";
-	cout<< b[4] << "\n\n";
+	cout << "String[10]:\t";
+	cout << string[10] << "\n\n";
 }

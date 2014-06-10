@@ -120,11 +120,18 @@ darray<T> darray<T>::operator+(const darray<T>& operator2)
 
 	for (int i = 0; i < tmpCapacity; ++i)
 	{
-		int o1 = 0;
-		if (i < size) o1 = array[i];
-		int o2 = 0;
-		if (i < operator2.size) o2 = operator2.array[i];
-		tmp.pushBack(o1 + o2);	
+		if (i < size && i < operator2.size)
+		{
+			tmp.pushBack( array[i] + operator2.array[i]);
+		}
+		else if (i < size)
+		{
+			tmp.pushBack( array[i]);
+		}
+		else
+		{
+			tmp.pushBack(operator2.array[i]);
+		}
 	}
 
 	return tmp;
@@ -146,11 +153,18 @@ darray<T> darray<T>::operator-(const darray<T>& operator2)
 
 	for (int i = 0; i < tmpCapacity; ++i)
 	{
-		int o1 = 0;
-		if (i < size) o1 = array[i];
-		int o2 = 0;
-		if (i < operator2.size) o2 = operator2.array[i];
-		tmp.pushBack(o1 - o2);
+		if (i < size && i < operator2.size)
+		{
+			tmp.pushBack(array[i] - operator2.array[i]);
+		}
+		else if (i < size)
+		{
+			tmp.pushBack(array[i]);
+		}
+		else
+		{
+			tmp.pushBack(operator2.array[i]);
+		}
 	}
 
 	return tmp;
@@ -210,7 +224,7 @@ void darray<T>::pushBack(const T value)
 {
 	if (size >= capacity)
 	{
-		array++;
+		(*this)++;
 	}
 	array[size] = value;
 	size++;
