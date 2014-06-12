@@ -8,23 +8,23 @@ class Matrix
 	int mVSize;
 	int mHSize;
 public:
-	Matrix() : mValue{ nullptr }, mVSize{ 0 }, mHSize{ 0 }{}
+	Matrix() : mValue(nullptr), mVSize(0), mHSize(0){}
 	Matrix(const int m, const int n);
 	~Matrix();
 	void CreateMatrix(const int m, const int n);
 	void DeleteMatrix();
 	
-	Matrix(Matrix &source);
-	Matrix operator=(const Matrix result);
+	Matrix(const Matrix &source);
+	Matrix& operator=(const Matrix& result);
 
-	int &operator()(int m, int n);
-	Matrix operator+(Matrix operand2);
-	Matrix operator++();
-	Matrix operator*(Matrix operand2);
+	int &operator()(const int m, const int n) const;
+	Matrix operator+(const Matrix& operand2);
+	Matrix& operator++();
+	Matrix operator*(const Matrix& operand2);
 
-	int GetVSize(){ return mVSize; }
-	int GetHSize(){ return mHSize; }
+	int GetVSize() const { return mVSize; }
+	int GetHSize() const { return mHSize; }
 
-	friend ostream &operator<<(ostream &stream, Matrix &output);
+	friend ostream &operator<<(ostream &stream, const Matrix &output);
 };
 

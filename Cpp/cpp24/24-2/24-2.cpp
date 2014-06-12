@@ -12,7 +12,7 @@
 #include <iomanip>
 using namespace std;
 
-ostream &operator<<(ostream &stream, Matrix &output);
+ostream &operator<<(ostream &stream, const Matrix &output);
 void RandomInit(Matrix &source);
 
 void main()
@@ -39,7 +39,7 @@ void main()
 	cout <<"d=b * (transposed a):\n"<< d << endl;
 }
 
-ostream &operator<<(ostream &stream, Matrix &output)
+ostream &operator<<(ostream &stream, const Matrix &output)
 {
 	for (int i = 0; i < output.GetVSize(); ++i)
 	{
