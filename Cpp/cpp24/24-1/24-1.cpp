@@ -15,7 +15,7 @@ using namespace std;
 
 ostream &TwoDigitFormat(ostream &stream);
 ostream &operator<<(ostream &stream, const Time &output);
-void Print(bool state, char *condition);
+void Print(const bool state, const char *condition);
 bool InputTime(Time &timeObject);
 
 void main()
@@ -60,7 +60,6 @@ void main()
 
 			Print(a <= c, "a<=c\t");
 			Print(a>=c, "a>=c\t");
-			Print(a <= b, "a<=b\t");
 			Print(b >= a, "b>=a\t");
 		}
 		else
@@ -158,7 +157,7 @@ ostream &operator<<(ostream &stream, const Time &output)
 }
 
 
-void Print(bool state, char* condition)
+void Print(const bool state, const char* condition)
 {
 	cout << condition;
 	if (state) 

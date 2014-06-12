@@ -1,6 +1,6 @@
 #include "Time.h"
 
-bool Time::SetTime(short hour, short min, short sec, bool american)
+bool Time::SetTime(const short hour, const short min, const short sec, const bool american)
 {
 	if (hour >= 0 && hour < 24 ) 
 	{
@@ -22,13 +22,13 @@ bool Time::SetTime(short hour, short min, short sec, bool american)
 }
 
 
-Time::Time(short hour, short min, short sec, bool american)
+Time::Time(const short hour, const short min, const short sec, const bool american)
 {
 	if (!SetTime(hour, min, sec, american)) { exit(1); }
 }
 
 
-bool Time::operator()(short hour, short min, short sec, bool american)
+bool Time::operator()(const short hour, const short min, const short sec, const bool american)
 {
 	if (SetTime(hour, min, sec, american)) 	{ return true; }
 
@@ -36,13 +36,13 @@ bool Time::operator()(short hour, short min, short sec, bool american)
 }
 
 
-int Time::ConvertToSeconds(Time source)
+int Time::ConvertToSeconds(const Time& source) const
 {
 	return source.mSec + source.mMin * 60 + source.mHour * 3600;
 }
 
 
-Time Time::MakeTime(int seconds)
+Time Time::MakeTime(int seconds) const
 {
 	Time tmp;
 	tmp.mSec = seconds % 60;
@@ -54,14 +54,14 @@ Time Time::MakeTime(int seconds)
 }
 
 
-Time Time::operator+(Time operand2)
+Time Time::operator+(const Time& operand2) 
 {
 	int resultInSeconds = ConvertToSeconds(*this) + ConvertToSeconds(operand2);
 	return MakeTime(resultInSeconds);
 }
 
 
-Time Time::operator-(Time operand2)
+Time Time::operator-(const Time& operand2)
 {
 	int resultInSeconds = ConvertToSeconds(*this) - ConvertToSeconds(operand2);
 	if (resultInSeconds < 0)
@@ -73,7 +73,7 @@ Time Time::operator-(Time operand2)
 }
 
 
-Time Time::operator=(Time result)
+Time& Time::operator=(const Time& result)
 {
 	mHour = result.mHour;
 	mMin = result.mMin;
@@ -82,7 +82,7 @@ Time Time::operator=(Time result)
 }
 
 
-bool Time::operator==(Time operand2)
+bool Time::operator==(const Time& operand2) const
 {
 	if (mHour == operand2.mHour &&
 		mMin == operand2.mMin &&
@@ -95,13 +95,13 @@ bool Time::operator==(Time operand2)
 }
 
 
-bool Time::operator!=(Time operand2)
+bool Time::operator!=(const Time& operand2) const
 {
 	return !(*this == operand2);
 }
 
 
-bool Time::operator>(Time operand2)
+bool Time::operator>(const Time& operand2) const
 {
 	if (ConvertToSeconds(*this) - ConvertToSeconds(operand2) > 0)
 	{
@@ -114,7 +114,7 @@ bool Time::operator>(Time operand2)
 }
 
 
-bool Time::operator<(Time operand2)
+bool Time::operator<(const Time& operand2) const
 {
 	if (ConvertToSeconds(*this) - ConvertToSeconds(operand2) < 0)
 	{
@@ -127,13 +127,13 @@ bool Time::operator<(Time operand2)
 }
 
 
-bool Time::operator>=(Time operand2)
+bool Time::operator>=(const Time& operand2) const
 {
 	return !(*this < operand2);
 }
 
 
-bool Time::operator<=(Time operand2)
+bool Time::operator<=(const Time& operand2) const
 {
 	return !(*this > operand2);
 }
