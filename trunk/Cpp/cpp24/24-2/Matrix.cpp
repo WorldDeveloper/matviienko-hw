@@ -36,7 +36,7 @@ Matrix::Matrix(const int m, const int n)
 	CreateMatrix(m, n);
 }
 
-int &Matrix::operator()(int i, int j)
+int &Matrix::operator()(const int i, const int j) const
 {
 	if (i >= 0 && i < mVSize && j >= 0 && j < mHSize)
 	{
@@ -49,14 +49,12 @@ int &Matrix::operator()(int i, int j)
 }
 void Matrix::DeleteMatrix()
 {
-	if (mValue)
-	{
+
 		for (int i = 0; i < mVSize; i++)
 		{
 			delete[] mValue[i];
 		}
 		delete[] mValue;
-	}
 }
 
 Matrix::~Matrix()
@@ -65,7 +63,7 @@ Matrix::~Matrix()
 }
 
 
-Matrix Matrix::operator=(Matrix result)
+Matrix& Matrix::operator=(const Matrix& result)
 {
 	if (mVSize != result.mVSize && mHSize != result.mHSize)
 	{
@@ -83,7 +81,7 @@ Matrix Matrix::operator=(Matrix result)
 }
 
 
-Matrix::Matrix(Matrix &source)
+Matrix::Matrix(const Matrix &source)
 {
 	CreateMatrix(source.mVSize, source.mHSize);
 	for (int i = 0; i < mVSize; ++i)
@@ -95,7 +93,7 @@ Matrix::Matrix(Matrix &source)
 	}
 }
 
-Matrix Matrix::operator+(Matrix operand2)
+Matrix Matrix::operator+(const Matrix& operand2)
 {
 	if (mVSize != operand2.mVSize || mHSize != operand2.mHSize)
 	{
@@ -114,7 +112,7 @@ Matrix Matrix::operator+(Matrix operand2)
 
 }
 
-Matrix Matrix::operator++()
+Matrix& Matrix::operator++()
 {
 	Matrix transp(mHSize, mVSize);
 	for (int i = 0; i < mVSize; ++i)
@@ -130,7 +128,7 @@ Matrix Matrix::operator++()
 	return *this;
 }
 
-Matrix Matrix::operator*(Matrix operand2)
+Matrix Matrix::operator*(const Matrix& operand2)
 {
 	if (mVSize != operand2.mHSize || mHSize != operand2.mVSize)
 	{
