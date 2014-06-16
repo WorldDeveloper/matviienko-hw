@@ -18,7 +18,7 @@ public:
 	Matrix& operator=(const Matrix& result);
 
 	int &operator()(const int m, const int n) const;
-	Matrix operator+(const Matrix& operand2);
+	Matrix operator+(const Matrix& operand2) const;
 	Matrix& operator++();
 	Matrix operator*(const Matrix& operand2);
 

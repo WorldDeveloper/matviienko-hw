@@ -65,6 +65,8 @@ Matrix::~Matrix()
 
 Matrix& Matrix::operator=(const Matrix& result)
 {
+	if (this == &result) return *this;
+
 	if (mVSize != result.mVSize && mHSize != result.mHSize)
 	{
 		DeleteMatrix();
@@ -93,7 +95,7 @@ Matrix::Matrix(const Matrix &source)
 	}
 }
 
-Matrix Matrix::operator+(const Matrix& operand2)
+Matrix Matrix::operator+(const Matrix& operand2) const
 {
 	if (mVSize != operand2.mVSize || mHSize != operand2.mHSize)
 	{
@@ -109,7 +111,6 @@ Matrix Matrix::operator+(const Matrix& operand2)
 		}
 	}
 	return tmp;
-
 }
 
 Matrix& Matrix::operator++()
