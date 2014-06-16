@@ -15,8 +15,8 @@ public:
 	Time(const short hour, const short min, const short sec, const bool american = 0);
 	bool operator()(const short hour, const short min, const short sec, const bool american = false);
 
-	Time operator+(const Time& operand2);
-	Time operator-(const Time& operand2);
+	Time operator+(const Time& operand2) const;
+	Time operator-(const Time& operand2) const;
 	Time& operator=(const Time& result);
 
 	bool operator==(const Time& operand2) const;
