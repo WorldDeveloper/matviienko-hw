@@ -67,7 +67,7 @@ void String::setString(char *initString)
 }
 
 
-String String::operator*(const String& string)
+String String::operator*(const String& string) const
 {
 	String tmp(realLen);	
 	char *result = tmp.value;

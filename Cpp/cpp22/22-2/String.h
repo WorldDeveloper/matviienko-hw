@@ -17,7 +17,7 @@ public:
 	~String();	
 	void setString(char *initString);
 	int getLength(){ return realLen; }
-	String operator*(const String& string);
+	String operator*(const String& string) const;
 	String &operator=( const String& string);
 	friend ostream &operator<<(ostream &stream, String string);
 	friend istream &operator>>(istream &stream, String &string);
