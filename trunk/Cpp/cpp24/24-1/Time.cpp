@@ -54,14 +54,14 @@ Time Time::MakeTime(int seconds) const
 }
 
 
-Time Time::operator+(const Time& operand2) 
+Time Time::operator+(const Time& operand2) const
 {
 	int resultInSeconds = ConvertToSeconds(*this) + ConvertToSeconds(operand2);
 	return MakeTime(resultInSeconds);
 }
 
 
-Time Time::operator-(const Time& operand2)
+Time Time::operator-(const Time& operand2) const 
 {
 	int resultInSeconds = ConvertToSeconds(*this) - ConvertToSeconds(operand2);
 	if (resultInSeconds < 0)
@@ -75,6 +75,8 @@ Time Time::operator-(const Time& operand2)
 
 Time& Time::operator=(const Time& result)
 {
+	if (this == &result) return *this;
+
 	mHour = result.mHour;
 	mMin = result.mMin;
 	mSec = result.mSec;

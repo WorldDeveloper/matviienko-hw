@@ -43,6 +43,9 @@ void main()
 			b.ChangeFormat();
 			cout <<"\t\t "<< b << endl;
 
+			a = a;
+			cout << endl << "a=a\t" << a; 
+			
 			Time c = a;
 			cout << "\nc=a\t" << c << endl;
 			cout <<"a+b\t"<< a + b << endl;
@@ -61,6 +64,8 @@ void main()
 			Print(a <= c, "a<=c\t");
 			Print(a>=c, "a>=c\t");
 			Print(b >= a, "b>=a\t");
+
+			
 		}
 		else
 		{
