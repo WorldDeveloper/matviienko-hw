@@ -51,10 +51,17 @@ void main()
 		int hands = 1;
 		Deck player[2];
 		Deck dealer;
-
 		deck.Shuffle();
+
+		/*Card card;
+		card.SetCard(1, 3);
+		player[0].AddCard(card);*/
+	
 		player[0].AddCard(deck.RemoveCard());
 		dealer.AddCard(deck.RemoveCard());
+
+		/*card.SetCard(1, 4);
+		player[0].AddCard(card); */
 		player[0].AddCard(deck.RemoveCard());
 
 		bool status[itemsNumber] = { true, true, true, false, true, true };
@@ -167,6 +174,13 @@ void main()
 							result = -(float)belt;
 							belt = 0;
 						}
+					}
+					else if (player[i].Points() == 21 && player[i].DeckSize() == 2)
+					{
+						result = (float)belt*2.5;
+						bankroll += result;
+						belt = 0;
+						break;
 					}
 					else if (player[i].Points() == 21 || input == F2)
 					{
