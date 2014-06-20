@@ -10,14 +10,14 @@
 #include <iomanip>
 using namespace std;
 
-inline void gotoxy(short x, short y);
-inline int curX();
-inline int curY();
+inline void Gotoxy(short x, short y);
+inline int CurX();
+inline int CurY();
 ostream& operator<<(ostream& stream, const Card& card);
 ostream& operator<<(ostream& stream, const Deck& card);
 void InitDeck(Deck& deck);
-int InputBelt(float& bankroll);
-void ShowBankroll(const float bankroll, const int belt);
+int InputBet(float& bankroll);
+void ShowBankroll(const float bankroll, const int bet);
 void ResultMessage(const float result);
 void ShowPlayer(const Deck& deck, const char* player);
 
@@ -41,7 +41,7 @@ void main()
 		cout << "\n\t Enter bankroll greater than 0 and less than 1 000: ";
 		cin >> bankroll;
 	}
-	int belt = InputBelt(bankroll);
+	int bet = InputBet(bankroll);
 	float result = 0;
 
 	while (true)
@@ -60,7 +60,7 @@ void main()
 		player[0].AddCard(deck.RemoveCard());
 		dealer.AddCard(deck.RemoveCard());
 
-		/*card.SetCard(1, 4);
+		/*card.SetCard(10, 4);
 		player[0].AddCard(card); */
 		player[0].AddCard(deck.RemoveCard());
 
@@ -71,14 +71,14 @@ void main()
 		mainMenu.setStatus(status);
 
 		mainMenu.showMenu(0);
-		ShowBankroll(bankroll, belt);
+		ShowBankroll(bankroll, bet);
 
 		ShowPlayer(player[0], "You");
 		ShowPlayer(dealer, "Dealer");
 
 		if (player[0].Points() == 21)
 		{
-			result = (float)belt*2.5;
+			result = (float)bet*2.5;
 			bankroll += result;
 
 			for (int i = 0; i < itemsNumber; ++i)
@@ -88,21 +88,21 @@ void main()
 			mainMenu.setStatus(status);
 
 			mainMenu.showMenu(0);
-			ShowBankroll(bankroll, belt);
+			ShowBankroll(bankroll, bet);
 			ShowPlayer(player[0], "You");
 			ShowPlayer(dealer, "Dealer");
 			ResultMessage(result);
-			belt = InputBelt(bankroll);
+			bet = InputBet(bankroll);
 			continue;
 		}
 
 		enum{ F1 = 59, F2, F3, F4, F5, F6 };
 		while (true)
 		{
-			if (!belt)
+			if (!bet)
 			{
 				ResultMessage(result);
-				belt = InputBelt(bankroll);
+				bet = InputBet(bankroll);
 				break;
 			}
 
@@ -122,9 +122,9 @@ void main()
 					break;
 
 				case F3:
-					if (player[0].DeckSize()>2 || bankroll < belt * 2) break;
-					bankroll -= belt;
-					belt *= 2;
+					if (player[0].DeckSize()>2 || bankroll < bet * 2) break;
+					bankroll -= bet;
+					bet *= 2;
 					for (int i = 0; i < hands; ++i)
 					{
 						if (player[i].Points() < 21)
@@ -137,7 +137,7 @@ void main()
 
 				case F4:
 					if (hands == 2) break;
-					if (player[0].DeckSize() == 2 && bankroll >= belt * 2)
+					if (player[0].DeckSize() == 2 && bankroll >= bet * 2)
 					{
 						int r1 = player[0](0).GetRank();
 						int r2 = player[0](1).GetRank();
@@ -147,8 +147,8 @@ void main()
 							hands = 2;
 							player[1].AddCard(player[0].RemoveCard());
 							player[0].AddCard(deck.RemoveCard());
-							bankroll -= belt;
-							belt *= 2;
+							bankroll -= bet;
+							bet *= 2;
 
 							status[3] = false;
 							mainMenu.setStatus(status);
@@ -156,9 +156,9 @@ void main()
 					}
 					break;
 				case F5:
-					bankroll += (float)belt / 2;
-					result = -(float)belt / 2;
-					belt = 0;
+					bankroll += (float)bet / 2;
+					result = -(float)bet / 2;
+					bet = 0;
 					break;
 				case F6:
 					exit(0);
@@ -171,15 +171,15 @@ void main()
 					{
 						if (hands == 1 || (i > 0 && player[0].Points() > 21))
 						{
-							result = -(float)belt;
-							belt = 0;
+							result = -(float)bet;
+							bet = 0;
 						}
 					}
 					else if (player[i].Points() == 21 && player[i].DeckSize() == 2)
 					{
-						result = (float)belt*2.5;
+						result = (float)bet*2.5;
 						bankroll += result;
-						belt = 0;
+						bet = 0;
 						break;
 					}
 					else if (player[i].Points() == 21 || input == F2)
@@ -192,15 +192,15 @@ void main()
 
 						if (dealer.Points() > 21 || dealer.Points() < player[i].Points())
 						{
-							result = (float)belt * 2;
+							result = (float)bet * 2;
 							bankroll += result;
-							belt = 0;
+							bet = 0;
 							break;
 						}
 						else if (hands == 1 || (hands>1 && i > 0))
 						{
-							result = -(float)belt;
-							belt = 0;
+							result = -(float)bet;
+							bet = 0;
 							break;
 						}
 					}
@@ -212,7 +212,7 @@ void main()
 					mainMenu.setStatus(status);
 				}
 
-				if (!belt)
+				if (!bet)
 				{
 					for (int i = 0; i < itemsNumber; ++i)
 					{
@@ -222,7 +222,7 @@ void main()
 				}
 
 				mainMenu.showMenu(0);
-				ShowBankroll(bankroll, belt);
+				ShowBankroll(bankroll, bet);
 
 				for (int i = 0; i < hands; ++i)
 				{
@@ -234,13 +234,13 @@ void main()
 	}
 }
 
-inline void gotoxy(short x, short y)
+inline void Gotoxy(short x, short y)
 {
 	COORD coord = { x, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-inline int curX()
+inline int CurX()
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -248,7 +248,7 @@ inline int curX()
 	return csbi.dwCursorPosition.X;
 }
 
-inline int curY()
+inline int CurY()
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -258,14 +258,14 @@ inline int curY()
 
 ostream& operator<<(ostream& stream, const Card& card)
 {
-	short x = curX();
-	short y = curY();
+	short x = CurX();
+	short y = CurY();
 
 	if (x > 70)
 	{
 		x = 16;
 		y += 8;
-		gotoxy(x, y);
+		Gotoxy(x, y);
 	}
 
 	char ranks[][13] = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
@@ -285,28 +285,28 @@ ostream& operator<<(ostream& stream, const Card& card)
 	char suit = card.GetSuit();
 
 	stream << "         ";
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 
 	stream << " " << left << setw(2) << setfill(' ') << rank << "    " << suit << " ";
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 	stream << "         ";
 
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 
 	stream << "    " << suit << "    ";
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 
 	stream << "         ";
 
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 
 	stream << " " << suit << "    " << right << setw(2) << setfill(' ') << rank << " ";
-	gotoxy(x, ++y);
+	Gotoxy(x, ++y);
 
 	stream << "         ";
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x20);
-	gotoxy(x + 10, y - 6);
+	Gotoxy(x + 10, y - 6);
 	return stream;
 }
 ostream& operator<<(ostream& stream, const Deck& card)
@@ -316,8 +316,8 @@ ostream& operator<<(ostream& stream, const Deck& card)
 		cout << card(i);
 	}
 
-	short y = curY();
-	gotoxy(0, y + 6);
+	short y = CurY();
+	Gotoxy(0, y + 6);
 	return stream;
 }
 
@@ -332,7 +332,7 @@ void InitDeck(Deck& deck)
 	}
 }
 
-int InputBelt(float& bankroll)
+int InputBet(float& bankroll)
 {
 	if (bankroll<1)
 	{
@@ -340,25 +340,25 @@ int InputBelt(float& bankroll)
 		exit(0);
 	}
 
-	int belt = 0;
+	int bet = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x2F);
-	cout << "\t Enter your belt: ";
-	cin >> belt;
+	cout << "\t Enter your bet: ";
+	cin >> bet;
 
-	while (belt <= 0 || (float)belt > bankroll)
+	while (bet <= 0 || (float)bet > bankroll)
 	{
-		cout << "\n\t Enter correct belt (greate than 0 and less than " << bankroll << "): ";
-		cin >> belt;
+		cout << "\n\t Enter correct bet (greate than 0 and less than " << bankroll << "): ";
+		cin >> bet;
 	}
-	bankroll -= belt;
+	bankroll -= bet;
 
-	return belt;
+	return bet;
 }
 
-void ShowBankroll(const float bankroll, const int belt)
+void ShowBankroll(const float bankroll, const int bet)
 {
 	cout << "Bankroll: " << bankroll << "\t\t";
-	if (belt) cout << "Belt: " << belt << "\t\t";
+	if (bet) cout << "bet: " << bet << "\t\t";
 	cout << "\n\n";
 }
 
