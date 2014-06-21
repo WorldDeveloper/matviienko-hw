@@ -1,4 +1,4 @@
-//создать аналог shared_ptr
+п»ї//СЃРѕР·РґР°С‚СЊ Р°РЅР°Р»РѕРі shared_ptr
 
 #include <iostream>
 #include "Sharedptr.h"
