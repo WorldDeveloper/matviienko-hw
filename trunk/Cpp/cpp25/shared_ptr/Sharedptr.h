@@ -28,9 +28,13 @@ public:
 
 	Sharedptr& operator=(const Sharedptr& source)
 	{
+		if (*this == source) return *this; 
+		
 		mPtr = source.mPtr;
 		mCount = source.mCount + 1;
 		cout << "\n\n*Copy mPtr to " << mCount << " obj";
+
+		return *this;
 	}
 
 	T* operator->()const { return mPtr; }
