@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <new>
 using namespace std;
 
@@ -44,6 +44,7 @@ ForwardList<T>::~ForwardList()
 		mpHead = mpHead->next;
 		delete needlessNode;
 	}
+	mCount = 0;
 }
 
 template <class T>
