@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include "Deck.h"
+#include "Player.h"
 #include "menu.h"
 #include <iomanip>
 using namespace std;
@@ -16,11 +17,12 @@ inline int CurY();
 ostream& operator<<(ostream& stream, const Card& card);
 ostream& operator<<(ostream& stream, const Deck& card);
 void InitDeck(Deck& deck);
-int InputBet(float& bankroll);
-void ShowBankroll(const float bankroll, const int bet);
+float Bankroll();
+void NewBet(Player& player);
+void ShowBankroll(const Player& player);
 void ResultMessage(const float result);
-void ShowPlayer(const Deck& deck, const char* player);
-
+void ShowPlayer(const Player& player, const char* name);
+void SplashScreen();
 
 void main()
 {
@@ -31,78 +33,61 @@ void main()
 	char* titles[itemsNumber] = { "F1 - Hit", "F2 - Stand", "F3 - Double", "F4 - Split", "F5 -Surrender", "F6 Exit" };
 	mainMenu.addItems(titles);
 
-	system("color 20");
-	cout << "\n\t You are playing Blackjack \n\n";
-	float bankroll;
-	cout << "\t Enter your bankroll: ";
-	cin >> bankroll;
-	while (bankroll <1 || bankroll > 1000000)
-	{
-		cout << "\n\t Enter bankroll greater than 0 and less than 1 000: ";
-		cin >> bankroll;
-	}
-	int bet = InputBet(bankroll);
-	float result = 0;
+	SplashScreen();
+
+	Player player(Bankroll());
 
 	while (true)
 	{
+		player.Reset();
+
 		Deck deck(52);
 		InitDeck(deck);
-		int hands = 1;
-		Deck player[2];
-		Deck dealer;
 		deck.Shuffle();
 
-		/*Card card;
-		card.SetCard(1, 3);
-		player[0].AddCard(card);*/
-	
-		player[0].AddCard(deck.RemoveCard());
-		dealer.AddCard(deck.RemoveCard());
+		Player dealer(1);
 
-		/*card.SetCard(10, 4);
-		player[0].AddCard(card); */
-		player[0].AddCard(deck.RemoveCard());
+		NewBet(player);
+		float result = 0.0f;
 
+		player.AddCard(deck);
+		dealer.AddCard(deck);
+		player.AddCard(deck);
+
+		enum { HIT, STAND, DOUBLE, SPLIT, SURRENDER, EXIT };
 		bool status[itemsNumber] = { true, true, true, false, true, true };
-		int r1 = player[0](0).GetRank();
-		int r2 = player[0](1).GetRank();
-		if (r1 == r2 || (r1 > 10 && r2 > 10)) status[3] = true;
+		if (player.CanSplit())
+		{
+			status[SPLIT] = true;
+		}
 		mainMenu.setStatus(status);
 
-		mainMenu.showMenu(0);
-		ShowBankroll(bankroll, bet);
-
-		ShowPlayer(player[0], "You");
-		ShowPlayer(dealer, "Dealer");
-
-		if (player[0].Points() == 21)
+		if (player.HaveBJ())
 		{
-			result = (float)bet*2.5;
-			bankroll += result;
-
-			for (int i = 0; i < itemsNumber; ++i)
-			{
-				status[i] = false;
-			}
-			mainMenu.setStatus(status);
-
-			mainMenu.showMenu(0);
-			ShowBankroll(bankroll, bet);
-			ShowPlayer(player[0], "You");
-			ShowPlayer(dealer, "Dealer");
-			ResultMessage(result);
-			bet = InputBet(bankroll);
-			continue;
+			result = (float)player.Bet()*2.5;
+			player.WonBank(result);
 		}
 
-		enum{ F1 = 59, F2, F3, F4, F5, F6 };
+		enum { F1 = 59, F2, F3, F4, F5, F6 };
+
 		while (true)
 		{
-			if (!bet)
+			if (!player.Bet())
+			{
+				for (int i = 0; i < itemsNumber; ++i)
+				{
+					status[i] = false;
+				}
+				mainMenu.setStatus(status);
+			}
+			mainMenu.showMenu(0);
+			ShowBankroll(player);
+			ShowPlayer(player, "You");
+			ShowPlayer(dealer, "Dealer");
+
+			if (!player.Bet())
 			{
 				ResultMessage(result);
-				bet = InputBet(bankroll);
 				break;
 			}
 
@@ -112,123 +97,66 @@ void main()
 				switch (input)
 				{
 				case F1:
-					for (int i = 0; i < hands; ++i)
-					{
-						if (player[i].Points()<21)
-						{
-							player[i].AddCard(deck.RemoveCard());
-						}
-					}
+					player.AddCard(deck);
 					break;
 
 				case F3:
-					if (player[0].DeckSize()>2 || bankroll < bet * 2) break;
-					bankroll -= bet;
-					bet *= 2;
-					for (int i = 0; i < hands; ++i)
-					{
-						if (player[i].Points() < 21)
-						{
-							player[i].AddCard(deck.RemoveCard()); 
-						}
-					}
-					input = 60;
+					player.Double(deck);
+					input = F2;
 					break;
 
 				case F4:
-					if (hands == 2) break;
-					if (player[0].DeckSize() == 2 && bankroll >= bet * 2)
-					{
-						int r1 = player[0](0).GetRank();
-						int r2 = player[0](1).GetRank();
-
-						if (r1 == r2 || (r1 > 10 && r2 > 10))
-						{
-							hands = 2;
-							player[1].AddCard(player[0].RemoveCard());
-							player[0].AddCard(deck.RemoveCard());
-							bankroll -= bet;
-							bet *= 2;
-
-							status[3] = false;
-							mainMenu.setStatus(status);
-						}
-					}
+					player.Split(deck);
+					status[SPLIT] = false;
+					mainMenu.setStatus(status);
 					break;
+
 				case F5:
-					bankroll += (float)bet / 2;
-					result = -(float)bet / 2;
-					bet = 0;
+					result = -(float)player.Bet() / 2;
+					player.WonBank(-result);
 					break;
+
 				case F6:
 					exit(0);
 					break;
 				}
 
-				for (int i = 0; i<hands; ++i)
+				if (player.Points() > 21)
 				{
-					if (player[i].Points() > 21)
+					result = -(float)player.Bet();
+					player.LostBank();
+				}
+				else if (player.HaveBJ())
+				{
+					result = (float)player.Bet()*2.5;
+					player.WonBank(result);
+				}
+				else if (player.Points() == 21 || input == F2)
+				{
+					while (dealer.Points() < 17)
 					{
-						if (hands == 1 || (i > 0 && player[0].Points() > 21))
-						{
-							result = -(float)bet;
-							bet = 0;
-						}
+						dealer.AddCard(deck);
 					}
-					else if (player[i].Points() == 21 && player[i].DeckSize() == 2)
-					{
-						result = (float)bet*2.5;
-						bankroll += result;
-						bet = 0;
-						break;
-					}
-					else if (player[i].Points() == 21 || input == F2)
-					{
-						while (dealer.Points() < 17)
-						{
-							Card tmp = deck.RemoveCard();
-							dealer.AddCard(tmp);
-						}
 
-						if (dealer.Points() > 21 || dealer.Points() < player[i].Points())
-						{
-							result = (float)bet * 2;
-							bankroll += result;
-							bet = 0;
-							break;
-						}
-						else if (hands == 1 || (hands>1 && i > 0))
-						{
-							result = -(float)bet;
-							bet = 0;
-							break;
-						}
+					if (dealer.Points()>21 ||
+						dealer.Points() < player.Points())
+					{
+						result = (float)player.Bet() * 2;
+						player.WonBank(result);
+					}
+					else
+					{
+						result = -(float)player.Bet();
+						player.LostBank();
 					}
 				}
 
 				if (player[0].DeckSize() > 2)
 				{
-					status[2] = false;
+					status[DOUBLE] = false;
+					status[SPLIT] = false;
 					mainMenu.setStatus(status);
 				}
-
-				if (!bet)
-				{
-					for (int i = 0; i < itemsNumber; ++i)
-					{
-						status[i] = false;
-					}
-					mainMenu.setStatus(status);
-				}
-
-				mainMenu.showMenu(0);
-				ShowBankroll(bankroll, bet);
-
-				for (int i = 0; i < hands; ++i)
-				{
-					ShowPlayer(player[i], "You");
-				}
-				ShowPlayer(dealer, "Dealer");
 			}
 		}
 	}
@@ -332,9 +260,25 @@ void InitDeck(Deck& deck)
 	}
 }
 
-int InputBet(float& bankroll)
+float Bankroll()
 {
-	if (bankroll<1)
+	float bankroll = 0.0f;
+	cout << "\n\t\t Enter your bankroll: ";
+	cin >> bankroll;
+
+	while (bankroll <1 || bankroll > 1000000)
+	{
+		cout << "\n\t Enter bankroll greater than 0 and less than 1 000: ";
+		cin >> bankroll;
+	}
+	cout << "\t\t";
+
+	return bankroll;
+}
+
+void NewBet(Player& player)
+{
+	if (player.Bankroll() < 1)
 	{
 		cout << endl << "\t You have lost the game!\n\n\t";
 		exit(0);
@@ -342,46 +286,72 @@ int InputBet(float& bankroll)
 
 	int bet = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x2F);
-	cout << "\t Enter your bet: ";
+	cout << " Enter your bet: ";
 	cin >> bet;
 
-	while (bet <= 0 || (float)bet > bankroll)
+	while (!player.MakeBet(bet))
 	{
-		cout << "\n\t Enter correct bet (greate than 0 and less than " << bankroll << "): ";
+		cout << "\n\t Enter correct bet (greate than 0 and less than " << player.Bankroll() << "): ";
 		cin >> bet;
 	}
-	bankroll -= bet;
-
-	return bet;
 }
 
-void ShowBankroll(const float bankroll, const int bet)
+void ShowBankroll(const Player& player)
 {
-	cout << "Bankroll: " << bankroll << "\t\t";
-	if (bet) cout << "bet: " << bet << "\t\t";
+	cout << "Bankroll: " << player.Bankroll() << "\t\t";
+	if (player.Bet())
+	{
+		cout << "bet: " << player.Bet();
+	}
 	cout << "\n\n";
 }
 
 void ResultMessage(const float result)
 {
 	cout << "\t";
-	if (result > 0) cout << " You have won " << result << "$";
-	else if (result < 0) cout << " You have lost " << -result << "$";
-	cout << endl;
+	if (result > 0)	{
+		cout << " You have won " << result << "$";
+	}
+	else if (result < 0) {
+		cout << " You have lost " << -result << "$";
+	}
+	cout << " ";
 }
 
-void ShowPlayer(const Deck& deck, const char* player)
+void ShowPlayer(const Player& player, const char* name)
 {
-	cout << " " << player << ": (";
+	cout << " " << name << ": (";
 
-	if (deck.Points() == 21 && deck.DeckSize() == 2){
+	if (player.HaveBJ()) {
 		cout << "BJ";
 	}
-	else if (deck.Points() > 21){
+	else if (player.Points() > 21) {
 		cout << "Bust";
 	}
-	else{
-		cout << deck.Points();
+	else {
+		cout << player.Points();
 	}
-	cout << ")\t" << deck << "\n\n";
+	cout << ")\n";
+
+	for (int i = 0; i < player.Hands(); ++i)
+	{
+		cout << "\t\t" << player[i] << "\n\n";
+	}
+}
+
+void SplashScreen()
+{
+	system("color 20");
+
+	time_t t1;
+	time(&t1);
+	time_t t2 = t1 + 3;
+
+	Gotoxy(30, 10);
+	cout << "BLACKJACK\n";
+
+	while (t1 < t2)
+	{
+		time(&t1);
+	}
 }

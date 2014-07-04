@@ -85,7 +85,7 @@ void Deck::AddCard(const Card card)
 	{
 		mPoints = tmp.mPoints + 11;
 	}
-	else if (tmp.mPoints + card.GetPoint()>21)
+	else if (tmp.mPoints + card.GetPoint() > 21)
 	{
 		mPoints = 0;
 		for (int i = 0; i < mDeckSize; ++i)
