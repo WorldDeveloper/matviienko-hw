@@ -33,8 +33,9 @@ public:
 
 	Sharedptr& operator=(const Sharedptr& source)
 	{
-		if (*this == source) return *this;
+		if (this == &source) return *this;
 
+		--(*mCount);
 		mPtr = source.mPtr;
 		mCount = source.mCount;
 		++(*mCount);
@@ -45,11 +46,27 @@ public:
 
 	T* operator->()const
 	{
-		if (mPtr != nullptr && *mCount != 0) return mPtr;
+		if (mPtr != nullptr || *mCount != 0)
+		{
+			return mPtr;
+		}
+		else
+		{
+			cout << "\nError\n";
+			exit(1);
+		}
 	}
 	T& operator*() const
 	{
-		if (mPtr != nullptr && *mCount != 0) return *mPtr;
+		if (mPtr != nullptr || *mCount != 0)
+		{
+			return *mPtr;
+		}
+		else
+		{
+			cout << "\nError\n";
+			exit(1);
+		}
 	}
 
 	bool operator==(const Sharedptr& operand2) const { return (*mPtr == *operand2.mPtr); }

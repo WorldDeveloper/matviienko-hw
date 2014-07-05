@@ -22,8 +22,8 @@ void main()
 
 	cout << "\n\nCreate ptr2\n";
 	Sharedptr<int> ptr2(new int);
-
-	*ptr2 = 2;
+	ptr2 = ptr1;
+	//*ptr2 = 2;
 	cout << "ptr2=2";
 	info(ptr2, "ptr2");
 
@@ -47,6 +47,11 @@ void main()
 	f2(ptr1, 1);
 	cout << "***Call by value ended***\n";
 
+
+	info(ptr1, "ptr1");
+	info(ptr2, "ptr2");
+
+	ptr2 = new int(5);
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
 }
