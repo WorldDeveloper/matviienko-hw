@@ -35,7 +35,7 @@ public:
 	{
 		if (this == &source) return *this;
 
-		--(*mCount);
+		this->~Sharedptr();
 		mPtr = source.mPtr;
 		mCount = source.mCount;
 		++(*mCount);
