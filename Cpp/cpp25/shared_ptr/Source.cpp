@@ -16,15 +16,14 @@ void main()
 	Sharedptr<int> ptr1(new int);
 
 	*ptr1 = 1;
-	cout << "ptr1=1";
+	cout << "ptr1=1\n";
 	info(ptr1, "ptr1");
 
 
 	cout << "\n\nCreate ptr2\n";
 	Sharedptr<int> ptr2(new int);
-	ptr2 = ptr1;
-	//*ptr2 = 2;
-	cout << "ptr2=2";
+	*ptr2 = 2;
+	cout << "ptr2=2\n";
 	info(ptr2, "ptr2");
 
 	cout << "\n\n ptr1==ptr2:\t" << (ptr1 == ptr2) << endl;
@@ -39,7 +38,7 @@ void main()
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
 
-	cout << "\n\n***Call by reference***";
+	cout << "\n\n***Call by reference***\n";
 	f1(ptr1, 1);
 	cout << "***Call by reference ended***\n";
 
@@ -51,6 +50,7 @@ void main()
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
 
+	cout << "\nptr2=new int(5)\n";
 	ptr2 = new int(5);
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
@@ -59,9 +59,8 @@ void main()
 template <typename T>
 void info(const Sharedptr<T>& p, char* name)
 {
-	cout << "\n\t " << name << "=" << *p;
-	cout << "\n\t # of copies: " << p.Count();
-	cout << "\n\t Is " << name << " unique: " << p.Unique() << endl;
+	cout << "\t " << name << "=" << *p;
+	cout << "\t # of copies: " << p.Count()<<"\n";
 }
 
 void f1(Sharedptr<int>& p, int count)
