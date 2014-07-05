@@ -50,8 +50,11 @@ void main()
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
 
-	cout << "\nptr2=new int(5)\n";
-	ptr2 = new int(5);
+	cout << "\nptr2=new int(2)\n";
+	ptr2 = new int(2);
+
+	cout << "\nptr1=new int(1)\n";
+	ptr1 = new int(1);
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
 }
