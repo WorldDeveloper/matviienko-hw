@@ -2,43 +2,55 @@ template <class T>
 class Sharedptr
 {
 	T* mPtr;
-	int mCount;
+	int* mCount;
 public:
-	Sharedptr(T* p = nullptr) :mPtr(p), mCount(0){ cout << "\n*Create mPtr"; }
+	Sharedptr(T* p = nullptr) :mPtr(p), mCount(new int)
+	{
+		*mCount = 1;
+		cout << "\*Create mPtr\n";
+	}
 	~Sharedptr()
 	{
-		if (mPtr != nullptr && mCount == 0)
+		if (mPtr != nullptr && *mCount < 2)
 		{
-			cout << "\n*Delete mPtr wich value=\"" << *mPtr << "\"\n";
+			cout << "*Delete mPtr wich value=\"" << *mPtr << "\"\n";
 			delete mPtr;
 		}
 		else
 		{
-			cout << "\n*Delete copy of mPtr #" << mCount;
-			mCount--;
+			cout << "*Delete copy of mPtr #" << *mCount << endl;
+			--(*mCount);
 		}
 	}
 
 	Sharedptr(const Sharedptr& source)
 	{
 		mPtr = source.mPtr;
-		mCount = source.mCount + 1;
-		cout << "\n\n*Copy mPtr to " << mCount << " obj";
+		mCount = source.mCount;
+		++(*mCount);
+		cout << "*Copy mPtr to " << *mCount << " obj\n";
 	}
 
 	Sharedptr& operator=(const Sharedptr& source)
 	{
-		if (*this == source) return *this; 
-		
+		if (*this == source) return *this;
+
 		mPtr = source.mPtr;
-		mCount = source.mCount + 1;
-		cout << "\n\n*Copy mPtr to " << mCount << " obj";
+		mCount = source.mCount;
+		++(*mCount);
+		cout << "*Copy mPtr to " << *mCount << " obj\n";
 
 		return *this;
 	}
 
-	T* operator->()const { return mPtr; }
-	T& operator*() const { return*mPtr; }
+	T* operator->()const
+	{
+		if (mPtr != nullptr && *mCount != 0) return mPtr;
+	}
+	T& operator*() const
+	{
+		if (mPtr != nullptr && *mCount != 0) return *mPtr;
+	}
 
 	bool operator==(const Sharedptr& operand2) const { return (*mPtr == *operand2.mPtr); }
 	bool operator!=(const Sharedptr& operand2) const { return !(*this == operand2); }
@@ -47,6 +59,6 @@ public:
 	bool operator>=(const Sharedptr& operand2) const { return !(*this < operand2); }
 	bool operator<=(const Sharedptr& operand2) const { return !(*this > operand2); }
 
-	bool Unique() const { return mCount == 0; }
-	int Count() const { return mCount; }
+	bool Unique() const { return *mCount == 0; }
+	int Count() const { return *mCount; }
 };
