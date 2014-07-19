@@ -25,7 +25,7 @@ public:
 
 	void Clear() { this->~QueueList(); }
 	int GetCount() const { return mCount; }
-	
+
 	void PushBack(const T& value);
 	T PopFront();
 };
@@ -60,6 +60,8 @@ QueueList<T>::QueueList(const QueueList<T>& source)
 template <class T>
 QueueList<T>& QueueList<T>::operator=(const QueueList<T>& source)
 {
+	if (this == &source) return *this; 
+	
 	this->~QueueList();
 
 	Node<T>* tmp = source.mpHead;

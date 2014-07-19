@@ -119,6 +119,7 @@ Array<T>::Array(const Array<T>& source)
 template <class T>
 Array<T>& Array<T>::operator=(const Array<T>& source)
 {
+	if (this == &source) return *this; 
 	RemoveAll();
 
 	Node<T>* tmp = source.mpHead;

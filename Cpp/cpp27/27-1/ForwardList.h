@@ -65,6 +65,8 @@ ForwardList<T>::ForwardList(const ForwardList<T>& source)
 template <class T>
 ForwardList<T>& ForwardList<T>::operator=(const ForwardList<T>& source)
 {
+	if (this == &source) return *this; 
+	
 	this->~ForwardList();
 
 	ListNode<T>* tmp = source.mpHead;
@@ -159,7 +161,7 @@ bool ForwardList<T>::EraseAt(const int index)
 	{
 		mpHead = mpHead->next;
 		delete eraseIndex;
-	}
+	}//if (index==mCount)*******************************************add
 	else
 	{		
 		for (int i = 1; i < index; ++i)
