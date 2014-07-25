@@ -9,7 +9,7 @@ Menu::Menu(char *name, const char size, const char length, const char* items[], 
 {
 	strcpy(mTitle, name);
 	mItem = new char*[mItemsNumber];
-	
+
 	for (int i = 0; i < mItemsNumber; i++)
 	{
 		mItem[i] = new char[mItemMaxLength];
@@ -65,14 +65,14 @@ void Menu::showMenu(const int activeItem /*=-2*/)
 	const short inactiveItemColor = 0x78;
 	const short menuColor = 0x37;
 	const short systemColor = 0xF0;
-	
+
 	//top-left border
 	gotoxy(mX, mY);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), menuColor);
 
 	for (int j = 0; j < 3; j++)
 	{
-		gotoxy(mX, mY+j);
+		gotoxy(mX, mY + j);
 		for (int i = mX; i < 80; i++)
 		{
 			cout << " ";
@@ -86,7 +86,7 @@ void Menu::showMenu(const int activeItem /*=-2*/)
 	cout << (char)218 << mTitle;
 	line(196, menuWidth - strlen(mTitle) - 2);
 	cout << (char)191;
-	gotoxy(mX, mY+1);
+	gotoxy(mX, mY + 1);
 	cout << (char)179 << " ";
 
 	//items output
@@ -108,12 +108,12 @@ void Menu::showMenu(const int activeItem /*=-2*/)
 
 	//bottom-right border
 	cout << (char)179;
-	gotoxy(mX, mY+2);
+	gotoxy(mX, mY + 2);
 	cout << (char)192;
 	line(196, menuWidth - 2);
 	cout << (char)217;
 
-	gotoxy(0, mY+5);
+	gotoxy(0, mY + 5);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), systemColor);
 }
 
