@@ -2,7 +2,7 @@
 
 
 
-PhoneBook::~PhoneBook() //copy constructor
+PhoneBook::~PhoneBook()
 {
 	while (mRoot)
 	{
@@ -38,7 +38,7 @@ void PhoneBook::CopyTree(Contact* contact)
 {
 	if (contact)
 	{
-		Add(contact->surname, contact->name, contact->phone);
+		Add(contact);
 		CopyTree(contact->left);
 		CopyTree(contact->right);
 	}
@@ -63,7 +63,7 @@ PhoneBook& PhoneBook::operator = (const PhoneBook& source)
 
 Contact*  PhoneBook::Add(const char* surname, const char* name, const char* phone)
 {
-	if ((!surname[0] || !name[0]) && !phone[0]) {	return nullptr;	}
+	if ((!surname[0] || !name[0]) && !phone[0]) { return nullptr; }
 
 	Contact* newContact = new Contact;
 	strcpy(newContact->surname, surname);
@@ -103,8 +103,10 @@ Contact*  PhoneBook::Add(const char* surname, const char* name, const char* phon
 	return newContact;
 }
 
-
-
+Contact*  PhoneBook::Add(Contact* contact)
+{
+	return Add(contact->surname, contact->name, contact->phone);
+}
 
 Contact* PhoneBook::SearchSurname(const char* surname, const Contact* const startFrom /*=nullptr*/) const
 {
@@ -137,6 +139,7 @@ Contact* PhoneBook::SearchSurname(const char* surname, const Contact* const star
 	return nullptr;
 }
 
+
 Contact* PhoneBook::SearchPhone(const char* phone, Contact*  const startFrom) const
 {
 	Contact* contact = new Contact;
@@ -162,6 +165,7 @@ Contact* PhoneBook::SearchPhone(const char* phone, Contact*  const startFrom) co
 	}
 	return nullptr;
 }
+
 
 Contact* PhoneBook::Min(Contact* contact /*=nullptr*/) const
 {

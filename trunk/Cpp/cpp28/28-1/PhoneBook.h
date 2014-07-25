@@ -19,22 +19,19 @@ struct ContactBuffer
 
 class Contact
 {
-	char surname[20]; 
-	char name[20];	
+	char surname[20];
+	char name[20];
 	char phone[15];
 	Contact* parent;
 	Contact* left;
 	Contact* right;
 public:
-	Contact():parent(nullptr), left(nullptr), right(nullptr)
+	Contact() :parent(nullptr), left(nullptr), right(nullptr)
 	{
-		surname[0] = '\0'; 
+		surname[0] = '\0';
 		name[0] = '\0';
 		phone[0] = '\0';
 	}
-	
-	void SetName(const char* iName) { strcpy(name, iName); }
-	void SetPhone(const char* iPhone) { strcpy(phone, iPhone); }
 
 	const char* GetSurname() const { return surname; }
 	const char* GetName() const { return name; }
@@ -61,15 +58,16 @@ public:
 
 	bool ValidInput(Contact* contact, const char* surname, const char* name, const char* phone);
 	Contact* Add(const char* surname, const char* name, const char* phone);
+	Contact* Add(Contact* contact);
 	bool Delete(Contact* contact);
 
-	Contact* SearchSurname(const char* surname, const Contact* const startFrom=nullptr) const;
+	Contact* SearchSurname(const char* surname, const Contact* const startFrom = nullptr) const;
 	Contact* SearchPhone(const char* phone, Contact* const startFrom) const;
 
-	Contact* Root() const {return mRoot;}
-	
+	Contact* Root() const { return mRoot; }
+
 	Contact* Min(Contact* contact = nullptr) const;
-	Contact* Max(Contact* contact=nullptr) const;
+	Contact* Max(Contact* contact = nullptr) const;
 
 	Contact* Next(Contact* contact) const;
 	Contact* Previous(Contact* contact)const;
