@@ -1,6 +1,6 @@
 ﻿/*
 Необходимо создать следующий набор программ:
-1. Программа для копирования каталогов (копируются все вложенные папки и
+Программа для копирования каталогов (копируются все вложенные папки и
 файлы).
 
 Для функций копирования и перемещения выполнить те же действия: 1.
@@ -44,6 +44,11 @@ void main(int argc, char* argv[])
 	char destination[_MAX_PATH];
 	strcpy(destination, argv[2]);
 
+	if (!strcmp(source, destination))
+	{
+		cout << "Can't copy a file to itself.\n";
+		exit(0);
+	}
 	if (_access(source, 00) == -1)
 	{
 		cout << "Error: source object doesn't exist.\n";
