@@ -1,11 +1,12 @@
 ﻿/*
 Необходимо создать следующий набор программ:
-Программа для удаления каталогов (удаляются все вложенные папки и файлы).
+Программа для перемещения каталогов (перемещаются все вложенные папки и файлы).
 
-В том случае, если у удаляемого файла (каталога) установлен атрибут Read-Only,
-необходимо вывести следующее меню: 1. Удалять? 2. Пропустить? 3.Удалять для всех? 4. Отмена?
+
+Для функций копирования и перемещения выполнить те же действия: 1.
+Перезаписать? 2. Пропустить? 3. Перезаписывать для всех? 4. Отмена?
 Параметры программы передаются через командную строку. Например,
-- delete.exe c:\A
+- copy.exe c:\A d:\B
 */
 
 #include <iostream>
@@ -13,96 +14,110 @@
 #include <stdio.h>
 #include <conio.h>
 #include <iomanip>
-#include <new>
 #include <windows.h>
 #include <io.h>
 #include "Graphics.h"
 
 using namespace std;
 
-bool DeleteFile(const char* path, bool& deleteAll);
-void DeleteNestedFiles(const char* path, bool& deleteAll);
+bool MoveObject(const char* source, const char* destination, bool& overwriteAll);
+void MoveNestedObject(const char* source, const char* destination, bool& overwriteAll);
 int SubMenu(const char* items[], const int itemsCount, const int baseX, const int baseY);
 bool IsDir(const char* path);
-bool ConfirmDelete(bool& deleteAll);
+bool ConfirmOverwrite(bool& overwriteAll);
 
 void main(int argc, char* argv[])
 {
 	HideCursor(true);
 
-	if (argc != 2)
+	if (argc != 3)
 	{
 		cout << "Error: incorrect parametrs number.\n";
 		exit(1);
 	}
 
-	char path[_MAX_PATH];
-	strcpy(path, argv[1]);
+	char source[_MAX_PATH];
+	strcpy(source, argv[1]);
 
-	if (_access(path, 00) == -1)
+	char destination[_MAX_PATH];
+	strcpy(destination, argv[2]);
+
+	if (_access(source, 00) == -1)
 	{
-		cout << "Error: file doesn't exist.\n";
+		cout << "Error: source object doesn't exist.\n";
 		exit(1);
 	}
 
-	bool deleteAll = false;
-	if (!DeleteFile(path, deleteAll))
-	{
-		cout << "Deleting stopped.\n";
-	}
-	else
-	{
-		cout << "\nDeleting finished.\n";
-	}
+	bool overwriteAll = false;
+	MoveObject(source, destination, overwriteAll);
+	cout << "\nMoving finished.\n";
 }
 
 
-bool DeleteFile(const char* path, bool& deleteAll)
+bool MoveObject(const char* source, const char* destination, bool& overwriteAll)
 {
-	const bool dir = IsDir(path);
+	const bool dir = IsDir(source);
 	const char* object = dir ? "folder" : "file";
 
-	if (dir)
-	{
-		cout << endl;
-		DeleteNestedFiles(path, deleteAll);
-		cout << endl;
-	}
+	if (dir) { cout << source << " ->\n    " << destination << "\n"; }
+	else { cout << "\t" << source << " ->\n" << "\t\t" << destination << "\n"; }
 
-	if (_access(path, 00) == 0 && _access(path, 02) == -1)
+	if (_access(destination, 00) == 0)
 	{
-		if (!deleteAll)
+		if (!overwriteAll)
 		{
-			cout << "..." << object << " is read-only. Delete anyway " << path << "?\n";
-			if (!ConfirmDelete(deleteAll))
+			cout << "...Overwrite an existing " << object << "?\n";
+			if (!ConfirmOverwrite(overwriteAll))
 			{
 				cout << "...Skipped\n";
 				return false;
 			}
 		}
 
-		wchar_t* dest = new wchar_t[_MAX_PATH];
-		MultiByteToWideChar(0, 0, path, -1, dest, _MAX_PATH);
-		SetFileAttributes(dest, FILE_ATTRIBUTE_NORMAL);
-		delete[] dest;
+		if (_access(destination, 02) == -1)
+		{
+			if (!overwriteAll)
+			{
+				cout << "..." << object << " is read-only. Overwrite anyway?\n";
+				if (!ConfirmOverwrite(overwriteAll))
+				{
+					cout << "...Skipped\n";
+					return false;
+				}
+			}
+
+			wchar_t* dest = new wchar_t[_MAX_PATH];
+			MultiByteToWideChar(0, 0, destination, -1, dest, _MAX_PATH);
+			SetFileAttributes(dest, FILE_ATTRIBUTE_NORMAL);
+			delete[] dest;
+		}
+
+		if (dir)
+		{
+			MoveNestedObject(source, destination, overwriteAll);
+			_rmdir(source);
+			return true;
+		}
+		else
+		{
+			remove(destination);
+		}
 	}
 
-	if ((!dir && remove(path) != 0) ||
-		(dir&& _rmdir(path) == -1))
+	if (rename(source, destination) != 0)
 	{
-		cout << "    Can't delete " << path << "\n";
-		cout << "Deleting stopped\n";
+		cout << "Error: can't move " << source << "\n";
+		cout << "Moving stopped\n";
 		exit(1);
 	}
 
-	if (!dir) { cout << "\t"; }
-	cout << path << "\n";
+	return true;
 }
 
-void DeleteNestedFiles(const char* path, bool& deleteAll)
+void MoveNestedObject(const char* source, const char* destination, bool& overwriteAll)
 {
 	char searchMask[_MAX_PATH];
-	strcpy(searchMask, path);
+	strcpy(searchMask, source);
 	strcat(searchMask, "\\*.*");
 
 	_finddata_t fileinfo;
@@ -114,19 +129,23 @@ void DeleteNestedFiles(const char* path, bool& deleteAll)
 		if (strcmp(fileinfo.name, ".") &&
 			strcmp(fileinfo.name, ".."))
 		{
-			char nestedPath[_MAX_PATH];
-			strcpy(nestedPath, path);
-			strcat(nestedPath, "\\");
-			strcat(nestedPath, fileinfo.name);
+			char nestedSource[_MAX_PATH];
+			strcpy(nestedSource, source);
+			strcat(nestedSource, "\\");
+			strcat(nestedSource, fileinfo.name);
 
-			DeleteFile(nestedPath, deleteAll);
+			char nestedDestination[_MAX_PATH];
+			strcpy(nestedDestination, destination);
+			strcat(nestedDestination, "\\");
+			strcat(nestedDestination, fileinfo.name);
+
+			MoveObject(nestedSource, nestedDestination, overwriteAll);
 		}
 
 		findNext = _findnext(result, &fileinfo);
 	}
 	_findclose(result);
 }
-
 
 int SubMenu(const char* items[], const int itemsCount, const int baseX, const int baseY)
 {
@@ -227,9 +246,9 @@ bool IsDir(const char* path)
 	return false;
 }
 
-bool ConfirmDelete(bool& deleteAll)
+bool ConfirmOverwrite(bool& overwriteAll)
 {
-	const char* sub[4] = { "   Skip ", " Delete this", " Delete all", "   Cancel" };
+	const char* sub[4] = { "     Skip ", " Overwrite this", " Overwrite all", "   Cancel" };
 	const short choice = SubMenu(sub, 4, 0, CurY());
 
 	GotoXY(0, CurY() - 1);
@@ -245,7 +264,7 @@ bool ConfirmDelete(bool& deleteAll)
 		return true;
 		break;
 	case 2:
-		deleteAll = true;
+		overwriteAll = true;
 		return true;
 		break;
 	default:
