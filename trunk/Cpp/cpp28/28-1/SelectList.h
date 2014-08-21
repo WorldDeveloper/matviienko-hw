@@ -33,4 +33,5 @@ public:
 	bool GetErrorStatus() const { return mErrorMessage; }
 	void ResetMessage();
 	void Reset();
+	bool ListIsEmpty();
 };
