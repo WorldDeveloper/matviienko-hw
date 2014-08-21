@@ -125,13 +125,7 @@ void SelectList::PreviousNode()
 
 void SelectList::DeleteNode()
 {
-	if (mPhoneBook->IsEmpty())
-	{
-		strcpy(mMessage, "Phone book is empty");
-		cout << "Phone book is empty\n";
-		mErrorMessage = true;
-		return;
-	}
+	if (ListIsEmpty()) return;
 
 	Contact* tmpContact = mSelectedContact;
 
@@ -155,13 +149,7 @@ void SelectList::DeleteNode()
 
 void SelectList::EditNode()
 {
-	if (mPhoneBook->IsEmpty())
-	{
-		strcpy(mMessage, "Phone book is empty");
-		cout << "Phone book is empty\n";
-		mErrorMessage = true;
-		return;
-	}
+	if (ListIsEmpty()) return;
 
 	HideCursor(false);
 	SetColour(0xB0);
@@ -241,12 +229,7 @@ void SelectList::AddNode()
 
 void SelectList::MaskSearch(const unsigned char symbol)
 {
-	if (mPhoneBook->IsEmpty())
-	{
-		strcpy(mMessage, "Phone book is empty");
-		mErrorMessage = true;
-		return;
-	}
+	if (ListIsEmpty()) return;
 
 	const int maskLen = strlen(mask);
 
@@ -260,33 +243,35 @@ void SelectList::MaskSearch(const unsigned char symbol)
 		mask[maskLen + 1] = '\0';
 	}
 
-	GotoXY(mBaseX, mCurY);
-	cout << mSelectedContact;
+	strcpy(mMessage, "Search mask: ");
+	strcat(mMessage, mask);
+	mErrorMessage = false;
 
+
+	const int prevY = mCurY;
 	mCurY = mBaseY;
+	Contact* prevContact = mSelectedContact;
 	mSelectedContact = mFirstContact;
-	Contact* prevContact = mFirstContact;
-	while (mSelectedContact && strcmp(mSelectedContact->GetSurname(), mask) < 0)
+
+	while (mSelectedContact && strncmp(mSelectedContact->GetSurname(), mask, strlen(mask)) != 0)
 	{
-		prevContact = mSelectedContact;
 		mSelectedContact = mPhoneBook->Next(mSelectedContact);
 		mCurY++;
 	}
 
-	if (mSelectedContact != mLastContact && !mSelectedContact)
+	if (!mSelectedContact)
 	{
 		mSelectedContact = prevContact;
-		mCurY--;
+		mCurY = prevY;
 	}
+
+	GotoXY(mBaseX, prevY);
+	cout << prevContact;
 
 	GotoXY(mBaseX, mCurY);
 	SetColour(mActiveColour);
 	cout << mSelectedContact;
 	SetColour(mInactiveColour);
-
-	strcpy(mMessage, "Search mask: ");
-	strcat(mMessage, mask);
-	mErrorMessage = false;
 }
 
 void SelectList::ResetMessage()
@@ -296,3 +281,15 @@ void SelectList::ResetMessage()
 	GotoXY(mBaseX, mCurY);
 }
 
+bool SelectList::ListIsEmpty()
+{
+	if (mPhoneBook->IsEmpty())
+	{
+		strcpy(mMessage, "Database is empty");
+		cout << "Database is empty\n";
+		mErrorMessage = true;
+		return true;
+	}
+
+	return false;
+}
