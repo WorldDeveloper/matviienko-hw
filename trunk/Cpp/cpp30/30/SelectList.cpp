@@ -7,7 +7,7 @@ void SelectList::ResetList()
 	mFirstLeaf = mBTree->Min();
 	mSelectedLeaf = mFirstLeaf;
 	mLastLeaf = mBTree->Max();
-	mCurY = mBaseY;
+
 	mMessage = new char[80];
 	strcpy(mMessage, "Type a phrase or press UP and DOWN arrow to select an item. ENTER - review mode");
 	mErrorMessage = false;
@@ -26,6 +26,7 @@ bool SelectList::ListIsEmpty()
 	if (mBTree->IsEmpty())
 	{
 		strcpy(mMessage, "Database is empty");
+		GotoXY(1, mBaseY);
 		cout << "Database is empty\n";
 		mErrorMessage = true;
 		return true;
@@ -33,6 +34,7 @@ bool SelectList::ListIsEmpty()
 
 	return false;
 }
+
 
 void SelectList::SelectActiveItem()
 {
@@ -43,9 +45,9 @@ void SelectList::SelectActiveItem()
 	else
 	{
 		SetColour(mActiveColour);
-		GotoXY(mBaseX, mCurY);
+		GotoXY(mBaseX, SelectedItemY());
 		ShowItem(mSelectedLeaf);
-		GotoXY(60, mCurY);
+		GotoXY(60, SelectedItemY());
 		SetColour(0x7C);
 		cout << " " << setw(19) << left << mMask;
 		SetColour(mInactiveColour);
@@ -56,22 +58,31 @@ void SelectList::DeselectActiveItem()
 {
 	if (!mSelectedLeafReview)
 	{
-		GotoXY(mBaseX, mCurY);
+		GotoXY(mBaseX, SelectedItemY());
 		cout << setw(80) << " ";
-		GotoXY(mBaseX, mCurY);
+		GotoXY(mBaseX, SelectedItemY());
 		ShowItem(mSelectedLeaf);
 	}
 }
 
 void SelectList::ShowItem(const Leaf* const leaf) const
 {
+	//cout << leaf->GetID() << ' ';
 	cout << ' ' << setw(FIRM_LEN) << left << leaf->GetFirm() << ' ';
 	printf("%-22.22s", leaf->GetBranch());
 }
 
 void SelectList::ShowSelectedItem()
 {
-	cout << "Mask: " << mMask << "\n\n";
+	if (ListIsEmpty()) return;
+
+	strcpy(mMessage, "ENTER - go back.");
+	mErrorMessage = false;
+	ShowStatus();
+
+	if (strlen(mMask)) cout << "\nMask: " << mMask << "\n\n";
+	else cout << endl;
+
 	cout << mSelectedLeaf;
 	mSelectedLeafReview = true;
 }
@@ -79,6 +90,8 @@ void SelectList::ShowSelectedItem()
 
 void SelectList::ShowList()
 {
+	if (ListIsEmpty()) return;
+
 	mSelectedLeafReview = false;
 	HideCursor(true);
 	GotoXY(mBaseX, mBaseY);
@@ -87,7 +100,7 @@ void SelectList::ShowList()
 	Leaf* leaf = mFirstLeaf;
 	int itemsCount = 0;
 
-	if (ListIsEmpty()) return;
+
 
 	if (!mSelectedLeaf) { mSelectedLeaf = mFirstLeaf; }
 
@@ -98,23 +111,13 @@ void SelectList::ShowList()
 		leaf = mBTree->Next(leaf);
 	}
 
-	leaf = mFirstLeaf;
-	mCurY = mBaseY;
 
-	while (leaf && leaf != mSelectedLeaf)
+	if (mSelectedLeaf)
 	{
-		leaf = mBTree->Next(leaf);
-		mCurY++;
-	}
-
-	if (leaf)
-	{
-		mSelectedLeaf = leaf;
 		SelectActiveItem();
 	}
 	else
 	{
-		mCurY = mBaseY;
 		cout << "Error: selected item wasn't found.\n";
 		strcpy(mMessage, "Error: selected item wasn't found.\n");
 		mErrorMessage = true;
@@ -124,36 +127,26 @@ void SelectList::ShowList()
 
 void SelectList::NextNode()
 {
-	if (mBTree->IsEmpty() || mSelectedLeafReview)
-	{
-		return;
-	}
+	if (mBTree->IsEmpty() || mSelectedLeafReview) 	return;
 
 	if (mSelectedLeaf != mLastLeaf)
 	{
 		mMask[0] = '\0';
 		DeselectActiveItem();
-
 		mSelectedLeaf = mBTree->Next(mSelectedLeaf);
-		++mCurY;
 		SelectActiveItem();
 	}
 }
 
 void SelectList::PreviousNode()
 {
-	if (mBTree->IsEmpty() || mSelectedLeafReview)
-	{
-		return;
-	}
+	if (mBTree->IsEmpty() || mSelectedLeafReview) return;
 
 	if (mSelectedLeaf != mFirstLeaf)
 	{
 		mMask[0] = '\0';
 		DeselectActiveItem();
-
 		mSelectedLeaf = mBTree->Previous(mSelectedLeaf);
-		--mCurY;
 		SelectActiveItem();
 	}
 }
@@ -168,7 +161,6 @@ bool SelectList::DeleteNode()
 	{
 		mSelectedLeaf = mBTree->Previous(mSelectedLeaf);
 		mLastLeaf = mSelectedLeaf;
-		mCurY--;
 	}
 	else
 	{
@@ -235,7 +227,6 @@ bool SelectList::EditNode()
 	mErrorMessage = false;
 	HideCursor(true);
 
-	mCurY = mBaseY;
 	mFirstLeaf = mBTree->Min();
 	mLastLeaf = mBTree->Max();
 	mSelectedLeafReview = false;
@@ -279,7 +270,6 @@ bool SelectList::AddNode()
 		return false;
 	}
 
-	mCurY = mBaseY;
 	mFirstLeaf = mBTree->Min();
 	mLastLeaf = mBTree->Max();
 	mSelectedLeafReview = false;
@@ -289,19 +279,18 @@ bool SelectList::AddNode()
 
 bool SelectList::Search(const int field, const bool findNext/*=false*/)
 {
-	int tmpY = mBaseY;
+	if (ListIsEmpty()) return false;
+
 	Leaf* searchedLeaf = mFirstLeaf;
 	if (findNext)
 	{
 		if (!strlen(mMask)) return false;
 		searchedLeaf = mBTree->Next(mSelectedLeaf);
-		tmpY = mCurY + 1;
 	}
 
 	while (searchedLeaf && strncmp(searchedLeaf->GetField(field), mMask, strlen(mMask)) != 0)
 	{
 		searchedLeaf = mBTree->Next(searchedLeaf);
-		tmpY++;
 	}
 
 	if (!searchedLeaf)
@@ -317,12 +306,11 @@ bool SelectList::Search(const int field, const bool findNext/*=false*/)
 	DeselectActiveItem();
 
 	mSelectedLeaf = searchedLeaf;
-	mCurY = tmpY;
 	SelectActiveItem();
 
 	if (strlen(mMask))
 	{
-		strcpy(mMessage, "F5 - find next.");
+		strcpy(mMessage, "F5 - find next, ENTER - review.");
 	}
 	else
 	{
@@ -356,10 +344,12 @@ void SelectList::MaskSearch(const unsigned char symbol, const int field)
 
 void SelectList::ResetMessage()
 {
+	if (ListIsEmpty()) return;
+
 	mMask[0] = '\0';
 	mMessage[0] = '\0';
 	mErrorMessage = false;
-	GotoXY(mBaseX, mCurY);
+	GotoXY(mBaseX, SelectedItemY());
 }
 
 bool SelectList::QuitReview()
@@ -382,3 +372,4 @@ void SelectList::ShowStatus()
 	cout << " " << setw(79) << left << mMessage;
 	SetColour(0xF0);
 }
+

@@ -28,23 +28,25 @@ struct Data
 
 class Leaf
 {
+	int mID;
 	Data mData;
 	Leaf* parent;
 	Leaf* left;
 	Leaf* right;
 public:
-	Leaf() :parent(nullptr), left(nullptr), right(nullptr)	{}
+	Leaf() :mID(0), parent(nullptr), left(nullptr), right(nullptr)	{}
 
-	Leaf(const Data& data) : parent(nullptr), left(nullptr), right(nullptr)
+	Leaf(const Data& data) :mID(0), parent(nullptr), left(nullptr), right(nullptr)
 	{
 		mData = data;
 	}
 
-	Leaf(const Leaf& leaf) : parent(leaf.parent), left(leaf.left), right(leaf.right)
+	Leaf(const Leaf& leaf) :mID(0), parent(leaf.parent), left(leaf.left), right(leaf.right)
 	{
 		mData = leaf.mData;
 	}
 
+	const int GetID() const { return mID; }
 	const Data  GetData() const { return mData; }
 	const char* GetFirm() const { return mData.firm; }
 	const char* GetOwner() const { return mData.owner; }
@@ -91,6 +93,7 @@ public:
 	bool ValidInput(const Data& data);
 	Leaf* Add(const Data& data);
 	bool Delete(Leaf* leaf);
+	void CalcID(Leaf* leaf);
 
 	Leaf* FindFirm(const char* firm, const Leaf* const startFrom = nullptr) const;
 	Leaf* Root() const { return mRoot; }

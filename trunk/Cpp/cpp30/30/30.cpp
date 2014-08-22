@@ -33,7 +33,7 @@ ostream& operator<<(ostream& stream, const Leaf* const leaf);
 int SubMenu(const char* items[], const int itemsCount, const int baseX, const int baseY);
 bool WriteLeafToFile(Leaf* leaf, FILE* pFile);
 bool SaveDB(BTree& bTree, const char* name);
-BTree OpenDB(const char* name);
+BTree* OpenDB(const char* name);
 
 
 void main()
@@ -57,7 +57,7 @@ void main()
 	cin.getline(dbPath, 250);
 	HideCursor(true);
 
-	BTree db = OpenDB(dbPath);
+	BTree db = *OpenDB(dbPath);
 
 	enum { INACTIVE = -1, FIND_FIRM, FIND_OWNER, FIND_PHONE, FIND_BRANCH, ADD = 0, EDIT, DEL };
 	int activePage = FIND_FIRM;
@@ -299,20 +299,33 @@ bool WriteLeafToFile(Leaf* leaf, FILE* pFile)
 bool SaveDB(BTree& bTree, const char* name)
 {
 	FILE* pFile = fopen(name, "w+");
-	if (!pFile)
+
+	if (bTree.IsEmpty())
+	{
+		char buffer = '\0';
+		if (!pFile || !fwrite(&buffer, sizeof(buffer), 1, pFile))
+		{
+			cout << "Error: write failure\n";
+			exit(1);
+		}
+		return false;
+	}
+
+
+	if (!pFile || !WriteLeafToFile(bTree.Root(), pFile))
 	{
 		cout << "Error: write failure\n";
 		exit(1);
 	}
-	WriteLeafToFile(bTree.Root(), pFile);
+
 	fclose(pFile);
 
 	return true;
 }
 
-BTree OpenDB(const char* name)
+BTree* OpenDB(const char* name)
 {
-	BTree openedDB; //pointer???
+	BTree* openedDB = new BTree; //pointer???
 
 	FILE* pFile = fopen(name, "r+");
 	if (!pFile)
@@ -325,7 +338,7 @@ BTree OpenDB(const char* name)
 	{
 		Data buffer;
 		fread(&buffer, sizeof(buffer), 1, pFile);
-		openedDB.Add(buffer);
+		openedDB->Add(buffer);
 	}
 	return openedDB;
 }
