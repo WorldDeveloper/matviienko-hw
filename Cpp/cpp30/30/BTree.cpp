@@ -48,6 +48,7 @@ BTree::BTree(const BTree& source)
 	mRoot = nullptr;
 	CopyTree(source.mRoot);
 }
+
 BTree& BTree::operator = (const BTree& source)
 {
 	if (this == &source) return *this;
@@ -59,6 +60,21 @@ BTree& BTree::operator = (const BTree& source)
 	return *this;
 }
 
+void BTree::CalcID(Leaf* leaf)
+{
+	const Leaf* prevLeaf = Previous(leaf);
+	int id = -1;
+	if (prevLeaf)
+	{
+		id = prevLeaf->mID;
+	}
+
+	while (leaf)
+	{
+		leaf->mID = ++id;
+		leaf = Next(leaf);
+	}
+}
 
 Leaf*  BTree::Add(const Data& data)
 {
@@ -97,6 +113,7 @@ Leaf*  BTree::Add(const Data& data)
 		newLeaf->parent->right = newLeaf;
 	}
 
+	CalcID(newLeaf);
 	return newLeaf;
 }
 
@@ -255,7 +272,10 @@ bool BTree::Delete(Leaf* leaf)
 			leaf->parent->right = leafChild;
 		}
 
+		Leaf* nextLeaf = Next(leaf);
 		delete leaf;
+		CalcID(nextLeaf);
+
 		return true;
 	}
 

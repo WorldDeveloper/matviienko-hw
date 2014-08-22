@@ -9,7 +9,6 @@ class SelectList
 	Leaf* mSelectedLeaf;
 	Leaf* mFirstLeaf;
 	Leaf* mLastLeaf;
-	int mCurY;
 	int mBaseX;
 	int mBaseY;
 	char* mMessage;
@@ -41,5 +40,6 @@ public:
 	void ShowStatus();
 	void ResetMessage();
 	void ResetList();
+	int SelectedItemY() const { return mBaseY + mSelectedLeaf->GetID(); }
 
 };
