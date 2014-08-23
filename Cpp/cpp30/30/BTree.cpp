@@ -1,7 +1,5 @@
 #include "BTree.h"
 
-
-
 BTree::~BTree()
 {
 	while (mRoot)
@@ -32,6 +30,7 @@ bool BTree::ValidInput(const Data& data)
 		return true;
 	}
 }
+
 
 void BTree::CopyTree(Leaf* leaf)
 {
@@ -132,7 +131,7 @@ Leaf* BTree::FindFirm(const char* firm, const Leaf* const startFrom /*=nullptr*/
 
 	while (leaf)
 	{
-		int nameCompare = strcmp(firm, leaf->mData.firm);
+		int nameCompare = strncmp(firm, leaf->mData.firm, strlen(firm));
 		if (nameCompare < 0)
 		{
 			leaf = leaf->left;
@@ -143,7 +142,13 @@ Leaf* BTree::FindFirm(const char* firm, const Leaf* const startFrom /*=nullptr*/
 		}
 		else
 		{
-			return leaf;
+			Leaf* searchedLeaf = leaf;
+			while (leaf && !strncmp(firm, leaf->mData.firm, strlen(firm)))
+			{
+				searchedLeaf = leaf;
+				leaf = Previous(leaf);
+			}
+			return searchedLeaf;
 		}
 	}
 	return nullptr;
