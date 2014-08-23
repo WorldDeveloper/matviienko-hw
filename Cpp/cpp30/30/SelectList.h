@@ -46,7 +46,6 @@ public:
 
 	void ShowStatus();
 	void ResetMessage();
-	void ResetList();
 	int SelectedItemY() const { return mBaseY + mSelectedLeaf->GetID(); }
 
 };

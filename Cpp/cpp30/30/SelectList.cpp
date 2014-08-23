@@ -2,7 +2,9 @@
 #include "SelectList.h"
 using namespace std;
 
-void SelectList::ResetList()
+
+SelectList::SelectList(BTree* bTree, const int baseX, const int baseY)
+:mBTree(bTree), mBaseX(baseX), mBaseY(baseY)
 {
 	mFirstLeaf = mBTree->Min();
 	mSelectedLeaf = mFirstLeaf;
@@ -14,12 +16,6 @@ void SelectList::ResetList()
 	mMask[0] = '\0';
 	mSelectedLeafReview = false;
 	mSecondColumn = 1;
-}
-
-SelectList::SelectList(BTree* bTree, const int baseX, const int baseY)
-:mBTree(bTree), mBaseX(baseX), mBaseY(baseY)
-{
-	ResetList();
 }
 
 bool SelectList::ListIsEmpty()
@@ -68,7 +64,6 @@ void SelectList::DeselectActiveItem()
 
 void SelectList::ShowItem(const Leaf* const leaf) const
 {
-	//cout << leaf->GetID() << ' ';
 	cout << ' ' << setw(FIRM_LEN) << left << leaf->GetFirm() << ' ';
 	printf("%-22.22s", leaf->GetField(mSecondColumn));
 }
@@ -113,7 +108,6 @@ void SelectList::ShowList(const int column)
 		leaf = mBTree->Next(leaf);
 	}
 
-
 	if (mSelectedLeaf)
 	{
 		SelectActiveItem();
@@ -124,33 +118,26 @@ void SelectList::ShowList(const int column)
 		strcpy(mMessage, "Error: selected item wasn't found.\n");
 		mErrorMessage = true;
 	}
-
 }
 
 void SelectList::NextNode()
 {
-	if (mBTree->IsEmpty() || mSelectedLeafReview) 	return;
+	if (mBTree->IsEmpty() || mSelectedLeafReview || mSelectedLeaf == mLastLeaf) 	return;
 
-	if (mSelectedLeaf != mLastLeaf)
-	{
-		mMask[0] = '\0';
-		DeselectActiveItem();
-		mSelectedLeaf = mBTree->Next(mSelectedLeaf);
-		SelectActiveItem();
-	}
+	mMask[0] = '\0';
+	DeselectActiveItem();
+	mSelectedLeaf = mBTree->Next(mSelectedLeaf);
+	SelectActiveItem();
 }
 
 void SelectList::PreviousNode()
 {
-	if (mBTree->IsEmpty() || mSelectedLeafReview) return;
+	if (mBTree->IsEmpty() || mSelectedLeafReview || mSelectedLeaf == mFirstLeaf) return;
 
-	if (mSelectedLeaf != mFirstLeaf)
-	{
-		mMask[0] = '\0';
-		DeselectActiveItem();
-		mSelectedLeaf = mBTree->Previous(mSelectedLeaf);
-		SelectActiveItem();
-	}
+	mMask[0] = '\0';
+	DeselectActiveItem();
+	mSelectedLeaf = mBTree->Previous(mSelectedLeaf);
+	SelectActiveItem();
 }
 
 bool SelectList::DeleteNode()
@@ -216,7 +203,6 @@ bool SelectList::EditNode()
 	if (!input.phone[0] && initial.phone[0]) { strcpy(input.phone, initial.phone); }
 	if (!input.address[0] && initial.address[0]) { strcpy(input.address, initial.address); }
 	if (!input.branch[0] && initial.branch[0]) { strcpy(input.branch, initial.branch); }
-
 
 	Leaf* tmp = mSelectedLeaf;
 	mSelectedLeaf = mBTree->Add(input);
@@ -322,11 +308,6 @@ bool SelectList::Search(const int field, const bool findNext/*=false*/)
 		return false;
 	}
 
-	DeselectActiveItem();
-
-	mSelectedLeaf = searchedLeaf;
-	SelectActiveItem();
-
 	if (strlen(mMask))
 	{
 		strcpy(mMessage, "F5 - find next, ENTER - review.");
@@ -337,6 +318,10 @@ bool SelectList::Search(const int field, const bool findNext/*=false*/)
 	}
 	mErrorMessage = false;
 	ShowStatus();
+
+	DeselectActiveItem();
+	mSelectedLeaf = searchedLeaf;
+	SelectActiveItem();
 
 	return true;
 }

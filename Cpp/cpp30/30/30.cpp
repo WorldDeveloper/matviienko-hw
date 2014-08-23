@@ -36,7 +36,6 @@ bool WriteLeafToFile(Leaf* leaf, ofstream& out);
 void SaveDB(BTree& bTree, const char* name);
 BTree* OpenDB(const char* name);
 
-
 void main()
 {
 	system("color F0");
@@ -184,7 +183,6 @@ void main()
 	}
 }
 
-
 ostream& operator<<(ostream& stream, const Leaf* const leaf)
 {
 	stream << "Trade name: " << leaf->mData.firm << "\n\n";
@@ -194,93 +192,6 @@ ostream& operator<<(ostream& stream, const Leaf* const leaf)
 	stream << "Branch: " << leaf->mData.branch << "\n\n";
 	return stream;
 }
-
-
-int SubMenu(const char* items[], const int itemsCount, const int baseX, const int baseY)
-{
-	int itemMaxLen = 0;
-	for (int i = 0; i < itemsCount; ++i)
-	{
-		if (itemMaxLen < strlen(items[i])) { itemMaxLen = strlen(items[i]); }
-	}
-	itemMaxLen++;
-
-	if (itemsCount < 2) return -1;
-	const short activeColour = 0x70;
-	const short inactiveColour = 0x78;
-
-	const int prevX = CurX();
-	const int prevY = CurY();
-
-	SetColour(activeColour);
-	GotoXY(baseX, baseY);
-	cout << setw(itemMaxLen) << left << items[0] << endl;
-	SetColour(inactiveColour);
-	for (int i = 1; i < itemsCount; ++i)
-	{
-		GotoXY(baseX, baseY + i);
-		cout << setw(itemMaxLen) << left << items[i];
-	}
-	GotoXY(baseX, baseY);
-
-	int selectedItem = -1;
-	while (true)
-	{
-		unsigned char control = getch();
-		enum{ KEY_ENTER = 13, KEY_ESCAPE = 27, KEY_UP = 72, KEY_DOWN = 80 };
-		int curY = CurY();
-		if (control == 224 && kbhit())
-		{
-			switch (getch())
-			{
-			case KEY_UP:
-				if (curY > baseY)
-				{
-					GotoXY(baseX, curY);
-					cout << setw(itemMaxLen) << left << items[curY - baseY];
-					GotoXY(baseX, --curY);
-					SetColour(activeColour);
-					cout << setw(itemMaxLen) << left << items[curY - baseY];
-					SetColour(inactiveColour);
-				}
-				break;
-			case KEY_DOWN:
-				if (curY < baseY + itemsCount - 1)
-				{
-					GotoXY(baseX, curY);
-					cout << setw(itemMaxLen) << items[curY - baseY];
-					GotoXY(baseX, ++curY);
-					SetColour(activeColour);
-					cout << setw(itemMaxLen) << items[curY - baseY];
-					SetColour(inactiveColour);
-				}
-				break;
-			}
-		}
-		else if (control == KEY_ENTER)
-		{
-			selectedItem = CurY() - baseY;
-			break;
-		}
-		else if (control == KEY_ESCAPE)
-		{
-			selectedItem = -1;
-			break;
-		}
-	}
-
-	SetColour(systemColour);
-
-	GotoXY(0, baseY);
-	for (int i = 0; i < itemsCount; ++i)
-	{
-		cout << setw(79) << " " << endl;
-	}
-	GotoXY(prevX, prevY);
-
-	return selectedItem;
-}
-
 
 bool WriteLeafToFile(Leaf* leaf, ofstream& out)
 {
