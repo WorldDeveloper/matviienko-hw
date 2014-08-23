@@ -24,6 +24,7 @@ struct Data
 		address[0] = '\0';
 		branch[0] = '\0';
 	}
+	bool IsEmpty() const { return !(firm[0] || owner[0] || phone[0] || address[0] || branch[0]); }
 };
 
 class Leaf

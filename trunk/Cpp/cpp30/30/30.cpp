@@ -17,6 +17,7 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <conio.h>
 #include <io.h>
@@ -31,8 +32,8 @@ const int systemColour = 0xF0;
 
 ostream& operator<<(ostream& stream, const Leaf* const leaf);
 int SubMenu(const char* items[], const int itemsCount, const int baseX, const int baseY);
-bool WriteLeafToFile(Leaf* leaf, FILE* pFile);
-bool SaveDB(BTree& bTree, const char* name);
+bool WriteLeafToFile(Leaf* leaf, ofstream& out);
+void SaveDB(BTree& bTree, const char* name);
 BTree* OpenDB(const char* name);
 
 
@@ -71,7 +72,7 @@ void main()
 
 		list.ShowStatus();
 		list.ResetMessage();
-		list.ShowList();
+		list.ShowList(activePage);
 
 		while (true)
 		{
@@ -84,21 +85,25 @@ void main()
 				if (secondByte == KEY_F1)
 				{
 					activePage = FIND_FIRM;
+					list.ResetMessage();
 					break;
 				}
 				else if (secondByte == KEY_F2)
 				{
 					activePage = FIND_OWNER;
+					list.ResetMessage();
 					break;
 				}
 				else if (secondByte == KEY_F3)
 				{
 					activePage = FIND_PHONE;
+					list.ResetMessage();
 					break;
 				}
 				else if (secondByte == KEY_F4)
 				{
 					activePage = FIND_BRANCH;
+					list.ResetMessage();
 					break;
 				}
 				else if (secondByte == KEY_F5)
@@ -151,7 +156,7 @@ void main()
 				}
 
 			}
-			else if ((control > 64 && control<91) || (control>96 && control < 123) || (control > 47 && control < 58) || control == 8 || control == 32)
+			else if ((control > 31 && control < 123) || control == 8)
 			{
 				list.MaskSearch(control, activePage);
 			}
@@ -162,7 +167,7 @@ void main()
 				dbMenu.showMenu();
 				if (list.QuitReview())
 				{
-					list.ShowList();
+					list.ShowList(activePage);
 				}
 				else
 				{
@@ -277,15 +282,15 @@ int SubMenu(const char* items[], const int itemsCount, const int baseX, const in
 }
 
 
-bool WriteLeafToFile(Leaf* leaf, FILE* pFile)
+bool WriteLeafToFile(Leaf* leaf, ofstream& out)
 {
 	if (leaf)
 	{
 		Data buffer = leaf->GetData();
-		if (fwrite(&buffer, sizeof(buffer), 1, pFile))
+		if (out.write((char*)&buffer, sizeof(buffer)))
 		{
-			WriteLeafToFile(leaf->GetLeft(), pFile);
-			WriteLeafToFile(leaf->GetRight(), pFile);
+			WriteLeafToFile(leaf->GetLeft(), out);
+			WriteLeafToFile(leaf->GetRight(), out);
 		}
 		else
 		{
@@ -296,49 +301,36 @@ bool WriteLeafToFile(Leaf* leaf, FILE* pFile)
 }
 
 
-bool SaveDB(BTree& bTree, const char* name)
+void SaveDB(BTree& bTree, const char* name)
 {
-	FILE* pFile = fopen(name, "w+");
-
-	if (bTree.IsEmpty())
-	{
-		char buffer = '\0';
-		if (!pFile || !fwrite(&buffer, sizeof(buffer), 1, pFile))
-		{
-			cout << "Error: write failure\n";
-			exit(1);
-		}
-		return false;
-	}
-
-
-	if (!pFile || !WriteLeafToFile(bTree.Root(), pFile))
+	ofstream out(name, ios::out | ios::binary);
+	if (!out || !WriteLeafToFile(bTree.Root(), out))
 	{
 		cout << "Error: write failure\n";
 		exit(1);
 	}
 
-	fclose(pFile);
-
-	return true;
+	out.close();
 }
 
 BTree* OpenDB(const char* name)
 {
-	BTree* openedDB = new BTree; //pointer???
+	BTree* openedDB = new BTree;
 
-	FILE* pFile = fopen(name, "r+");
-	if (!pFile)
+	ifstream in(name, ios::in | ios::binary);
+	if (!in)
 	{
 		cout << "\nError: read failure.\n\n";
 		exit(1);
 	}
 
-	while (!feof(pFile))
+	while (!in.eof())
 	{
 		Data buffer;
-		fread(&buffer, sizeof(buffer), 1, pFile);
+		in.read((char*)&buffer, sizeof(buffer));
 		openedDB->Add(buffer);
 	}
+
+	in.close();
 	return openedDB;
 }

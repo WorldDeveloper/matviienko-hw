@@ -17,23 +17,30 @@ class SelectList
 	const short mInactiveColour = 0xF0;
 	char mMask[20];
 	bool mSelectedLeafReview;
+	int mSecondColumn;
 public:
 	SelectList(BTree* bTree, const int baseX, const int baseY);
 	~SelectList() { delete[] mMessage; }
 
 	bool ListIsEmpty();
+
 	void SelectActiveItem();
 	void DeselectActiveItem();
+
 	void ShowItem(const Leaf* const leaf) const;
 	void ShowSelectedItem();
-	void ShowList();
+	void ShowList(const int column);
+
 	void NextNode();
 	void PreviousNode();
+
 	bool DeleteNode();
 	bool EditNode();
 	bool AddNode();
+
 	bool Search(const int field, const bool findNext = false);
 	void MaskSearch(const unsigned char symbol, const int field);
+
 	bool QuitReview();
 	bool ReviewStatus() const { return mSelectedLeafReview; }
 
