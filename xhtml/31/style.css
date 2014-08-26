@@ -1,0 +1,27 @@
+﻿body{
+    background-color:black;
+    padding-top:20px;
+    margin:0px;
+    text-align:center;
+	font-weight:bold;
+}
+
+img {
+   border:none;
+}
+
+.Content {
+  vertical-align:central;
+  font-weight:bold;
+  padding:30px;
+  color:red;
+}
+
+a {
+    margin-right:30px;
+}
+
+.red {
+   background-color: red;
+   }
+
