@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body {
+            font-family: Verdana, sans-serif;
+            font-size: 13px;
+        }
+
+        #container {
+            min-width: 500px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        #header {
+            height: 125px;
+        }
+
+        .headLine {
+            border-bottom: 1px solid black;
+            padding-top: 84px;
+            padding-left: 400px;
+        }
+
+        #menu {
+            float: left;
+            width: 125px;
+            text-align: right;
+            margin-top: 40px;
+        }
+
+        #greeting {
+            min-width: 200px;
+            padding: 27px 240px 20px 140px;
+        }
+
+        #news {
+            float: right;
+            width: 200px;
+            font-size: 10px;
+            padding: 30px;
+        }
+
+        .newsHeader {
+            width: 232px;
+            margin: 0;
+            float: right;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        dt.newsTitle {
+            font-weight: bold;
+        }
+
+        dd.newsBody {
+            margin: 0 0 20px 0;
+        }
+
+        #footer {
+            clear: both;
+            border-top: 1px solid black;
+        }
+
+        .rectangle, .bottomRectangle {
+            border: 1px solid black;
+            border-top: none;
+            background-color: #A0A0A0;
+            height: 17px;
+        }
+
+        .bottomRectangle {
+            width: 207px;
+            float: left;
+        }
+
+
+        .copyright {
+            float: right;
+            width: 230px;
+            font-size: 10px;
+        }
+
+        a.menu {
+            text-decoration: none;
+            font-weight: bold;
+            color: #4C4C4C;
+        }
+
+        .logo {
+            float: left;
+            margin-top: 32px;
+            width: 309px;
+        }
+    </style>
+    <title>PopStar</title>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <img class="logo" src="img/header2.jpg" alt="logo" />
+            <div class="headLine"></div>
+            <div class="newsHeader">
+                <div class="rectangle"></div>
+                НОВОСТИ
+            </div>
+
+        </div>
+        <div id="content">
+            <div id="menu">
+                <a class="menu" href="#">О компании</a><br />
+                <a class="menu" href="#">Наши звездочки</a><br />
+                <a class="menu" href="#">Услуги</a><br />
+                <a class="menu" href="#">Контакты</a><br />
+            </div>
+            <div id="news">
+                <dl>
+                    <dt class="newsTitle">02.03.2003</dt>
+                    <dd class="newsBody">На прошлой неделе услугами нашей компании воспользовались 20 начинающих звезд!</dd>
+                    <dt class="newsTitle">20.02.2003</dt>
+                    <dd class="newsBody"> К нам пришел работать лучший продюссер! Мы поднимаем цены на 20%!</dd>
+                </dl>
+
+            </div>
+            <div id="greeting">
+                <p>
+                    Наша компания является самой известной в мире и вне всякого сомнения самой уважаемой.
+                    Мы не только раскручиваем звезд, мы их зажигаем. Нам принадлежит более тысячи отличных
+                    рекламных площадок, мы можем сделать звезду из самого бездарного на свете лентяя.
+                </p>
+                <p>
+                    У нас работают только профессионалы своего дела, которые обеспечивают
+                    все необходимое для вашего успеха, обращайтесь к нам и вы не пожалеете.
+                </p>
+            </div>
+
+        </div>
+        <div id="footer">
+            <div class="bottomRectangle">
+            </div>
+            <div class="copyright">2003 (c) PopStar</div>
+        </div>
+    </div>
+</body>
+</html>
