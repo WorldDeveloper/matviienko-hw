@@ -26,8 +26,9 @@
 using namespace std;
 
 template <class T>
-void GetInfo(const Array<T>& obj)
+void GetInfo(Array<T>& obj, char* test)
 {
+	cout << "\n\n*" << test << endl;
 	cout << "\n\t size=\t" << obj.GetSize();
 	cout << "\n\t upper bound=\t" << obj.GetUpperBound();
 	cout << "\n\t is empty=\t" << obj.IsEmpty();
@@ -41,74 +42,72 @@ void GetInfo(const Array<T>& obj)
 }
 void main()
 {
-	cout << "\n***A************************************\n";
+	cout << "\n***A***\n";
+
 	Array<int> a;
-	cout << "*SetSize(3,5)\n";
 	a.SetSize(3, 5);
-	GetInfo(a);
+	GetInfo(a, "SetSize(3,5)");
 
-	cout << "*SetSize(13,5)\n";
+	a.Add(1);
+	GetInfo(a, "Add(1)");
+
 	a.SetSize(13, 5);
+	GetInfo(a, "SetSize(13,5)");
 
-	cout << "*Add()\n";
-	a.Add();
-
-	cout << "*for i=0 to 14: Set(i,i)\n";
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < 13; ++i)
 	{
-		a.SetAt(i, i);
+		a.Add(i);
 	}
-	GetInfo(a);
+	GetInfo(a, "for i=0 to 12: Add(i)");
 
-	cout << "*RemoveAll()\n";
 	a.RemoveAll();
-	GetInfo(a);
+	GetInfo(a, "RemoveAll()");
 
-	cout << "*SetSize(14)\n";
-	a.SetSize(14);
+	a.SetSize(10, 5);
+	GetInfo(a, "SetSize(10)");
 
-	cout << "*for i=0 to 9: Set(i,i*2)\n";
-	for (int i = 0; i < 10; ++i)
+
+	for (int i = 0; i < 5; ++i)
 	{
-		a.SetAt(i, i * 2);
+		a.Add(i * 3);
 	}
+	GetInfo(a, "for i=0 to 5: Add(i*3)");
 
-	cout << "*FreeExtra()\n";
 	a.FreeExtra();
-	GetInfo(a);
+	GetInfo(a, "FreeExtra()");
 
 
-	cout << "\n***B************************************\n";
+	cout << "\n***B****\n";
 	Array<int> b;
-	cout << "*B=A\n";
 	b = a;
-	GetInfo(b);
+	GetInfo(b, "B=A");
 
-	cout << "*Append(a)\n";
+	for (int i = 0; i < 5; ++i)
+	{
+		b.SetAt(i, i);
+	}
+	GetInfo(b, "for i=0 to 5: SetAt(i, i)");
+
 	b.Append(a);
-	GetInfo(b);
+	GetInfo(b, "Append(a)");
 
 	cout << "*InsertAt(0, 111)\n";
 	b.InsertAt(0, 111);
-	cout << "*InsertAt(5, 555)\n";
-	b.InsertAt(5, 555);
-	cout << "*InsertAt(21, 21)\n";
-	b.InsertAt(21, 21);
-	cout << "*InsertAt(23,23)\n";
-	b.InsertAt(23, 23);
-	GetInfo(b);
+	cout << "*InsertAt(4, 444)\n";
+	b.InsertAt(4, 444);
+	cout << "*InsertAt(11, 111)\n";
+	b.InsertAt(11, 1222);
+	GetInfo(b, "After insertion");
 
-	cout << "*RemoveAt(23)\n";
-	b.RemoveAt(23);
-	cout << "*RemoveAt(21)\n";
-	b.RemoveAt(21);
-	cout << "*RemoveAt(5)\n";
-	b.RemoveAt(5);
+	cout << "*RemoveAt(11)\n";
+	b.RemoveAt(11);
+	cout << "*RemoveAt(4)\n";
+	b.RemoveAt(4);
 	cout << "*RemoveAt(0)\n";
 	b.RemoveAt(0);
-	GetInfo(b);
+	GetInfo(b, "After deletion");
 
-	cout << "\n***pA************************************\n";
+	cout << "\n***pA****\n";
 	cout << "*pa=a.GetData()\n\t";
 	int *pa = a.GetData();
 	for (int i = 0; i <= a.GetUpperBound(); ++i)
@@ -116,7 +115,7 @@ void main()
 		cout << pa[i] << " ";
 	}
 
-	cout << "\n\n***pB************************************\n";
+	cout << "\n\n***pB***\n";
 	cout << "*pb=b.GetData()\n\t";
 	int *pb = b.GetData();
 	for (int i = 0; i <= b.GetUpperBound(); ++i)
