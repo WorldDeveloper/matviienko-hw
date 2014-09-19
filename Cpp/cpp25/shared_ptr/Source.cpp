@@ -57,6 +57,11 @@ void main()
 	ptr1 = new int(1);
 	info(ptr1, "ptr1");
 	info(ptr2, "ptr2");
+
+	Sharedptr<int> p;
+	info(p, "p");
+	p = ptr1;
+	info(p, "p");
 }
 
 template <typename T>

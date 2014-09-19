@@ -1,4 +1,4 @@
-template <class T>
+﻿template <class T>
 class Sharedptr
 {
 	T* mPtr;
@@ -6,15 +6,22 @@ class Sharedptr
 public:
 	Sharedptr(T* p = nullptr) :mPtr(p), mCount(new int)
 	{
-		*mCount = 1;
-		cout << "\*Create mPtr\n";
+		if (mPtr) 
+		{ 
+			*mCount = 1;
+			cout << "\*Create mPtr\n";
+		}
+		else { *mCount = 0; }
+
+		
 	}
 	~Sharedptr()
 	{
-		if (mPtr != nullptr && *mCount < 2)
+		if (mPtr != nullptr && *mCount ==1)
 		{
 			cout << "*Delete mPtr wich value=\"" << *mPtr << "\"\n";
 			delete mPtr;
+			delete mCount;
 		}
 		else
 		{
