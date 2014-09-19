@@ -37,7 +37,7 @@ void PrintFormat(const char* output, ...)
 		{
 			++curSymbol;
 			bool leftAlign = false;
-			if (*curSymbol != '\0'&& *curSymbol == '-')
+			if (*curSymbol == '-')
 			{
 				cout << left;
 				leftAlign = true;
@@ -49,7 +49,7 @@ void PrintFormat(const char* output, ...)
 			}
 
 			char fill = ' ';
-			if (*curSymbol != '\0'&& *curSymbol == '0')
+			if (*curSymbol == '0')
 			{
 				fill = '0';
 				++curSymbol;
