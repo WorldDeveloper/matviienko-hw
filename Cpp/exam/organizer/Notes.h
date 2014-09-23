@@ -51,6 +51,13 @@ public:
 
 		return mNotes[itemIndex];
 	}
+
+	string GetItemInWindow(const int itemIndex) const
+	{
+		if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) throw "out of range";
+
+		return mNotes[itemIndex];
+	}
 	
 	bool SelectItem(const int itemIndex)
 	{

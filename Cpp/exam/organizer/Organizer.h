@@ -29,7 +29,7 @@ public:
 	virtual int GetIndexOfSelectedItem() const = 0;
 	virtual bool SelectItem(const int itemIndex) = 0;
 	virtual string GetItemInLine(const int itemIndex) const = 0;
-	//virtual string GetItemInWindow(const int itemIndex) const = 0;
+	virtual string GetItemInWindow(const int itemIndex) const = 0;
 	~Organizer(){}
 
 	void MessageBox(const string& message, const bool error)
@@ -111,6 +111,11 @@ public:
 		ShowItemInLine(GetIndexOfSelectedItem());
 		SetColour(mInactiveColour);
 	}
+	void ShowSelectedItemInWindow() const
+	{
+		GotoXY(mBaseX, mBaseY);
+		cout << GetItemInWindow(GetIndexOfSelectedItem()) << endl;
+	}
 	void ShowList() const
 	{
 		if (!GetSize()) return;
@@ -124,6 +129,22 @@ public:
 		}
 
 		ShowSelectedItemInLine();
+	}
+	void ReviewSelectedItem()
+	{
+		if (!GetSize()) return;
+
+		RepaintWindow(ACTIVE, ACTIVE, true);
+		if (!mSelectedItemReview)
+		{
+			ShowSelectedItemInWindow();
+			mSelectedItemReview = true;
+		}
+		else
+		{
+			ShowList();
+			mSelectedItemReview = false;
+		}
 	}
 };
 

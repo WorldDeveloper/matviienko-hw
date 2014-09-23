@@ -74,25 +74,14 @@ void main()
 		}
 		else if (control == KEY_ENTER)
 		{
-			/*system("cls");
-			searchMenu.showMenu(activePage);
-			dbMenu.showMenu();
-			if (list.QuitReview())
-			{
-				list.ShowList(activePage);
-			}
-			else
-			{
-				list.ShowSelectedItem();
-			}*/
+			p->ReviewSelectedItem();
 		}
 		else if (control == KEY_ESCAPE)
 		{
-			/*GotoXY(0, 4);
-			exit(0);*/
+			GotoXY(0, 4);
+			exit(0);
 		}
 	}
-	//SetColour(systemColour);
 }
 
 
