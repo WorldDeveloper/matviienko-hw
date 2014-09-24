@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include "Graphics.h"
 #include "menu.h"
@@ -82,35 +83,38 @@ public:
 		mSelectedItemReview(false),
 		mMainMenu("Organizer", { " F1 Events ", " F2 Contacts ", " F3 Notes " }, 0, 0), // create settings in separate file
 		mItemsControlMenu("Items management", { "F5 Add", "F6 Edit", "F7 Delete" }, 46, 0)
-	{}
+	{
+		mMainMenu.SetStatus(0);
+		mItemsControlMenu.SetStatus(ACTIVE);
+	}
 	~Organizer(){}
 	
 	void Add()
 	{
-		const int activePage = mMainMenu.GetStatus();
-		RepaintWindow(activePage, ADD, false);
+		mItemsControlMenu.SetStatus(ADD);
+		RepaintWindow(false);
 
 		if (!AddDetails()) MessageBox("Item has not been added.", true);
 		
-		RepaintWindow(activePage, ACTIVE, true);
+		mItemsControlMenu.SetStatus(ACTIVE);
+		RepaintWindow(true);
 		ShowList();
 	}
 	void Edit()
 	{
-		const int activePage = mMainMenu.GetStatus();
 		if (!GetSize())
 		{
 			MessageBox("There are no items to edit.", true);
 		}
 		else
 		{		
-			
-			RepaintWindow(activePage, EDIT, false);
+			mItemsControlMenu.SetStatus(EDIT);
+			RepaintWindow(false);
 
 			if (!EditDetails()) MessageBox("Item has not been changed.", true);
 		}
-
-		RepaintWindow(activePage, ACTIVE, false);
+		mItemsControlMenu.SetStatus(ACTIVE);
+		RepaintWindow(true);
 		ShowList();
 	}
 	void Delete()
@@ -123,8 +127,8 @@ public:
 		{
 			if (!DeleteDetails()) MessageBox("Item has not been deleted.", true);
 		}
-		const int activePage = mMainMenu.GetStatus();
-		RepaintWindow(activePage, ACTIVE, false);
+
+		RepaintWindow();
 		if (GetSize()) ShowList();
 	}
 	
@@ -147,7 +151,7 @@ public:
 	{
 		if (!GetSize()) return;
 
-		RepaintWindow(mMainMenu.GetStatus(), ACTIVE, true);
+		RepaintWindow();
 		if (!mSelectedItemReview)
 		{
 			ShowSelectedItemInWindow();
@@ -199,12 +203,16 @@ public:
 		while (true){ if (getch()) break; }
 		SetColour(mSystemColour);
 	}
-	void RepaintWindow(const int mainMenuStatus, const int itemsControlMenuStatus, const bool hideCursor)
+	void RepaintWindow(const bool hideCursor=true)
 	{
 		system("cls");
-		mMainMenu.ShowMenu(mainMenuStatus);
-		mItemsControlMenu.ShowMenu(itemsControlMenuStatus);
+		mMainMenu.ShowMenu();
+		mItemsControlMenu.ShowMenu();
 		HideCursor(hideCursor);
+	}
+	void SetActivePage(const int page)
+	{
+		mMainMenu.SetStatus(page);
 	}
 };
 

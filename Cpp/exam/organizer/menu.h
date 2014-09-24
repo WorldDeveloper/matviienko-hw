@@ -18,7 +18,7 @@ public:
 	//void addItems(const char* name[]);
 	void SetStatus(const int activeItem);
 	void RepaintMenu(const int activeItem = -2);
-	void ShowMenu(const int activeItem = -2);
+	void ShowMenu();
 	void Line(unsigned const char c, const int length);
 	int GetStatus() const;
 };

@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include "Notes.h"
+#include "Contacts.h"
+#include "Events.h"
 
 using namespace std;
 
@@ -14,12 +16,13 @@ void main()
 	system("color F0");
 	HideCursor(true);
 
-	short activePage = 0;
+
+	Contacts contact;
 	Notes note;
 	Notes n1;
 	Notes n2;
 	Organizer* p = &note;
-	p->RepaintWindow(activePage, ACTIVE, true);
+	p->RepaintWindow();
 	p->ShowList();
 	while (true)
 	{
@@ -31,23 +34,23 @@ void main()
 			unsigned char secondByte = getch();
 			if (secondByte == KEY_F1)
 			{
-				activePage = 0;
-				p = &note;
-				p->RepaintWindow(activePage, ACTIVE, true);
+				p = &n1;
+				p->SetActivePage(0);
+				p->RepaintWindow();
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F2)
 			{
-				activePage = 1; 
-				p = &n1;
-				p->RepaintWindow(activePage, ACTIVE, true);
+				p = &contact;
+				p->SetActivePage(1);
+				p->RepaintWindow();
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F3)
 			{
-				activePage = 2; 
-				p = &n2;
-				p->RepaintWindow(activePage, ACTIVE, true);
+				p = &note;
+				p->SetActivePage(2);
+				p->RepaintWindow();
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F5)
