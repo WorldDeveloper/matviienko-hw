@@ -16,6 +16,7 @@ public:
 		char note[250];
 		cin.getline(note, 250);
 		mNotes.push_back(note);
+		
 		mSelectedNote =--mNotes.end();
 		return true;
 	}

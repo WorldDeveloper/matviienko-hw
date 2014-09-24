@@ -29,10 +29,8 @@ void Menu::SetStatus(const int activeItem)
 	if (activeItem >= 0 || activeItem < mItems.size())  mStatus[activeItem] = true;
 }
 
-void Menu::ShowMenu(const int activeItem /*=-2*/)
+void Menu::ShowMenu()
 {
-	SetStatus(activeItem);
-
 	SetColour(mMenuColour);
 	for (int j = 0; j < 3; j++)
 	{
