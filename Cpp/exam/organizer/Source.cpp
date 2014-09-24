@@ -1,7 +1,7 @@
-/*
-Написать программу, реализующую электронный органайзер. 
-Реализовать возможности добавления, удаления, редактирования и хранения данных. 
-Предусмотреть обработку всех возможных ошибок
+п»ї/*
+РќР°РїРёСЃР°С‚СЊ РїСЂРѕРіСЂР°РјРјСѓ, СЂРµР°Р»РёР·СѓСЋС‰СѓСЋ СЌР»РµРєС‚СЂРѕРЅРЅС‹Р№ РѕСЂРіР°РЅР°Р№Р·РµСЂ. 
+Р РµР°Р»РёР·РѕРІР°С‚СЊ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РґРѕР±Р°РІР»РµРЅРёСЏ, СѓРґР°Р»РµРЅРёСЏ, СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ Рё С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С…. 
+РџСЂРµРґСѓСЃРјРѕС‚СЂРµС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РІСЃРµС… РІРѕР·РјРѕР¶РЅС‹С… РѕС€РёР±РѕРє
 */
 
 #include <iostream>
@@ -14,11 +14,12 @@ void main()
 	system("color F0");
 	HideCursor(true);
 
+	short activePage = 0;
 	Notes note;
 	Notes n1;
 	Notes n2;
 	Organizer* p = &note;
-	p->RepaintWindow(ACTIVE, ACTIVE, true);
+	p->RepaintWindow(activePage, ACTIVE, true);
 	p->ShowList();
 	while (true)
 	{
@@ -30,20 +31,23 @@ void main()
 			unsigned char secondByte = getch();
 			if (secondByte == KEY_F1)
 			{
+				activePage = 0;
 				p = &note;
-				p->RepaintWindow(ACTIVE, ACTIVE, true);
+				p->RepaintWindow(activePage, ACTIVE, true);
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F2)
 			{
+				activePage = 1; 
 				p = &n1;
-				p->RepaintWindow(ACTIVE, ACTIVE, true);
+				p->RepaintWindow(activePage, ACTIVE, true);
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F3)
 			{
+				activePage = 2; 
 				p = &n2;
-				p->RepaintWindow(ACTIVE, ACTIVE, true);
+				p->RepaintWindow(activePage, ACTIVE, true);
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F5)
@@ -60,11 +64,11 @@ void main()
 			}
 			else if (secondByte == KEY_UP)
 			{
-				
+				p->PreviousItem();
 			}
 			else if (secondByte == KEY_DOWN)
 			{
-				
+				p->NextItem();
 			}
 
 		}

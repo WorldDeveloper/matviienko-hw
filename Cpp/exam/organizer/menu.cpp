@@ -33,13 +33,7 @@ void Menu::ShowMenu(const int activeItem /*=-2*/)
 {
 	SetStatus(activeItem);
 
-	const short activeItemColour = 0x9E;
-	const short inactiveItemColour = 0x96;
-	const short menuColour = 0x96;
-	const short systemColour = 0xF0;
-
-
-	SetColour(menuColour);
+	SetColour(mMenuColour);
 	for (int j = 0; j < 3; j++)
 	{
 		GotoXY(mX, mY + j);
@@ -48,7 +42,7 @@ void Menu::ShowMenu(const int activeItem /*=-2*/)
 			cout << " ";
 		}
 	}
-	
+
 	GotoXY(mX, mY);
 	int menuWidth = 3;
 
@@ -69,16 +63,17 @@ void Menu::ShowMenu(const int activeItem /*=-2*/)
 	//items output
 	vector<string>::iterator curItem = mItems.begin();
 	vector<bool>::iterator curStatus = mStatus.begin();
+
 	
-	int itemColour;
-	while (curItem !=mItems.end())
+	while (curItem != mItems.end())
 	{
-		if (*curStatus) itemColour = activeItemColour;
-		else itemColour = inactiveItemColour;
+		int itemColour;
+		if (*curStatus) itemColour = mActiveItemColour;
+		else itemColour = mInactiveItemColour;
 
 		SetColour(itemColour);
 		cout << " " << *curItem << " ";
-		SetColour(menuColour);
+		SetColour(mMenuColour);
 		cout << " ";
 		curItem++;
 		curStatus++;
@@ -94,10 +89,54 @@ void Menu::ShowMenu(const int activeItem /*=-2*/)
 	cout << bottomRightCorner;
 
 	GotoXY(0, mY + 5);
-	SetColour(systemColour);
+	SetColour(mSystemColour);
+}
+
+void Menu::RepaintMenu(const int activeItem /*=-2*/)
+{
+	SetStatus(activeItem);
+
+	int menuWidth = 3;
+
+	for (int i = 0; i < mItems.size(); i++) { menuWidth += mItems[i].size() + 3; }
+
+	GotoXY(mX+1, mY + 1);
+
+	vector<string>::iterator curItem = mItems.begin();
+	vector<bool>::iterator curStatus = mStatus.begin();
+
+	
+	while (curItem != mItems.end())
+	{
+		int itemColour;
+		if (*curStatus) itemColour = mActiveItemColour;
+		else itemColour = mInactiveItemColour;
+
+		SetColour(itemColour);
+		cout << " " << *curItem << " ";
+		SetColour(mMenuColour);
+		cout << " ";
+		curItem++;
+		curStatus++;
+	}
+	GotoXY(0, mY + 5);
+	SetColour(mSystemColour);
 }
 
 void Menu::Line(unsigned const char c, const int length)
 {
 	for (int i = 0; i < length; i++) { cout << c; }
+}
+
+int Menu::GetStatus() const
+{
+	for (int i = 0; i < mStatus.size(); ++i)
+	{
+		if (mStatus[i])
+		{
+			return i;
+		}
+	}
+	
+	return -1;
 }

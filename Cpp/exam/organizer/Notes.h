@@ -59,7 +59,7 @@ public:
 		return mNotes[itemIndex];
 	}
 	
-	bool SelectItem(const int itemIndex)
+	bool SetIndexOfSelectedItem(const int itemIndex)
 	{
 		if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) return false;
 
