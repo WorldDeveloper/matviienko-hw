@@ -18,8 +18,8 @@ class Organizer// create settings in separate file
 	const short mBaseY = 5;
 	const short mSystemColour = 0xF0;
 	const short mSystemAnticolour = 0xFF;
-	const short mActiveColour=0x70;
-	const short mInactiveColour=0xF0;
+	const short mActiveColour = 0x70;
+	const short mInactiveColour = 0xF0;
 	const short mListItemLen = 77;
 	bool mSelectedItemReview;
 
@@ -52,7 +52,7 @@ class Organizer// create settings in separate file
 		cout << GetItemInWindow(GetIndexOfSelectedItem()) << endl;
 	}
 
-	
+
 	void SelectActiveItem()
 	{
 		if (mSelectedItemReview)
@@ -88,14 +88,14 @@ public:
 		mItemsControlMenu.SetStatus(ACTIVE);
 	}
 	~Organizer(){}
-	
+
 	void Add()
 	{
 		mItemsControlMenu.SetStatus(ADD);
 		RepaintWindow(false);
 
 		if (!AddDetails()) MessageBox("Item has not been added.", true);
-		
+
 		mItemsControlMenu.SetStatus(ACTIVE);
 		RepaintWindow(true);
 		ShowList();
@@ -107,7 +107,7 @@ public:
 			MessageBox("There are no items to edit.", true);
 		}
 		else
-		{		
+		{
 			mItemsControlMenu.SetStatus(EDIT);
 			RepaintWindow(false);
 
@@ -131,8 +131,8 @@ public:
 		RepaintWindow();
 		if (GetSize()) ShowList();
 	}
-	
-	void ShowList() 
+
+	void ShowList()
 	{
 		if (!GetSize()) return;
 
@@ -140,7 +140,7 @@ public:
 		SetColour(mInactiveColour);
 		mSelectedItemReview = false;
 
-		for (int i=0; i<GetSize(); ++i)
+		for (int i = 0; i < GetSize(); ++i)
 		{
 			ShowItemInLine(i);
 		}
@@ -163,12 +163,12 @@ public:
 			mSelectedItemReview = false;
 		}
 	}
-	
+
 	void NextItem()
 	{
 		const int curIndex = GetIndexOfSelectedItem();
 		const int size = GetSize();
-		if (!size || curIndex>=size-1 ) return;
+		if (!size || curIndex >= size - 1) return;
 
 		DeselectActiveItem();
 		SetIndexOfSelectedItem(curIndex + 1);
@@ -181,7 +181,7 @@ public:
 		if (!size || curIndex <= 0) return;
 
 		DeselectActiveItem();
-		SetIndexOfSelectedItem(curIndex -1);
+		SetIndexOfSelectedItem(curIndex - 1);
 		SelectActiveItem();
 	}
 
@@ -203,7 +203,7 @@ public:
 		while (true){ if (getch()) break; }
 		SetColour(mSystemColour);
 	}
-	void RepaintWindow(const bool hideCursor=true)
+	void RepaintWindow(const bool hideCursor = true)
 	{
 		system("cls");
 		mMainMenu.ShowMenu();
