@@ -214,5 +214,6 @@ public:
 	{
 		mMainMenu.SetStatus(page);
 	}
+	virtual void Today(){}
 };
 

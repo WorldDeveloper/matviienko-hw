@@ -2,8 +2,7 @@
 #include "Organizer.h"
 #include "Date.h";
 #include "Time.h";
-
-
+#include <fstream>
 
 struct Event
 {
@@ -28,6 +27,7 @@ class Events :public Organizer
 {
 	vector<Event> mEvents;
 	vector<Event>::iterator mSelectedEvent;
+	char* mDBname = "events";
 	long mId;
 	bool SetDetails(Event& event)
 	{		
@@ -99,8 +99,10 @@ class Events :public Organizer
 		}
 	}
 public:
-	Events()
-		:mId(0){}
+	Events():mId(1){
+		OpenDB(mDBname);
+		if (mEvents.size()) Today();
+	}
 	bool AddDetails()
 	{
 		cout << "Fill in the following fields\n\n";
@@ -111,6 +113,7 @@ public:
 		sort(mEvents.begin(), mEvents.end());
 		mSelectedEvent = find(mEvents.begin(), mEvents.end(), event);
 
+		SaveDB(mDBname);
 		return true;
 	}
 	bool EditDetails()
@@ -125,6 +128,7 @@ public:
 		sort(mEvents.begin(), mEvents.end());
 		mSelectedEvent = find(mEvents.begin(), mEvents.end(), event);
 
+		SaveDB(mDBname);
 		return true;
 	}
 
@@ -134,6 +138,8 @@ public:
 
 		mSelectedEvent = mEvents.erase(mSelectedEvent);
 		if (mSelectedEvent == mEvents.end() && !mEvents.empty()) mSelectedEvent--;
+
+		SaveDB(mDBname);
 		return true;
 	}
 	int GetSize() const { return mEvents.size(); }
@@ -182,5 +188,85 @@ public:
 		return true;
 	}
 	virtual ~Events(){}
+
+	void Today()
+	{
+		time_t rawtime;
+		struct tm * timeinfo;
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		Date today;
+		today.SetDate(timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday);
+
+		for (vector<Event>::iterator event=mEvents.begin(); event!= mEvents.end(); ++event)
+		{
+			mSelectedEvent = event; 
+			if (event->fromDate >= today) break;
+		}
+	}
+
+	void SaveDB(const char* name)
+	{
+		ofstream out(name);
+		if (out.is_open())
+		{
+			for (vector<Event>::iterator event = mEvents.begin(); event != mEvents.end(); ++event)
+			{
+				out << event->id << "\n";
+				out << event->eventName << "\n";
+				out << event->fromDate.GetDate() << "\n";
+				out << event->fromTime.GetTime() << "\n";
+				out << event->toDate.GetDate() << "\n";
+				out << event->toTime.GetTime() << "\n";
+				out << event->where << "\n";
+				out << event->desctiption << "\n";
+			}
+		}
+		else
+		{
+			throw "unable to open file";
+		}
+		out.close();
+	}
+
+	void OpenDB(const char* name)
+	{
+		ifstream in(name);
+
+		if (in.is_open())
+		{
+			while(!in.eof())
+			{
+				Event event;
+				event.id = mId++;
+				string tmp;
+				if (!getline(in, tmp)) break;
+				getline(in, event.eventName);
+				
+				getline(in, tmp);
+				if (!event.fromDate.SetDate(tmp)) throw "reading error";
+
+				getline(in, tmp);
+				if (!event.fromTime.SetTime(tmp)) throw "reading error";
+
+				getline(in, tmp);
+				if (!event.toDate.SetDate(tmp)) throw "reading error";
+
+				getline(in, tmp);
+				if (!event.toTime.SetTime(tmp)) throw "reading error";
+
+				getline(in, event.where);
+				getline(in, event.desctiption);
+				mEvents.push_back(event);
+			}
+			
+		}
+		else
+		{
+			throw "unable to open file.";
+		}
+
+		in.close();
+	}
 };
 

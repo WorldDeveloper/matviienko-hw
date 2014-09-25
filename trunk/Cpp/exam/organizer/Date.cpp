@@ -20,6 +20,15 @@ int Date::LastDay()
 	}
 }
 
+bool Date::SetDate(const string& date)
+{
+	const short year = stoi(date.substr(0, 4));
+	const short month = stoi(date.substr(5, 2));
+	const short day = stoi(date.substr(8, 2));
+	if (SetDate(year, month, day)) return true;
+	else return false;
+}
+
 bool Date::SetDate(const short year, const short month, const short day)
 {
 	if (year > 1900 && year < 3000) 	{ mYear = year; }
