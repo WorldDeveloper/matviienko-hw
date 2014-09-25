@@ -1,6 +1,6 @@
 ﻿/*
-Написать программу, реализующую электронный органайзер. 
-Реализовать возможности добавления, удаления, редактирования и хранения данных. 
+Написать программу, реализующую электронный органайзер.
+Реализовать возможности добавления, удаления, редактирования и хранения данных.
 Предусмотреть обработку всех возможных ошибок
 */
 
@@ -8,6 +8,8 @@
 #include "Notes.h"
 #include "Contacts.h"
 #include "Events.h"
+#include "Time.h" //****del
+#include "Date.h" //****
 
 using namespace std;
 
@@ -16,17 +18,15 @@ void main()
 	system("color F0");
 	HideCursor(true);
 
-
-	Contacts contact;
-	Notes note;
-	Notes n1;
-	Notes n2;
-	Organizer* p = &note;
+	Events events;
+	Contacts contacts;
+	Notes notes;
+	Organizer* p = &events;
 	p->RepaintWindow();
 	p->ShowList();
 	while (true)
 	{
-		enum{ KEY_ENTER = 13, KEY_ESCAPE = 27, KEY_F1 = 59, KEY_F2, KEY_F3, KEY_F5=63, KEY_F6, KEY_F7, KEY_UP = 72, KEY_DOWN = 80, KEY_DELETE = 83 };
+		enum{ KEY_ENTER = 13, KEY_ESCAPE = 27, KEY_F1 = 59, KEY_F2, KEY_F3, KEY_F5 = 63, KEY_F6, KEY_F7, KEY_UP = 72, KEY_DOWN = 80, KEY_DELETE = 83 };
 		unsigned char control = getch();
 
 		if (control == 0 || control == 224 && kbhit())
@@ -34,21 +34,21 @@ void main()
 			unsigned char secondByte = getch();
 			if (secondByte == KEY_F1)
 			{
-				p = &n1;
+				p = &events;
 				p->SetActivePage(0);
 				p->RepaintWindow();
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F2)
 			{
-				p = &contact;
+				p = &contacts;
 				p->SetActivePage(1);
 				p->RepaintWindow();
 				p->ShowList();
 			}
 			else if (secondByte == KEY_F3)
 			{
-				p = &note;
+				p = &notes;
 				p->SetActivePage(2);
 				p->RepaintWindow();
 				p->ShowList();

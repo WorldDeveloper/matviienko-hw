@@ -4,43 +4,45 @@
 #include <string>
 using namespace std;
 
-class Notes:public Organizer
+class Notes :public Organizer
 {
 	vector<string> mNotes;
 	vector<string>::iterator mSelectedNote;
 public:
 	Notes();
 	bool AddDetails()
-	{		
-		cout << "Add note: ";
-		char note[250];
-		cin.getline(note, 250);
-		mNotes.push_back(note);
-		
-		mSelectedNote =--mNotes.end();
+	{
+		cout << " Add note: ";
+		string tmp;
+		fflush(stdin); 
+		getline(cin, tmp);
+		mNotes.push_back(tmp);
+
+		mSelectedNote = --mNotes.end();
 		return true;
 	}
 	bool EditDetails()
 	{
 		if (mNotes.empty()) return false;
 
-		cout << "Edit note:";
-		char note[250];
-		cin.getline(note, 250);
-		*mSelectedNote = note;
+		cout << " Edit note:";
+		string tmp;
+		fflush(stdin); 
+		getline(cin, tmp);
+		*mSelectedNote = tmp;
 		return true;
 	}
 
 	bool DeleteDetails()
 	{
-		if (mNotes.empty()) return false; 
-		
+		if (mNotes.empty()) return false;
+
 		mSelectedNote = mNotes.erase(mSelectedNote);
 		if (mSelectedNote == mNotes.end() && !mNotes.empty()) mSelectedNote--;
 		return true;
 	}
 	int GetSize() const { return mNotes.size(); }
-	int GetIndexOfSelectedItem() const 
+	int GetIndexOfSelectedItem() const
 	{
 		if (mNotes.empty()) return -1;
 
@@ -59,7 +61,7 @@ public:
 
 		return mNotes[itemIndex];
 	}
-	
+
 	bool SetIndexOfSelectedItem(const int itemIndex)
 	{
 		if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) return false;
