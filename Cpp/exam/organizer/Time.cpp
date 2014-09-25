@@ -11,6 +11,14 @@ bool Time::SetTime(const short hour, const short min)
 	return true;
 }
 
+bool Time::SetTime(const string& time)
+{
+	const short hour = stoi(time.substr(0, 2));
+	const short min = stoi(time.substr(3, 2));
+
+	if (SetTime(hour, min)) return true;
+	else return false;
+}
 
 int Time::ConvertToMinutes(const Time& source) const
 {

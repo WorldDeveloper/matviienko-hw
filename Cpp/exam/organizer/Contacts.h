@@ -21,8 +21,7 @@ class Contacts :public Organizer
 	vector<Contact>::iterator mSelectedContact;
 	long mId;
 public:
-	Contacts()
-		:mId(0){}
+	Contacts():mId(1){}
 	bool AddDetails()
 	{
 		cout << "Fill in the following fields\n\n";

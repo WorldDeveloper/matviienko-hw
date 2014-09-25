@@ -8,8 +8,6 @@
 #include "Notes.h"
 #include "Contacts.h"
 #include "Events.h"
-#include "Time.h" //****del
-#include "Date.h" //****
 
 using namespace std;
 
@@ -36,6 +34,7 @@ void main()
 			{
 				p = &events;
 				p->SetActivePage(0);
+				p->Today();
 				p->RepaintWindow();
 				p->ShowList();
 			}
