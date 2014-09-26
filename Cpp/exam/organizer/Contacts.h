@@ -1,6 +1,7 @@
 #pragma once
 #include "Organizer.h"
 
+
 const vector<string> const contactTitles = { "Surname", "Name", "Address", "Phone", "E-mail", "Notes" };
 
 struct Contact
@@ -20,8 +21,13 @@ class Contacts :public Organizer
 	vector<Contact> mContacts;
 	vector<Contact>::iterator mSelectedContact;
 	long mId;
+	char* mDBname = "contacts";
 public:
-	Contacts():mId(1){}
+	Contacts() :mId(1)
+	{
+		OpenDB(mDBname);
+		mSelectedContact = mContacts.begin();
+	}
 	bool AddDetails()
 	{
 		cout << "Fill in the following fields\n\n";
@@ -29,9 +35,9 @@ public:
 		contact.id = mId++;
 		for (int i = 0; i < contactTitles.size(); ++i)
 		{
-			cout << "\n "<<contactTitles[i] << ": ";
+			cout << "\n " << contactTitles[i] << ": ";
 			string tmp;
-			fflush(stdin); 
+			fflush(stdin);
 			getline(cin, tmp);
 			contact.data.push_back(tmp);
 		}
@@ -39,6 +45,7 @@ public:
 		sort(mContacts.begin(), mContacts.end());
 		mSelectedContact = find(mContacts.begin(), mContacts.end(), contact);
 
+		SaveDB(mDBname);
 		return true;
 	}
 	bool EditDetails()
@@ -47,9 +54,10 @@ public:
 
 		cout << "Edit the following fields\n\n";
 		Contact contact;
+		contact.id = mId++;
 		for (int i = 0; i < contactTitles.size(); ++i)
 		{
-			cout << "\n "<<contactTitles[i] << ": ";
+			cout << "\n " << contactTitles[i] << ": ";
 			string tmp;
 			fflush(stdin);
 			getline(cin, tmp);
@@ -59,6 +67,7 @@ public:
 		sort(mContacts.begin(), mContacts.end());
 		mSelectedContact = find(mContacts.begin(), mContacts.end(), contact);
 
+		SaveDB(mDBname);
 		return true;
 	}
 
@@ -68,6 +77,8 @@ public:
 
 		mSelectedContact = mContacts.erase(mSelectedContact);
 		if (mSelectedContact == mContacts.end() && !mContacts.empty()) mSelectedContact--;
+		
+		SaveDB(mDBname); 
 		return true;
 	}
 	int GetSize() const { return mContacts.size(); }
@@ -87,10 +98,10 @@ public:
 	string GetItemInWindow(const int itemIndex) const
 	{
 		if (mContacts.empty() || itemIndex < 0 || itemIndex >= mContacts.size()) throw "out of range";
-		string output = "\n";
+		string output;
 		for (int i = 0; i < contactTitles.size(); ++i)
 		{
-			output += " " + contactTitles[i] + ": " + mContacts[itemIndex].data[i] + "\n";
+			output += "\n " + contactTitles[i] + ": " + mContacts[itemIndex].data[i] + "\n";
 		}
 		return output;
 	}
@@ -103,5 +114,56 @@ public:
 		return true;
 	}
 	virtual ~Contacts(){}
+
+	void SaveDB(const char* name)
+	{
+		ofstream out(name);
+		if (out.is_open())
+		{
+
+			for (vector<Contact>::iterator contact = mContacts.begin(); contact != mContacts.end(); ++contact)
+			{
+				out << contact->id << '\n';
+				for (int i = 0; i < contactTitles.size(); ++i)
+				{
+					out << contact->data[i] << '\n';
+				}
+			}
+		}
+		else
+		{
+			throw "unable to open file";
+		}
+		out.close();
+	}
+
+	void OpenDB(const char* name)
+	{
+		ifstream in(name);
+
+		if (in.is_open())
+		{
+			while (!in.eof())
+			{
+				Contact contact;
+				contact.id = mId++;
+				string tmp;
+				if (!getline(in, tmp)) break;
+
+				for (int i = 0; i < contactTitles.size(); ++i)
+				{
+					getline(in, tmp);
+					contact.data.push_back(tmp);
+				}
+				mContacts.push_back(contact);
+			}
+		}
+		else
+		{
+			throw "unable to open file.";
+		}
+
+		in.close();
+	}
 };
 

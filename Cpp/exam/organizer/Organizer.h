@@ -6,6 +6,7 @@
 #include "Graphics.h"
 #include "menu.h"
 #include <conio.h>
+#include <fstream>
 using namespace std;
 
 enum{ ACTIVE = -2, INACTIVE, ADD, EDIT, DEL };

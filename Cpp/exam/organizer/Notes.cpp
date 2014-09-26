@@ -3,6 +3,8 @@
 
 Notes::Notes()
 {
+	OpenDB();
+	mSelectedNote = mNotes.begin();
 }
 
 

@@ -8,6 +8,7 @@ class Notes :public Organizer
 {
 	vector<string> mNotes;
 	vector<string>::iterator mSelectedNote;
+	char* mDBname = "notes";
 public:
 	Notes();
 	bool AddDetails()
@@ -19,6 +20,7 @@ public:
 		mNotes.push_back(tmp);
 
 		mSelectedNote = --mNotes.end();
+		SaveDB();
 		return true;
 	}
 	bool EditDetails()
@@ -30,6 +32,7 @@ public:
 		fflush(stdin); 
 		getline(cin, tmp);
 		*mSelectedNote = tmp;
+		SaveDB();
 		return true;
 	}
 
@@ -39,6 +42,8 @@ public:
 
 		mSelectedNote = mNotes.erase(mSelectedNote);
 		if (mSelectedNote == mNotes.end() && !mNotes.empty()) mSelectedNote--;
+		
+		SaveDB();
 		return true;
 	}
 	int GetSize() const { return mNotes.size(); }
@@ -70,5 +75,44 @@ public:
 		return true;
 	}
 	virtual ~Notes(){}
+
+		void SaveDB()
+	{
+		ofstream out(mDBname);
+		if (out.is_open())
+		{
+			for (vector<string>::iterator note = mNotes.begin(); note != mNotes.end(); ++note)
+			{
+				out << *note<< "\n";
+			}
+		}
+		else
+		{
+			throw "unable to open file";
+		}
+		out.close();
+	}
+
+	void OpenDB()
+	{
+		ifstream in(mDBname);
+
+		if (in.is_open())
+		{
+			while(!in.eof())
+			{
+				string note;
+				if (!getline(in, note)) break;
+				mNotes.push_back(note);
+			}
+			
+		}
+		else
+		{
+			throw "unable to open file.";
+		}
+
+		in.close();
+	}
 };
 

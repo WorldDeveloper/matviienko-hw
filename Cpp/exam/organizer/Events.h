@@ -2,7 +2,6 @@
 #include "Organizer.h"
 #include "Date.h";
 #include "Time.h";
-#include <fstream>
 
 struct Event
 {
@@ -171,10 +170,10 @@ public:
 		if (mEvents.empty() || itemIndex < 0 || itemIndex >= mEvents.size()) throw "out of range";
 
 		vector<Event>::const_iterator item = mEvents.begin() + itemIndex;
-		string output = "Event name: " + item->eventName;
-		output += "\n\n Description: " + item->desctiption;
-		output += "\n\n From: " + item->fromDate.GetDate() + "  " + item->fromTime.GetTime();
+		string output = "From: " + item->fromDate.GetDate() + "  " + item->fromTime.GetTime();
 		output += "\tTo: " + item->toDate.GetDate() + "  " + item->toTime.GetTime();
+		output += "\n\n Event name: " + item->eventName;
+		output += "\n\n Description: " + item->desctiption;
 		output += "\n\n Where: " + item->where;
 
 		return output;
