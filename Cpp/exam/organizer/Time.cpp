@@ -3,10 +3,10 @@
 bool Time::SetTime(const short hour, const short min)
 {
 	if (hour >= 0 && hour < 24) 	{ mHour = hour; }
-	else	return false;
+	else return false;
 
 	if (min >= 0 && min < 60) { mMin = min; }
-	else { return false; }
+	else return false; 
 
 	return true;
 }
@@ -17,7 +17,7 @@ bool Time::SetTime(const string& time)
 	const short min = stoi(time.substr(3, 2));
 
 	if (SetTime(hour, min)) return true;
-	else return false;
+	return false;
 }
 
 int Time::ConvertToMinutes(const Time& source) const

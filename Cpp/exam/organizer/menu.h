@@ -13,12 +13,12 @@ class Menu
 	const short mInactiveItemColour = 0x96;
 	const short mMenuColour = 0x96;
 	const short mSystemColour = 0xF0;
+
+	void Line(unsigned const char c, const int length);
 public:
 	Menu(string title, vector<string> items, const int xCoord, const int yCoord);
-	//void addItems(const char* name[]);
 	void SetStatus(const int activeItem);
 	void RepaintMenu(const int activeItem = -2);
 	void ShowMenu();
-	void Line(unsigned const char c, const int length);
 	int GetStatus() const;
 };

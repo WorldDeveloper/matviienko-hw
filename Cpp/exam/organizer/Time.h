@@ -10,6 +10,7 @@ class Time
 public:
 	Time() :mHour(0), mMin(0) {}
 	Time(const short hour, const short min);
+
 	bool SetTime(const short hour, const short min);
 	bool SetTime(const string& time);
 	string GetTime() const;
