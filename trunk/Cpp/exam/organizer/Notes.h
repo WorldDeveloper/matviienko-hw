@@ -17,10 +17,12 @@ public:
 		string tmp;
 		fflush(stdin); 
 		getline(cin, tmp);
+		
+		if (tmp.empty()) return false;
 		mNotes.push_back(tmp);
-
 		mSelectedNote = --mNotes.end();
 		SaveDB();
+
 		return true;
 	}
 	bool EditDetails()
@@ -31,7 +33,10 @@ public:
 		string tmp;
 		fflush(stdin); 
 		getline(cin, tmp);
+		
+		if (tmp.empty()) return false; 
 		*mSelectedNote = tmp;
+		
 		SaveDB();
 		return true;
 	}

@@ -41,6 +41,8 @@ public:
 			getline(cin, tmp);
 			contact.data.push_back(tmp);
 		}
+		if (contact.data[0].empty() && contact.data[1].empty()) return false;
+
 		mContacts.push_back(contact);
 		sort(mContacts.begin(), mContacts.end());
 		mSelectedContact = find(mContacts.begin(), mContacts.end(), contact);
@@ -63,6 +65,8 @@ public:
 			getline(cin, tmp);
 			contact.data.push_back(tmp);
 		}
+		if (contact.data[0].empty() && contact.data[1].empty()) return false;
+
 		*mSelectedContact = contact;
 		sort(mContacts.begin(), mContacts.end());
 		mSelectedContact = find(mContacts.begin(), mContacts.end(), contact);
