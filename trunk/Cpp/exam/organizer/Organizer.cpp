@@ -48,8 +48,6 @@ void Organizer::DeselectActiveItem()
 	}
 }
 
-
-
 void Organizer::Add()
 {
 	mItemsControlMenu.SetStatus(ADD);
