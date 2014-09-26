@@ -36,16 +36,20 @@ class Events :public Organizer
 		fflush(stdin);
 		getline(cin, event.eventName);
 
+		fflush(stdin); 
 		cout << "\n Begin date...";
 		SetDate(event.fromDate);
 
 		cout << "\n Begin time...";
+		fflush(stdin);
 		SetTime(event.fromTime);
 
 		cout << "\n End date...";
+		fflush(stdin);
 		SetDate(event.toDate);
 
 		cout << "\n End time...";
+		fflush(stdin);
 		SetTime(event.toTime);
 
 		if (event.fromDate > event.toDate ||
@@ -56,6 +60,7 @@ class Events :public Organizer
 		getline(cin, event.where);
 
 		cout << "\n Event description: ";
+		fflush(stdin);
 		getline(cin, event.desctiption);
 
 		return true;
