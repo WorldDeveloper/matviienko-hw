@@ -74,10 +74,6 @@ void main()
 			}
 
 		}
-		else if ((control > 31 && control < 123) || control == 8)
-		{
-			//list.MaskSearch(control, activePage);
-		}
 		else if (control == KEY_ENTER)
 		{
 			p->ReviewSelectedItem();
@@ -89,5 +85,3 @@ void main()
 		}
 	}
 }
-
-

@@ -8,13 +8,11 @@ using namespace std;
 Menu::Menu(string title, vector<string> items, const int xCoord, const int yCoord)
 :mTitle(title), mItems(items), mX(xCoord), mY(yCoord)
 {
-
 	for (int i = 0; i < items.size(); ++i)
 	{
 		mStatus.push_back(false);
 	}
 }
-
 
 void Menu::SetStatus(const int activeItem)
 {
@@ -62,7 +60,6 @@ void Menu::ShowMenu()
 	vector<string>::iterator curItem = mItems.begin();
 	vector<bool>::iterator curStatus = mStatus.begin();
 
-	
 	while (curItem != mItems.end())
 	{
 		int itemColour;

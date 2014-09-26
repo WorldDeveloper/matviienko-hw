@@ -1,25 +1,6 @@
 #include "Date.h"
 #include <ctime>
 
-int Date::LastDay()
-{
-	if (mMonth == 1 || mMonth == 3 || mMonth == 5 || mMonth == 7 || mMonth == 8 || mMonth == 10 || mMonth == 12)
-		return 31;
-	else if (mMonth == 4 || mMonth == 6 || mMonth == 9 || mMonth == 11)
-		return 30;
-	else {
-		if (mYear % 4 == 0) {
-			if (mYear % 100 == 0) {
-				if (mYear % 400 == 0)
-					return 29;
-				return 28;
-			}
-			return 29;
-		}
-		return 28;
-	}
-}
-
 bool Date::SetDate(const string& date)
 {
 	const short year = stoi(date.substr(0, 4));
@@ -122,4 +103,23 @@ string Date::GetDate() const
 	if (mDay < 10) day.insert(0, "0");
 
 	return year + "." + month + "." + day;
+}
+
+int Date::LastDay()
+{
+	if (mMonth == 1 || mMonth == 3 || mMonth == 5 || mMonth == 7 || mMonth == 8 || mMonth == 10 || mMonth == 12)
+		return 31;
+	else if (mMonth == 4 || mMonth == 6 || mMonth == 9 || mMonth == 11)
+		return 30;
+	else {
+		if (mYear % 4 == 0) {
+			if (mYear % 100 == 0) {
+				if (mYear % 400 == 0)
+					return 29;
+				return 28;
+			}
+			return 29;
+		}
+		return 28;
+	}
 }
