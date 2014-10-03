@@ -12,12 +12,13 @@ int AnalyseString(string& text);
 
 void main()
 {
+	cout << "Expression: ";
 	string expression;
 	cin >> expression;
 
 	try
 	{
-		cout << AnalyseString(expression) << endl;
+		cout <<"Result: "<< AnalyseString(expression) << endl;
 	}
 	catch (char* e)
 	{
@@ -29,6 +30,18 @@ void main()
 int Input(string& text, string::iterator& pStart)
 {
 	if (pStart == text.end()) throw "syntax error";
+
+	if (*pStart == '(')
+	{
+		++pStart;
+		size_t found = text.find(")", pStart - text.begin());
+		if (found == string::npos) throw "syntax error";
+		
+		const int cur = pStart - text.begin();
+		pStart = text.begin() + found + 1;
+
+		return AnalyseString(text.substr(cur, found - cur));
+	}
 
 	string::iterator pEnd = pStart + 1;
 	while (pEnd != text.end() &&
@@ -94,7 +107,9 @@ int AnalyseString(string& text)
 		}
 		else if (*symb == '/')
 		{
-			buffer /= Input(text, ++symb);
+			int tmp= Input(text, ++symb);
+			if (tmp) buffer /= tmp;
+			else throw "division by zero";
 		}
 		else
 		{
@@ -102,5 +117,6 @@ int AnalyseString(string& text)
 		}
 	}
 	result += buffer;
+
 	return result;
 }
