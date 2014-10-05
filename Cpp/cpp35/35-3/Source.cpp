@@ -20,7 +20,7 @@ using namespace std;
 ostream& operator<<(ostream& stream, const Student& student);
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output);
+ostream& operator<<(ostream& stream, const vector<T>& output);
 
 Student Input();
 
@@ -80,7 +80,7 @@ ostream& operator<<(ostream& stream, const Student& student)
 }
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output)
+ostream& operator<<(ostream& stream, const vector<T>& output)
 {
 	for (auto& i : output)
 	{

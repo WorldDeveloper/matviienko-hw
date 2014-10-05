@@ -7,7 +7,7 @@
 using namespace std;
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output);
+ostream& operator<<(ostream& stream, const vector<T>& output);
 
 void main()
 {
@@ -21,7 +21,7 @@ void main()
 }
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output)
+ostream& operator<<(ostream& stream, const vector<T>& output)
 {
 	stream << "[";
 	for (auto& i : output)

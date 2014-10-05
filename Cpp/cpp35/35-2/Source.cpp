@@ -8,10 +8,10 @@
 using namespace std;
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output);
+ostream& operator<<(ostream& stream, const vector<T>& output);
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<vector<T>>& output);
+ostream& operator<<(ostream& stream, const vector<vector<T>>& output);
 
 void main()
 {
@@ -23,6 +23,7 @@ void main()
 	for (int i = 0; i <m; ++i)
 	{
 		multiplicationTable[i].resize(n);
+
 		for (int j = 0; j <n; ++j)
 		{
 			multiplicationTable[i][j] = (i+1)*(j+1);
@@ -33,9 +34,8 @@ void main()
 }
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<T>& output)
+ostream& operator<<(ostream& stream, const vector<T>& output)
 {
-
 	for (auto& i : output)
 	{
 		stream << i << "\t";
@@ -45,9 +45,8 @@ ostream& operator<<(ostream& stream, vector<T>& output)
 }
 
 template <class T>
-ostream& operator<<(ostream& stream, vector<vector<T>>& output)
-{
-	
+ostream& operator<<(ostream& stream, const vector<vector<T>>& output)
+{	
 	for (int i = 0; i < output.size();++i)
 	{
 		stream << output[i] << endl;
