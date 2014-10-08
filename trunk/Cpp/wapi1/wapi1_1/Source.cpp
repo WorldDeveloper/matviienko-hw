@@ -30,6 +30,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 
 	string averageNumber = to_string(symbolsNumber/messagesNumber);
 	MsgBox(averageNumber.c_str(),"Average number of symbols");
+
+	return 0;
 }
 
 void MsgBox(const char* message, const char* title)
