@@ -18,7 +18,7 @@ bool Date::SetDate(const short year, const short month, const short day)
 	if (month >0 && month < 13) { mMonth = month; }
 	else  return false;
 
-	if (day > 0 && day <= LastDay()) { mDay = day; }
+	if (day > 0 && day <= LastDayInMonth()) { mDay = day; }
 	else  return false;
 
 	return true;
@@ -38,14 +38,9 @@ int Date::ConvertToSeconds() const
 
 bool Date::operator==(const Date& operand2) const
 {
-	if (mYear == operand2.mYear &&
+	return (mYear == operand2.mYear &&
 		mMonth == operand2.mMonth &&
-		mDay == operand2.mDay)
-	{
-		return true;
-	}
-
-	return false;
+		mDay == operand2.mDay);
 }
 
 
@@ -57,27 +52,13 @@ bool Date::operator!=(const Date& operand2) const
 
 bool Date::operator>(const Date& operand2) const
 {
-	if (ConvertToSeconds() - operand2.ConvertToSeconds() > 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (ConvertToSeconds() - operand2.ConvertToSeconds() > 0);
 }
 
 
 bool Date::operator<(const Date& operand2) const
 {
-	if (ConvertToSeconds() - operand2.ConvertToSeconds() < 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (ConvertToSeconds() - operand2.ConvertToSeconds() < 0);
 }
 
 
@@ -105,7 +86,7 @@ string Date::GetDate() const
 	return year + "." + month + "." + day;
 }
 
-int Date::LastDay()
+int Date::LastDayInMonth()
 {
 	if (mMonth == 1 || mMonth == 3 || mMonth == 5 || mMonth == 7 || mMonth == 8 || mMonth == 10 || mMonth == 12)
 		return 31;

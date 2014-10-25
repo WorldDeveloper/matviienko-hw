@@ -22,5 +22,5 @@ public:
 	bool operator<(const Time& operand2) const;
 	bool operator<=(const Time& operand2) const;
 
-	int ConvertToMinutes(const Time& source) const;
+	int ConvertToMinutes() const;
 };
