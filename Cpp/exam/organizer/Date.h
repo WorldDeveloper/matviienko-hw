@@ -22,5 +22,5 @@ public:
 	bool operator<=(const Date& operand2) const;
 
 	int ConvertToSeconds() const;
-	int LastDay();
+	int LastDayInMonth();
 };

@@ -93,7 +93,7 @@ bool Contacts::SetIndexOfSelectedItem(const int itemIndex)
 	return true;
 }
 
-void Contacts::SaveDB(const char* name)
+void Contacts::SaveDB(const string name)
 {
 	ofstream out(name);
 	if (out.is_open())
@@ -114,7 +114,7 @@ void Contacts::SaveDB(const char* name)
 	out.close();
 }
 
-void Contacts::OpenDB(const char* name)
+void Contacts::OpenDB(const string name)
 {
 	ifstream in(name);
 

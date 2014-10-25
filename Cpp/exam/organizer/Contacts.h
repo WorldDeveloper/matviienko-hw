@@ -20,7 +20,7 @@ class Contacts :public Organizer
 	vector<Contact> mContacts;
 	vector<Contact>::iterator mSelectedContact;
 	long mId;
-	char* mDBname = "contacts";
+	string mDBname = "contacts";
 public:
 	Contacts() :mId(1)
 	{
@@ -40,6 +40,6 @@ public:
 	string GetItemInLine(const int itemIndex) const;
 	string GetItemInWindow(const int itemIndex) const;
 
-	void SaveDB(const char* name);
-	void OpenDB(const char* name);
+	void SaveDB(const string name);
+	void OpenDB(const string name);
 };

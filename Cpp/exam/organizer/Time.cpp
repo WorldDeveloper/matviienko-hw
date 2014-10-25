@@ -16,13 +16,12 @@ bool Time::SetTime(const string& time)
 	const short hour = stoi(time.substr(0, 2));
 	const short min = stoi(time.substr(3, 2));
 
-	if (SetTime(hour, min)) return true;
-	return false;
+	return SetTime(hour, min);
 }
 
-int Time::ConvertToMinutes(const Time& source) const
+int Time::ConvertToMinutes() const
 {
-	return source.mMin + source.mHour * 60;
+	return mMin + mHour * 60;
 }
 
 
@@ -45,27 +44,13 @@ bool Time::operator!=(const Time& operand2) const
 
 bool Time::operator>(const Time& operand2) const
 {
-	if (ConvertToMinutes(*this) - ConvertToMinutes(operand2) > 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (this->ConvertToMinutes() - operand2.ConvertToMinutes() > 0);
 }
 
 
 bool Time::operator<(const Time& operand2) const
 {
-	if (ConvertToMinutes(*this) - ConvertToMinutes(operand2) < 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (this->ConvertToMinutes() - operand2.ConvertToMinutes() < 0);
 }
 
 
