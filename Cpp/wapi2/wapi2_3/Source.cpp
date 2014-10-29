@@ -1,8 +1,8 @@
-/*
-Написать приложение, позволяющее при нажатии левой кнопки мыши изменить
-текст в заголовке окна стандартного приложения "Калькулятор",
-а при нажатии правой кнопки мыши сместить вправо кнопку "Пуск",
-изменив на ней надпись.
+п»ї/*
+РќР°РїРёСЃР°С‚СЊ РїСЂРёР»РѕР¶РµРЅРёРµ, РїРѕР·РІРѕР»СЏСЋС‰РµРµ РїСЂРё РЅР°Р¶Р°С‚РёРё Р»РµРІРѕР№ РєРЅРѕРїРєРё РјС‹С€Рё РёР·РјРµРЅРёС‚СЊ
+С‚РµРєСЃС‚ РІ Р·Р°РіРѕР»РѕРІРєРµ РѕРєРЅР° СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ "РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ",
+Р° РїСЂРё РЅР°Р¶Р°С‚РёРё РїСЂР°РІРѕР№ РєРЅРѕРїРєРё РјС‹С€Рё СЃРјРµСЃС‚РёС‚СЊ РІРїСЂР°РІРѕ РєРЅРѕРїРєСѓ "РџСѓСЃРє",
+РёР·РјРµРЅРёРІ РЅР° РЅРµР№ РЅР°РґРїРёСЃСЊ.
 */
 
 #include <Windows.h>
@@ -73,7 +73,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 void RenameCalculator(HWND hWnd)
 {
 	HWND hCalc;
-	hCalc = FindWindow(L"CalcFrame", L"Калькулятор");
+	hCalc = FindWindow(L"CalcFrame", L"РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ");
 	if (hCalc)
 	{
 		SetWindowText(hCalc, TEXT("myCalc"));
@@ -81,13 +81,13 @@ void RenameCalculator(HWND hWnd)
 	}
 	else
 	{
-		MessageBox(hWnd, TEXT("Откройте \"Калькулятор\"."), TEXT("Can't find Calculator"), MB_OK | MB_ICONINFORMATION);
+		MessageBox(hWnd, TEXT("РћС‚РєСЂРѕР№С‚Рµ \"РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ\"."), TEXT("Can't find Calculator"), MB_OK | MB_ICONINFORMATION);
 	}
 }
 
 void RenameStartButton(HWND hWnd)
 {
-	TCHAR name[2][10] = { L"Пуск", L"Стоп" };
+	TCHAR name[2][10] = { L"РџСѓСЃРє", L"РЎС‚РѕРї" };
 	bool changed = false;
 
 	HWND hStartButton;
