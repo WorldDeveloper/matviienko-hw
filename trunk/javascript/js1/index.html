@@ -1,0 +1,43 @@
+﻿<!--
+Пользуясь диалоговыми окнами, соберите о пользователе следующую
+информацию:
+- ФИО
+- пол
+- возраст
+- e-mail
+Затем выведите собранную информацию в диалоговом окне "confirm" и задайте
+пользователю вопрос - "Все верно?":
+Рис. №1.3. Вид диалогового окна
+Если пользователь согласен, поблагодарите его за предоставленную информацию,
+иначе - повторите процесс сбора информации.
+-->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Personal information</title>
+</head>
+<body>
+    <script type="text/javascript">
+        <!--
+        var personalInfoTitle = ["Initials", "Gender", "Age", "E-mail"];
+        while(true)
+        {
+            var personalInfo = "";
+            for (var i = 0; i < personalInfoTitle.length; ++i) {
+                personalInfo+=personalInfoTitle[i]+": "+prompt(personalInfoTitle[i])+"\n";
+            }
+
+            personalInfo += "\n Is It correct information? \n";
+
+            if (confirm(personalInfo)) break;
+            //else if (!confirm("Please re-enter your personal information")) break;
+        }
+        
+        alert("Thanks");
+        //-->
+    </script>
+</body>
+</html>
