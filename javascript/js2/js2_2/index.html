@@ -1,0 +1,41 @@
+﻿<!--
+    От пользователя требуется ввести ФИО. Необходимо, чтобы сценарий проверил ввод пользователя на наличие недопустимых символов.
+    Недопустимыми символами считать любые символы, кроме букв, пробелов и точек. Эти символы можно задать в сценарии в виде строки.
+-->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Surname check</title>
+    <script type="text/javascript">
+        function CheckName(name)
+        {
+            if (!name || name == null) return false;
+
+            name = name.toLowerCase();
+            var pattern = "abcdefghijklmnopqrstuvwxyz абвгґдеєжзиіїйклмнопрстуфхцчшщьюя'ёъыэ-.";
+
+            for (var i = 0; i < name.length; ++i) {
+                if (pattern.lastIndexOf(name[i]) == -1) return false;
+            }
+            return true;
+        }
+    </script>
+
+</head>
+<body>
+    
+    <script type="text/javascript">
+        while (true)
+        {
+            var name = prompt("Please enter your name and surname.");
+            if (name == "null") break;
+            if (CheckName(name)) break;
+        }
+
+        if (name && name != "null") alert("Thanks, " + name);
+    </script>
+
+</body>
+</html>
