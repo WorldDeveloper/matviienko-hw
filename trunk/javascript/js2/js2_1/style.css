@@ -1,0 +1,17 @@
+﻿
+table {
+    border-collapse: collapse;
+}
+
+tr.correct {
+    background-color: palegreen;
+}
+
+tr.incorrect {
+    background-color: tomato;
+}
+
+td, th {
+    border: 1px solid black;
+    padding: 0 20px 0 20px;
+}

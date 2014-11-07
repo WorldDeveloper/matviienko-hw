@@ -1,0 +1,67 @@
+﻿<!--
+Реализовать простейший вариант теста, поочередно выдавая пользователю вопросы,
+требующие односложных ответов ("Да" и "Нет"). После прохождения теста вывести результат.
+Вопросы и оценки за каждый вопрос хранить в сценарии в виде массивов.
+-->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Test</title>
+    
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script type="text/javascript">
+        function Test() {
+            this.mQuestions = ["2+2=4?", "4-2=3?", "2*2=4?"];
+            this.mAnswers = [true, false, true];
+            this.mUserAnswers = [];
+
+            this.PassTest = function () {
+                this.mUserAnswers = [];
+                for (var i = 0; i < this.mQuestions.length; ++i) {
+                    this.mUserAnswers.push(confirm(this.mQuestions[i]));
+                }
+            }
+
+            this.ShowResult = function () {
+                if (this.mUserAnswers.length != this.mQuestions.length) {
+                    var error = "Test hasn't been passed.";
+                    document.write("<b>" + error + "</b>");
+                    alert(error);
+                    return;
+                }
+
+                document.write("<table><tr><th>Question</th><th>Your answer</th><th>Correct answer</th></tr>");
+                var grade = 0;
+                for (var i = 0; i < this.mQuestions.length; ++i) {
+                    var trClass = "incorrect";
+                    if (this.mAnswers[i] == this.mUserAnswers[i]) trClass = "correct";
+
+                    document.write("<tr class='" + trClass + "'><td>" + this.mQuestions[i] + "</td><td>" + this.mUserAnswers[i] + "</td><td>" + this.mAnswers[i] + "</td></tr>");
+                    grade += (this.mUserAnswers[i] == this.mAnswers[i]);
+                }
+                document.write("</table>");
+
+                grade = Math.round(grade * 1000 / this.mQuestions.length) / 10;
+                var output = "Your grade is " + grade + "% out of 100%";
+                document.write("<br /><b>" + output + "</b>");
+
+                alert(output);
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+    <script type="text/javascript">
+        var test = new Test();
+        test.PassTest();
+        test.ShowResult();
+    </script>
+
+</body>
+</html>
