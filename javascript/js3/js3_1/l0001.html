@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Lamborghini model #1</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <div class="Header">
+        <script type="text/javascript">
+            var paths = ["home.jpg", "lamborghini.jpg", "ferrari.jpg"];
+            var header = new Rollover(paths);
+        </script>
+
+        <a href="index.html"> <img src="images/home.jpg" alt="Main page" onmouseover="header.OnMouseOver(this, 0)" onmouseout="header.OnMouseOut(this, 0)" /></a>
+        <a href="lamborghini.html"><img src="images/lamborghini.jpg" alt="&quot;Lamborghini&quot;" onmouseover="header.OnMouseOver(this, 1)" onmouseout="header.OnMouseOut(this, 1)" /></a>
+        <a href="ferrari.html"><img src="images/ferrari.jpg" alt="&quot;Ferrari&quot;" onmouseover="header.OnMouseOver(this, 2)" onmouseout="header.OnMouseOut(this, 2)" /></a>
+    </div>
+
+    <div class="Content">
+        <img src="images/lamborghini/l0001.jpg" />
+    </div>
+
+    <div class="Footer">
+        <script type="text/javascript">
+            var footerPaths = ["lamborghini/preview/l0001.jpg", "lamborghini/preview/l0002.jpg", "lamborghini/preview/l0003.jpg"];
+            var footer = new Rollover(footerPaths);
+        </script>
+
+        <a href="l0001.html"><img src="images/lamborghini/preview/l0001.jpg" alt="Lamborghini" onmouseover="footer.OnMouseOver(this, 0)" onmouseout="footer.OnMouseOut(this, 0)" /></a>
+        <a href="l0002.html"><img src="images/lamborghini/preview/l0002.jpg" alt="Lamborghini" onmouseover="footer.OnMouseOver(this, 1)" onmouseout="footer.OnMouseOut(this, 1)" /></a>
+        <a href="l0003.html"><img src="images/lamborghini/preview/l0003.jpg" alt="Lamborghini" onmouseover="footer.OnMouseOver(this, 2)" onmouseout="footer.OnMouseOut(this, 2)" /></a>
+    </div>
+</body>
+</html>

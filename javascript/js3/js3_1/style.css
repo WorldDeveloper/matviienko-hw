@@ -1,0 +1,31 @@
+﻿body{
+    background-color:red;
+    padding:0px;
+    margin:0px;
+    text-align:center;
+}
+
+img {
+   border:none;
+}
+
+.Content {
+  background-color:black;
+  min-height:500px;
+  padding:50px 20px;
+  vertical-align:middle;
+}
+
+a {
+    margin-right:30px;
+}
+
+.Header {
+    padding:20px;
+}
+
+.Footer {
+    padding:20px;
+    margin-top:30px;
+    background-color:red;
+}
