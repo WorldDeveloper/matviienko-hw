@@ -4,6 +4,7 @@
 .clock {
     text-align: center;
     width: 100px;
+    height:30px;
     padding:50px 20px;
     background-image:url(clock.jpg);
     background-repeat:no-repeat;
