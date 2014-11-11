@@ -1,0 +1,19 @@
+﻿body {
+}
+
+.clock {
+    text-align: center;
+    width: 100px;
+    padding:50px 20px;
+    background-image:url(clock.jpg);
+    background-repeat:no-repeat;
+}
+
+.clocksTime {
+    font-weight: bold;
+}
+
+.clocksDate {
+    font-size: smaller;
+    color: #888888;
+}
