@@ -1,0 +1,22 @@
+﻿<!--
+Используя изученные методы анимации объектов и обработки событий, напишите сценарий,
+вращающий элемент вокруг текущего положения курсора мыши. Само собой разумеется,
+что при изменении положения курсора, центр вращения так же должен смещаться следом за ним.
+ -->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <img id="elementToMove" src="gear.png" style="position:absolute; left:0; top:0;" />
+    <script type="text/javascript">
+        var animate = new Animation(elementToMove);
+    </script>
+
+</body>
+</html>
