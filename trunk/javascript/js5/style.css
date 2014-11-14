@@ -1,0 +1,13 @@
+﻿#content {
+    border:1px dotted black;
+    width:430px;
+    margin:0 auto;
+}
+
+.preview {
+    width:100px;
+    height:75px;
+    margin:20px;
+    cursor:pointer;
+}
+

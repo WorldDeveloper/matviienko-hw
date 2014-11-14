@@ -1,0 +1,28 @@
+﻿<!--
+В качестве домашнего задания вам предстоит создать (спокойно!) фотогалерею. На главной странице должен содержаться список изображений.
+     При щелчке левой кнопки мыши на миниатюре в списке, увеличенное изображение загружается в новом окне, которое не содержит никаких элементов управления,
+     кроме стандартных (заголовок и рамки). Размеры окна подберите экспериментально, при условии, что все изображения должны иметь одинаковый размер, например - 400х300 px.
+При наведении на изображение в списке курсора мыши, в строке состояния должна отображаться информация об увеличенном изображении - имя файла,
+    его размеры и объем в килобайтах (приближенно), например: picture001.jpg (400x300, 0.230К).
+-->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Auto gallery</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <div id="content">
+        <img src="images/preview/l0001.jpg" class="preview" onmouseover="status = 'l0001.jpg (640x480 62.0k)'" onclick="CreateWnd('images/l0001.jpg')" />
+        <img src="images/preview/l0002.jpg" class="preview" onmouseover="status='l0002.jpg (640x480 89.5k)'" onclick="CreateWnd('images/l0002.jpg')" />
+        <img src="images/preview/l0003.jpg" class="preview" onmouseover="status='l0003.jpg (640x480 79.3k)'" onclick="CreateWnd('images/l0003.jpg')" />
+        <img src="images/preview/f0001.jpg" class="preview" onmouseover="status='f0001.jpg (640x480 53.3k)'" onclick="CreateWnd('images/f0001.jpg')" />
+        <img src="images/preview/f0002.jpg" class="preview" onmouseover="status='f0002.jpg (640x480 57.5k)'" onclick="CreateWnd('images/f0002.jpg')" />
+        <img src="images/preview/f0003.jpg" class="preview" onmouseover="status='f0003.jpg (640x441 110.1k)'" onclick="CreateWnd('images/f0003.jpg')" />
+    </div>
+</body>
+</html>
