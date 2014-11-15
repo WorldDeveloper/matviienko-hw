@@ -1,0 +1,19 @@
+﻿<!--
+Напишите регулярное выражение и сценарий, выполняющий проверку корректности ввода фамилии и инициалов пользователя в следующем виде: 
+Иванов И.И. либо Иванов ИИ
+-->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Initials</title>
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <form name="user">
+        Surname and initials:&nbsp;<input type="text" name="fullName" size="50" />
+        <input type="Submit" value="Submit" onclick="checkSurname(user.fullName.value)" />
+        </form>
+</body>
+</html>
