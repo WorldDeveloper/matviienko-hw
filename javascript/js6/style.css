@@ -1,0 +1,16 @@
+﻿body
+{
+    margin:0px;
+    padding:0px;
+     height: 100%;
+}
+
+#mainFrame {
+    position:absolute;
+    margin:10px 0 0 0;
+    padding:0px;
+    width:100%;
+    height:95%;
+    border:0px;
+    border-top:2px solid gray;
+}
