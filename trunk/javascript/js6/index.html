@@ -1,0 +1,27 @@
+﻿<!--
+В качестве домашнего задания вам предлагается "написать свой браузер"! В чем это будет заключаться? На web-странице размещается 2 фрейма. В верхнем фрейме создать форму, обеспечивающую следующие возможности: 
+    ввод адреса 
+    загрузка страницы в нижний фрейм или новое окно 
+    переход назад и вперед по истории страниц нижнего фрейма 
+    повторная загрузка страницы в нижнем фрейме 
+-->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Browser</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <form name="navigationBar">
+        <input type="button" value="<<Back" onclick="history.back(); return false;" />
+        <input type="button" value="Forward>>" onclick="history.forward();  return false;"/>
+        <input type="text" name="destUrl" size="50" />
+        <input type="button" value="Open" onclick="OpenUrl()" />
+        <input type="checkbox" name="newWindow" value="New window" />New window
+        </form>
+    <iframe src="empty.html" id="mainFrame"></iframe>
+</body>
+</html>
