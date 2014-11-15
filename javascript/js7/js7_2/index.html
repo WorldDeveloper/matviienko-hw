@@ -1,0 +1,22 @@
+﻿<!--
+Напишите регулярное выражение и сценарий, выполняющий проверку корректности ввода адреса электронной почты.
+    Адрес электронной почты должен иметь следующий вид: login@host
+login - последовательность из букв, цифр и символов "-", начинающаяся с буквы. Длинна - от 3 до 10 символов.
+host - строка вида mail.ru или mail.odessa.ua и т.п. В конце host должен содержать от 2 до 3 символов (ru, com, net, ua и пр.)
+
+-->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>E-mail</title>
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <form name="user">
+        E-mail&nbsp;<input type="text" name="eMail" size="50" />
+        <input type="Submit" value="Submit" onclick="checkEmail(user.eMail.value)" />
+    </form>
+</body>
+</html>
