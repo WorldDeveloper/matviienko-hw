@@ -1,0 +1,37 @@
+﻿<!--
+А второе задание будет посложнее. Создайте Веб-страницу с несколькими изображениями. 
+    При щелчке на любом из них в отдельном блоке должен сменяться описательный текст. 
+    То есть, Вы щёлкаете по картинке и где-то на странице в специально отведённом месте появляется её описание. 
+    Также, картинки должны быть чёрно-белыми и меняться на цветные только при подведении указателя к ним. 
+    Эта страница должна быть оформлена, то есть Ваша задача состоит не только в написании сценариев, но и создании таблицы стилей. 
+-->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Auto gallery</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+    <h1>Auto gallery!</h1>
+    <div id="container">
+        <script type="text/javascript">
+            var paths = ["lamborghini.jpg", "ferrari.jpg"];
+            var desc = ["Automobili Lamborghini S.p.A. is an Italian brand and manufacturer of luxury sports cars and, formerly, SUVs, which is owned by the Volkswagen Group through its subsidiary brand division Audi.",
+            "Ferrari S.p.A. is an Italian luxury sports car manufacturer based in Maranello. Founded by Enzo Ferrari in 1929, as Scuderia Ferrari, the company sponsored drivers and manufactured race cars before moving into production of street-legal vehicles as Ferrari S.p.A. "];
+            var header = new Rollover(paths);
+        </script>
+
+        <img src="images/lamborghini.jpg" alt="&quot;Lamborghini&quot;"onclick="document.getElementById('description').innerHTML = desc[0]; return false;" onmouseover="header.OnMouseOver(this, 0)" onmouseout="header.OnMouseOut(this, 0)" />
+       <img src="images/ferrari.jpg" alt="&quot;Ferrari&quot;" onclick="document.getElementById('description').innerHTML = desc[1]; return false;" onmouseover="header.OnMouseOver(this, 1)" onmouseout="header.OnMouseOut(this, 1)" />
+    
+        <div id="description">
+        </div>
+    </div>
+
+</body>
+</html>

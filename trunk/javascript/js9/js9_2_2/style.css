@@ -1,0 +1,30 @@
+﻿body
+{
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+}
+
+img
+{
+    border: none;
+    margin-right: 30px;
+    cursor:pointer;
+}
+
+#container
+{
+   margin:0 auto;
+    text-align: center;
+    width: 500px;
+}
+
+#description
+{
+    margin-top:50px;
+}
+
+h1
+{
+    text-align: center;
+}
