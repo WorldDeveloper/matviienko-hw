@@ -3,11 +3,11 @@
     var child = elem.firstElementChild;
     var parent = elem.parentElement;
 
-    for (var i = 0; i < elem.parentElement.childElementCount; ++i) {      
+    for (var i = 0; i < parent.childElementCount; ++i) {      
 
-        if (elem.parentElement.children[i].childElementCount!=0 && elem.parentElement.children[i] != elem ) {            
-            elem.parentElement.children[i].style.listStyleImage = 'url("img/plus.png")';
-            elem.parentElement.children[i].firstElementChild.style.display = "none";
+        if (parent.children[i].childElementCount!=0 && parent.children[i] != elem ) {            
+            parent.children[i].style.listStyleImage = 'url("img/plus.png")';
+            parent.children[i].firstElementChild.style.display = "none";
         }
     }
 
