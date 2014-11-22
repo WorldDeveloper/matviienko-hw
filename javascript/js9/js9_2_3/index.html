@@ -1,0 +1,56 @@
+﻿<!--
+А ещё сделайте раскрывающиеся списки по типу папок «Избранного».
+    Во-первых, списки должны быть много­уровневыми, то есть должны вкладываться один в другой. 
+    Во-вторых, при открытии одного из под­списков остальные должны быть закрыты.
+    И в-третьих, тщательно отладьте код, предвидя как можно больше вариантов его использования.
+-->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>List</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="JavaScript.js"></script>
+</head>
+<body>
+
+    <ul>
+        <li>item 1</li>
+        <li class="parent" onclick="DropdownList(this);">
+            item 2
+            <ul class="dropdownList">
+                <li class="parent" onclick="event.cancelBubble = true;  DropdownList(this);">subitem 2.1
+                    <ul class="dropdownList">
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.1.1</li>
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.1.2</li>
+                    </ul>
+                </li>
+                <li class="parent" onclick="event.cancelBubble = true;  DropdownList(this);">
+                    subitem 2.2
+                    <ul class="dropdownList">
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.2.1</li>
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.2.2</li>
+                    </ul>
+                </li>
+                <li class="parent" onclick="event.cancelBubble = true;  DropdownList(this);">
+                    subitem 2.3
+                    <ul class="dropdownList">
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.3.1</li>
+                        <li class="child" onclick="event.cancelBubble = true;">subitem 2.3.2</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="parent" onclick="DropdownList(this);">
+            item 3
+            <ul class="dropdownList">
+                <li class="child" onclick="event.cancelBubble = true;">subitem 3.1</li>
+                <li class="child" onclick="event.cancelBubble = true;">subitem 3.2</li>
+                <li class="child" onclick="event.cancelBubble = true;">subitem 3.3</li>
+            </ul>
+        </li>
+        <li>item 4</li>
+    </ul>
+</body>
+</html>
