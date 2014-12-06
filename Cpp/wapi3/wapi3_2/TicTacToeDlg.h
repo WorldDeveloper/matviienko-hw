@@ -4,26 +4,25 @@
 #include "resource.h"
 #include "TicTacToeGame.h"
 
-
-
 class TicTacToeDlg
 {
 	const int mFirstSquaresID;
-	HWND mhDialog;
 	HINSTANCE mhInst;
+	HWND mhDialog;
+	HWND mhStart;
+	HWND mhBoard[3][3];
 	HWND mhHumanFirst;
 	HWND mhDifficulty[3];
 	HBITMAP mBmpHumanMark;
 	HBITMAP mBmpComputerMark;
-	HWND mhStart;
-	HWND mhBoard[3][3];
+
 	TicTacToeGame mGame;
-	
+
 	bool mGameStarted;
 	bool mHumanFirst;
-public:	
+public:
 	TicTacToeDlg();
-	
+
 	static TicTacToeDlg* handler;
 	static BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -36,6 +35,4 @@ public:
 	void StartGame();
 	void StopGame();
 	void ShowResult(const bool cross);
-	~TicTacToeDlg();
 };
-
