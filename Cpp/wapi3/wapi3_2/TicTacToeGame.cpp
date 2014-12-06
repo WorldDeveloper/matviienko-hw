@@ -5,7 +5,7 @@
 
 
 TicTacToeGame::TicTacToeGame()
-	:mHumansMark(1), mComputersMark(-2), mEmptySquaresNumber(mBoardSize*mBoardSize), mDifficulty(1)
+	:mHumansMark(1), mComputersMark(-1), mEmptySquaresNumber(mBoardSize*mBoardSize), mDifficulty(1)
 {
 	for (int i=0; i<mBoardSize; ++i)
 	{
@@ -30,20 +30,58 @@ bool TicTacToeGame::ComputerMove(int& row, int& col)
 {
 	if (BoardIsFull()) throw "Illegal move!";
 
+	Move bestMove;
 	switch(mDifficulty)
 	{
 	case 0:
 		{
-			RandomMove(row, col);
-			mBoard[row][col]=-1;
-			mEmptySquaresNumber--;
-
-			return CheckVictory(row, col, -mBoardSize);
+			RandomMove(bestMove);
+			break;
 		}
-	}
-	
+	case 1:
+		{			
+			bool win=false;
+			if (mEmptySquaresNumber>mBoardSize*mBoardSize-2) RandomMove(bestMove);
+			else win=BestMove(bestMove, mComputersMark);
 
-	return false;
+			if (!win)
+				{
+					Move blockMove;
+					if (BestMove(blockMove, mHumansMark))
+					{
+						bestMove=blockMove;
+					}
+			}
+
+			break;
+		}
+	case 2:
+		{
+			bool win=false;
+			if (mEmptySquaresNumber>mBoardSize*mBoardSize-2) FirstMove(bestMove);
+			else win=BestMove(bestMove, mComputersMark);
+
+			if (!win)
+				{
+					Move blockMove;
+					if (BestMove(blockMove, mHumansMark))
+					{
+						bestMove=blockMove;
+					}
+			}
+			
+			break;
+		}
+	default:
+		throw "Incorrect dfficulty level!";
+	}
+
+	row=bestMove.row;
+	col=bestMove.col;
+	mBoard[row][col]=-1;
+	mEmptySquaresNumber--;
+
+	return CheckVictory(row, col, -mBoardSize);
 }
 
 bool TicTacToeGame::CheckVictory(const int row, const int col, const int criteria)
@@ -101,28 +139,68 @@ bool TicTacToeGame::CheckVictory(const int row, const int col, const int criteri
 	return false;
 }
 
-bool TicTacToeGame::BestMove(const int mark)
+void TicTacToeGame::FirstMove(Move& firstMove)
 {
-	int vertical[mBoardSize]={0};
-	int horizontal[mBoardSize]={0};
-	int rightDiagonal=0;
-	int leftDiagonal=0;
+	Move move[5];
+	move[1].row=2;
+	move[2].col=2;
+	move[3].row=2;
+	move[3].col=2;
+	move[4].row=1;
+	move[4].col=1;
 
-	
-	for (int i=0; i<mBoardSize; ++i)
+	std::srand(std::time(NULL));
+	int randomMove=std::rand()%5;
+	while(!SquareIsEmpty(move[randomMove].row, move[randomMove].col))
 	{
-		for (int j=0; j<mBoardSize; ++j)
-		{
-			vertical[i]+=mBoard[i][j];
-			horizontal[i]+=mBoard[j][i];
-		}
-		rightDiagonal+=mBoard[i][i];
-		leftDiagonal+=mBoard[mBoardSize-i-1][i];
+		randomMove=std::rand()%5;
 	}
 
-	
+	firstMove=move[randomMove];
+}
+
+
+bool TicTacToeGame::BestMove(Move& bestMove, const int playersMark)
+{
+	int sign=-playersMark;
+	bestMove.value=mBoardSize*sign;
+
+	for (int row=0; row<mBoardSize; ++row)
+	{
+		for (int col=0; col<mBoardSize; ++col)
+		{
+			if(SquareIsEmpty(row,col))
+			{
+				int strategies[4]={0};
+				for (int i=0; i<mBoardSize; ++i)
+				{
+					if (row==col) strategies[0]+=mBoard[i][i];
+					if (mBoardSize-row-1==col) strategies[1]+=mBoard[mBoardSize-i-1][i];
+					strategies[2]+=mBoard[i][col];
+					strategies[3]+=mBoard[row][i];
+					
+				}
+
+				for (int i=0; i<4; ++i)
+				{
+					if (strategies[i]*sign<bestMove.value*sign)
+					{
+						bestMove.value=strategies[i];	
+						bestMove.row=row;
+						bestMove.col=col;
+
+						if (bestMove.value==(mBoardSize-1)*playersMark) 
+						{	
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return false;
+
 }
 
 void TicTacToeGame::SetDifficulty(const int level)
@@ -134,12 +212,12 @@ void TicTacToeGame::SetDifficulty(const int level)
 
 
 
-void TicTacToeGame::RandomMove(int& row, int& col)
+void TicTacToeGame::RandomMove(Move& randomMove)
 {
 
 	std::srand(std::time(NULL));
 	int randomSquare=std::rand()%(mEmptySquaresNumber);
-	
+
 	//randomSquare=1;
 
 	for (int i=0; i<mBoardSize; ++i)
@@ -151,8 +229,8 @@ void TicTacToeGame::RandomMove(int& row, int& col)
 				--randomSquare;
 				if (randomSquare<1)
 				{
-					row=i;
-					col=j;
+					randomMove.row=i;
+					randomMove.col=j;
 					return;
 				}
 			}
