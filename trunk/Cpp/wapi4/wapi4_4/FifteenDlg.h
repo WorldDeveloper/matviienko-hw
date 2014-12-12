@@ -11,8 +11,6 @@ class FifteenDlg
 	std::vector<HWND> mhTile;
 	FifteenGame mGame;
 
-	std::wstring GetString(HWND hWnd)const;
-
 public:
 	FifteenDlg();
 
