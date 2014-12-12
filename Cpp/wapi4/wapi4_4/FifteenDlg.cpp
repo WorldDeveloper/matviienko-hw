@@ -38,10 +38,17 @@ void FifteenDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 
 		if (mGame.IsFinished())
 		{
-			MessageBox(hWnd, L"Well done!", L"You have won!", MB_OK);
+			std::wstringstream mes;
+			mes<<"Well done!\n\r Your time: ";
+
+			int time = mGame.GetElapsedTime();
+			mes<< time / 60<<" min ";
+			mes<< time % 60<<" sec";
+
+			MessageBox(hWnd, mes.str().c_str(), L"You have won!", MB_OK);
 
 			ShowWindow(mhTile[mGame.GetMissingTile()], SW_SHOW);
-			mGame.Randomize();
+			mGame.NewGame();
 
 			const int end = mGame.GetTilesCount();
 			for (int i = 0; i < end; ++i)
