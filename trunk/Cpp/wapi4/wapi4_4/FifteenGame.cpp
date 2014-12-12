@@ -8,7 +8,7 @@ FifteenGame::FifteenGame() :mTilesCount(16)
 {
 	std::srand(time(NULL));
 	for (int i = 0; i < mTilesCount; ++i) mTile.push_back(i);
-	Randomize();
+	NewGame();
 }
 
 
@@ -19,13 +19,16 @@ std::wstring FifteenGame::GetTile(const int index) const
 	return std::to_wstring(mTile[index]);
 }
 
-bool FifteenGame::IsFinished() const
+bool FifteenGame::IsFinished()
 {
 	const int end = mTilesCount - 1;
 	for (int i = 0; i < end; ++i)
 	{
 		if (mTile[i] != i + 1) return false;
 	}
+
+	std::time(&mElapsedTime);
+	mElapsedTime -= mStartTime;
 
 	return true;
 }
@@ -86,8 +89,10 @@ bool FifteenGame::SwapTile(const int index)
 	return false;
 }
 
-void FifteenGame::Randomize()
+void FifteenGame::NewGame()
 {
+	std::time(&mStartTime);
+	mElapsedTime = 0;
 	do
 	{
 		Shuffle();

@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include "resource.h"
 #include <string>
+#include <sstream>
 #include <vector>
 #include "FifteenGame.h"
 
