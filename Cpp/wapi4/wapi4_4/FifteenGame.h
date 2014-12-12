@@ -12,11 +12,10 @@ class FifteenGame
 public:
 	FifteenGame();
 	std::wstring GetTile(const int index) const;
-	int GetMissingTile() const { 		return mMissingTileIndex; 	}
+	int GetMissingTile() const { return mMissingTileIndex; }
 	int GetTilesCount() const { return mTilesCount; }
 	bool HasSolution() const;
 	bool IsFinished() const;
 	bool SwapTile(const int index);
 	void Randomize();
 };
-

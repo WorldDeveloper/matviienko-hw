@@ -10,7 +10,6 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int CmdShow)
 {
-	//try****	
 	FifteenDlg dlg;
-		return DialogBox(hInstance, MAKEINTRESOURCE(IDD_FIFTEEN), NULL, FifteenDlg::DlgProc);
+	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_FIFTEEN), NULL, FifteenDlg::DlgProc);
 }

@@ -4,7 +4,7 @@
 
 
 
-FifteenGame::FifteenGame():mTilesCount(16)
+FifteenGame::FifteenGame() :mTilesCount(16)
 {
 	std::srand(time(NULL));
 	for (int i = 0; i < mTilesCount; ++i) mTile.push_back(i);
@@ -15,7 +15,7 @@ FifteenGame::FifteenGame():mTilesCount(16)
 std::wstring FifteenGame::GetTile(const int index) const
 {
 	if (index < 0 || index >= mTilesCount) throw "Tile is out of range";
-	
+
 	return std::to_wstring(mTile[index]);
 }
 
@@ -24,7 +24,7 @@ bool FifteenGame::IsFinished() const
 	const int end = mTilesCount - 1;
 	for (int i = 0; i < end; ++i)
 	{
-		if (mTile[i] != i+1) return false;
+		if (mTile[i] != i + 1) return false;
 	}
 
 	return true;
@@ -37,16 +37,16 @@ bool FifteenGame::HasSolution() const
 	for (int i = 0; i < end; ++i)
 	{
 		int k = 0;
-		for (int j = i+1; j < mTilesCount; ++j)
+		for (int j = i + 1; j < mTilesCount; ++j)
 		{
-			if (!mTile[j]) break;
-			if (mTile[j] <mTile[i]) k++;
+			if (!mTile[j]) continue;
+			if (mTile[j] < mTile[i]) k++;
 		}
 		n += k;
 	}
 
 	int sa = (int)std::sqrt(mTilesCount);
-	if (((n + mMissingTileIndex / (int)std::sqrt(mTilesCount) + 1) % 2)==1) return false;
+	if (((n + mMissingTileIndex / (int)std::sqrt(mTilesCount) + 1) % 2) == 1) return false;
 
 	return true;
 }
@@ -67,8 +67,8 @@ void FifteenGame::Shuffle()
 
 bool FifteenGame::SwapTile(const int index)
 {
-	if (index<0 || index >= mTilesCount)   throw "Tile is out of range";
-	if (index==mMissingTileIndex) return false;
+	if (index < 0 || index >= mTilesCount)   throw "Tile is out of range";
+	if (index == mMissingTileIndex) return false;
 
 	const int frameSize = (int)std::sqrt(mTilesCount);
 
@@ -83,14 +83,13 @@ bool FifteenGame::SwapTile(const int index)
 		return true;
 	}
 
-	return false;	
+	return false;
 }
 
 void FifteenGame::Randomize()
 {
-	do 
+	do
 	{
 		Shuffle();
 	} while (!(HasSolution() && !IsFinished()));
-
 }
