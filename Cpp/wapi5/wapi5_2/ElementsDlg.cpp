@@ -55,6 +55,7 @@ void ElementsDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify
 		if (index == 3) style |= CBS_DROPDOWNLIST;
 		mhControls[index].push(CreateWindowEx(WS_EX_CLIENTEDGE, buffer, buffer,
 			style, rLeft, rTop, mControlWidth, mControlHeight[index], hWnd, 0, GetModuleHandle(0), 0));
+		delete[] buffer;
 
 		break;
 	}
