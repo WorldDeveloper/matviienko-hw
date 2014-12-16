@@ -60,6 +60,8 @@ void FifteenDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 				if (mGame.GetTile(i) == L"0") ShowWindow(mhTile[i], SW_HIDE);
 				else SetWindowText(mhTile[i], mGame.GetTile(i).c_str());
 			}
+			SetTimer(hWnd, IDT_TIMER, 1000, NULL);
+			SendMessage(mhProgress, PBM_SETPOS, mGame.GetSolvedSquaresNumber(), 0);
 		}
 	}
 	catch (wchar_t* error)
