@@ -19,7 +19,6 @@ class GameDlg
 	HWND mhProgress;
 	GameModel mGame;
 
-	bool mGameStarted;
 	const int mPadding = 10;
 	const int mButtonSize = 50;
 

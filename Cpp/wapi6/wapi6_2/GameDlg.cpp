@@ -6,7 +6,6 @@ GameDlg* GameDlg::ptr = nullptr;
 GameDlg::GameDlg()
 {
 	ptr = this;
-	mGameStarted = false;
 }
 
 BOOL CALLBACK GameDlg::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
