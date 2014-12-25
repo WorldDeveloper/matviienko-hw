@@ -1,4 +1,5 @@
 #include "FrameWnd.h"
+#include "ChildWnd.h"
 
 //LRESULT CALLBACK MDIChildWndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -8,6 +9,7 @@ TCHAR szClassWindow[] = L"Organizer";
 
 
 FrameWnd frameWindow;
+ChildWnd childWindow;
 
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int nCmdShow)
 {
@@ -35,7 +37,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 
 	if (!RegisterClassEx(&wcl)) return 0;
 
-	wcl.lpfnWndProc = FrameWnd::MdiChildWinProc;
+	wcl.lpfnWndProc = ChildWnd::MdiChildWinProc;
 	wcl.lpszClassName = frameWindow.GetChildClassName();
 	wcl.lpszMenuName = NULL;
 	wcl.hIconSm = NULL;
