@@ -1,9 +1,11 @@
 #pragma once
 #include "Header.h"
+#include "iOrganizer.h"
 
 
 class FrameWnd
 {
+	iOrganizer* miOrganizer;
 	HINSTANCE mhInst;
 	HWND mhWnd;	
 	wchar_t szChildWindow[12];
