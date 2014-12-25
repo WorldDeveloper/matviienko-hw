@@ -41,12 +41,12 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 	wcl.cbClsExtra = 0;
 	wcl.cbWndExtra = 0;
 	wcl.hInstance = hInst;
-	wcl.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wcl.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ORGANIZER32));
 	wcl.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcl.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wcl.lpszMenuName = NULL;
 	wcl.lpszClassName = szClassWindow;
-	wcl.hIconSm = NULL;
+	wcl.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ORGANIZER16));
 
 
 	if (!RegisterClassEx(&wcl)) return 0;
@@ -88,17 +88,18 @@ LRESULT CALLBACK FrameWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lP
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case ID_FILE_NEW:
+		case ID_PAGE_CALENDAR:
 			
-			hMDIClientWnd = CreateMDIWindow(szChildWindow, _T("Unknown Document"), WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hMDIClient, hInstance, 0);
+			hMDIClientWnd = CreateMDIWindow(szChildWindow, L"Calendar", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hMDIClient, hInstance, 0);
 
 			break;
-		case ID_FILE_OPEN:
+		case ID_PAGE_NOTE:
 		{
+			hMDIClientWnd = CreateMDIWindow(szChildWindow, L"Notes", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hMDIClient, hInstance, 0);
 
 			break;
 		}
-		case ID_FILE_SAVE:
+		case ID_PAGE_ALARM:
 		{
 			HWND hChild = (HWND)SendMessage(hMDIClient, WM_MDIGETACTIVE, 0, 0);
 			SendMessage(hMDIClient, WM_MDIRESTORE, (WPARAM)hChild, 0);
@@ -160,45 +161,53 @@ void CreateMenu(HWND hWnd)
 	HMENU hMenu, hSubMenu;
 	hMenu = CreateMenu();
 		   hSubMenu = CreatePopupMenu();
-		   AppendMenu(hSubMenu, MF_STRING, ID_FILE_NEW, _T("&New"));
-		   AppendMenu(hSubMenu, MF_STRING, ID_FILE_OPEN, _T("&Open"));
-		   AppendMenu(hSubMenu, MF_STRING, ID_FILE_SAVE, _T("&Save"));
-		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&File"));
+		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_CALENDAR, L"&Calendar");
+		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_NOTE, L"&Notes");
+		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_ALARM, _T("&Alarms"));
+		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&Navigation"));
 		   
 		   hSubMenu = CreatePopupMenu();
-		   AppendMenu(hSubMenu, MF_STRING, ID_NAV_CALENDAR, _T("&Calendar"));
-		   AppendMenu(hSubMenu, MF_STRING, ID_NAV_NOTE, _T("N&ote"));
-		   AppendMenu(hSubMenu, MF_STRING, ID_NAV_ALARM, _T("&Alarm"));
-		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, _T("&Navigation"));
+		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_ADD, L"&Add");
+		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_EDIT, L"&Edit");
+		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_DELETE, L"&Delete");
+		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, L"&Action");
 		   SetMenu(hWnd, hMenu);
 }
 
 void CreateToolbar(HWND hWnd)
 {
 	InitCommonControls();
-	HWND hTool = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, hWnd,(HMENU)IDC_MAIN_TOOL, GetModuleHandle(NULL), NULL);
+	HWND hTool = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT,  0, 0, 0, 0, hWnd, (HMENU)IDC_MAIN_TOOL, GetModuleHandle(NULL), NULL);
 
 	SendMessage(hTool, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
 	
-	
-	TBBUTTON tbb[2];
-	TBADDBITMAP tbab;
+	HIMAGELIST hImg = ImageList_Create(64, 64, ILC_COLOR32 | ILC_MASK, 10, 10);
+	for (int i = 0; i < 6; ++i)
+	{
+		ImageList_AddIcon(hImg, LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_CALENDAR+i)));
+	}
 
-	tbab.hInst = HINST_COMMCTRL;
-	tbab.nID = IDB_STD_LARGE_COLOR;
-	SendMessage(hTool, TB_ADDBITMAP, 0, (LPARAM)&tbab);
+	SendMessage(hTool, TB_SETIMAGELIST, (WPARAM)0, (LPARAM)hImg);
 
-
+	TBBUTTON tbb[7];
 	ZeroMemory(tbb, sizeof(tbb));
-	tbb[0].iBitmap = STD_FILEOPEN;
-	tbb[0].fsState = TBSTATE_ENABLED;
-	tbb[0].fsStyle = TBSTYLE_BUTTON;
-	tbb[0].idCommand = ID_FILE_OPEN;
 
-	tbb[1].iBitmap = STD_FILESAVE;
-	tbb[1].fsState = TBSTATE_ENABLED;
-	tbb[1].fsStyle = TBSTYLE_BUTTON;
-	tbb[1].idCommand = ID_FILE_SAVE;
+	int bitmap = 0;
+	for (int i = 0; i < 7; ++i)
+	{
+		if (i == 3)
+		{
+			tbb[3].iBitmap = 0;
+			tbb[3].fsState = 0;
+			tbb[3].fsStyle = TBSTYLE_SEP;
+			tbb[3].idCommand = 0;
+			continue;
+		}
+		tbb[i].iBitmap = bitmap++;
+		tbb[i].fsState = TBSTATE_ENABLED;
+		tbb[i].fsStyle = TBSTYLE_BUTTON;
+		tbb[i].idCommand = ID_PAGE_CALENDAR+i;
+	}
 
 	SendMessage(hTool, TB_ADDBUTTONS, sizeof(tbb) / sizeof(TBBUTTON), (LPARAM)&tbb);
 }
@@ -227,7 +236,7 @@ void ReSize(HWND hWnd, HWND hClient)
 
 
 	RECT rcClient; 
-	int iEditHeight;
+	int iClientHeight;
 
 	hTool = GetDlgItem(hWnd, IDC_MAIN_TOOL);
 	SendMessage(hTool, TB_AUTOSIZE, 0, 0);
@@ -242,8 +251,8 @@ void ReSize(HWND hWnd, HWND hClient)
 	iStatusHeight = rcStatus.bottom - rcStatus.top;
 
 	GetClientRect(hWnd, &rcClient);
-	iEditHeight = rcClient.bottom - iToolHeight - iStatusHeight;
+	iClientHeight = rcClient.bottom - iToolHeight - iStatusHeight;
 
 
-	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iEditHeight, SWP_NOZORDER);	
+	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);	
 }
