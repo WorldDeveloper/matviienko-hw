@@ -29,25 +29,6 @@ LRESULT CALLBACK FrameWnd::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	return FALSE;
 }
 
-LRESULT CALLBACK FrameWnd::MdiChildWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-	case WM_CLOSE:
-	{		
-		if (hWnd == mhCalendar) mhCalendar = NULL;
-		else if (hWnd == mhNote) mhNote = NULL;
-		else if (hWnd == mhAlarm) mhAlarm = NULL;
-	}
-
-	default:
-		return DefMDIChildProc(hWnd, message, wParam, lParam);
-	}
-
-	return 0;
-}
-
-
 void FrameWnd::Cls_OnClose(HWND hWnd)
 {
 	PostQuitMessage(0);
@@ -81,15 +62,17 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 	switch (id)
 	{
 	case ID_PAGE_CALENDAR:
-		if (!mhCalendar) mhCalendar = CreateMDIWindow(szChildWindow, L"Calendar", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		if (!mhCalendar) mhCalendar = CreateChildWindow(L"Calendar");
 		else
 		{
 			SetFocus(mhCalendar);
+			HWND butt = CreateWindowEx(WS_EX_CLIENTEDGE, L"Button", L"Button",
+				WS_CHILD | WS_VISIBLE, 50, 50, 100, 50, mhCalendar, 0, mhInst, 0);
 		}
 		break;
 	case ID_PAGE_NOTE:
 	{
-		if (!mhNote) mhNote = CreateMDIWindow(szChildWindow, L"Notes", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		if (!mhNote) mhNote = CreateChildWindow(L"Notes");
 		else
 		{
 			SetFocus(mhNote);
@@ -97,7 +80,7 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		break;
 	}
 	case ID_PAGE_ALARM:
-		if (!mhAlarm) mhAlarm = CreateMDIWindow(szChildWindow, L"Alarms", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		if (!mhAlarm) mhAlarm = CreateChildWindow(L"Alarms");
 		else
 		{			
 			SetFocus(mhAlarm);
@@ -149,6 +132,7 @@ void FrameWnd::CreateToolbar(HWND hWnd)
 	TBBUTTON tbb[7];
 	ZeroMemory(tbb, sizeof(tbb));
 
+	const wchar_t toolTip[6][10] = { L"Calendar", L"Notes", L"Alarms", L"Add", L"Edit", L"Delete" };
 	int bitmap = 0;
 	for (int i = 0; i < 7; ++i)
 	{
@@ -160,10 +144,11 @@ void FrameWnd::CreateToolbar(HWND hWnd)
 			tbb[3].idCommand = 0;
 			continue;
 		}
-		tbb[i].iBitmap = bitmap++;
+		tbb[i].iBitmap = bitmap;// ++
 		tbb[i].fsState = TBSTATE_ENABLED;
 		tbb[i].fsStyle = TBSTYLE_BUTTON;
 		tbb[i].idCommand = ID_PAGE_CALENDAR+i;
+		tbb[i].iString = (INT_PTR)toolTip[bitmap++];
 	}
 
 	SendMessage(hTool, TB_ADDBUTTONS, sizeof(tbb) / sizeof(TBBUTTON), (LPARAM)&tbb);
@@ -214,3 +199,7 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);	
 }
 
+HWND FrameWnd::CreateChildWindow(wchar_t* title)
+{
+	return CreateMDIWindow(szChildWindow, title, WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+}

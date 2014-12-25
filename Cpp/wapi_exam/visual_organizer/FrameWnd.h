@@ -7,7 +7,7 @@ class FrameWnd
 	HINSTANCE mhInst;
 	HWND mhWnd;	
 	wchar_t szChildWindow[12];
-
+	HWND CreateChildWindow(wchar_t* title);
 public:
 	FrameWnd();
 
@@ -18,7 +18,7 @@ public:
 	static HWND mhAlarm;
 
 	static LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static LRESULT CALLBACK MdiChildWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	/*static LRESULT CALLBACK MdiChildWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);*/
 	
 	void Cls_OnClose(HWND hWnd);
 	BOOL Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct);
