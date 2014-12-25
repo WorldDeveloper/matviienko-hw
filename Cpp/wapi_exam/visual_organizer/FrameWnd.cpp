@@ -3,6 +3,9 @@
 
 FrameWnd* FrameWnd::handler = nullptr;
 HWND FrameWnd::mhMdiClient = NULL;
+HWND FrameWnd:: mhCalendar = NULL;
+HWND FrameWnd:: mhNote = NULL;
+HWND FrameWnd:: mhAlarm = NULL;
 
 FrameWnd::FrameWnd() 
 {
@@ -20,20 +23,36 @@ LRESULT CALLBACK FrameWnd::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		HANDLE_MSG(hWnd, WM_SIZE, handler->Cls_OnSize);
 
 	default:
-		return DefFrameProc(hWnd,mhMdiClient, message, wParam, lParam);
+		return DefFrameProc(hWnd, mhMdiClient, message, wParam, lParam);
 	}
 
 	return FALSE;
 }
 
+LRESULT CALLBACK FrameWnd::MdiChildWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_CLOSE:
+	{		
+		if (hWnd == mhCalendar) mhCalendar = NULL;
+		else if (hWnd == mhNote) mhNote = NULL;
+		else if (hWnd == mhAlarm) mhAlarm = NULL;
+	}
+
+	default:
+		return DefMDIChildProc(hWnd, message, wParam, lParam);
+	}
+
+	return 0;
+}
+
+
 void FrameWnd::Cls_OnClose(HWND hWnd)
 {
-	if (hWnd == mhCalendar) mhCalendar = NULL;
-	else if (hWnd == mhNotes) mhNotes = NULL;
-	else if (hWnd == mhAlarms) mhAlarms = NULL;
-
 	PostQuitMessage(0);
 }
+
 
 BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 {
@@ -63,15 +82,28 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 	{
 	case ID_PAGE_CALENDAR:
 		if (!mhCalendar) mhCalendar = CreateMDIWindow(szChildWindow, L"Calendar", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		else
+		{
+			SetFocus(mhCalendar);
+		}
 		break;
 	case ID_PAGE_NOTE:
 	{
-		HWND hChild = (HWND)SendMessage(mhMdiClient, WM_MDIGETACTIVE, 0, 0);
-		SetWindowText(hChild, L"Active");
-		SendMessage(mhMdiClient, WM_MDIRESTORE, (WPARAM)hChild, 0);
+		if (!mhNote) mhNote = CreateMDIWindow(szChildWindow, L"Notes", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		else
+		{
+			SetFocus(mhNote);
+		}
 		break;
 	}
-	//default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
+	case ID_PAGE_ALARM:
+		if (!mhAlarm) mhAlarm = CreateMDIWindow(szChildWindow, L"Alarms", WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+		else
+		{			
+			SetFocus(mhAlarm);
+		}
+		break;
+	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
 	}
 
 }

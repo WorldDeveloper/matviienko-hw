@@ -1,6 +1,6 @@
 #include "FrameWnd.h"
 
-LRESULT CALLBACK MDIChildWndProc(HWND, UINT, WPARAM, LPARAM);
+//LRESULT CALLBACK MDIChildWndProc(HWND, UINT, WPARAM, LPARAM);
 
 
 
@@ -35,7 +35,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 
 	if (!RegisterClassEx(&wcl)) return 0;
 
-	wcl.lpfnWndProc = MDIChildWndProc;
+	wcl.lpfnWndProc = FrameWnd::MdiChildWinProc;
 	wcl.lpszClassName = frameWindow.GetChildClassName();
 	wcl.lpszMenuName = NULL;
 	wcl.hIconSm = NULL;
@@ -60,16 +60,19 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 }
 
 
-LRESULT CALLBACK MDIChildWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMessage)
-	{
-		
-	default:
-		return DefMDIChildProc(hWnd, uMessage, wParam, lParam);
-	}
-
-	return 0;
-}
+//LRESULT CALLBACK MDIChildWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
+//{
+//	switch (uMessage)
+//	{
+//	case WM_CLOSE:
+//		MessageBox(hWnd, L"Close", NULL, MB_OK);
+//		break;
+//		
+//	default:
+//		return DefMDIChildProc(hWnd, uMessage, wParam, lParam);
+//	}
+//
+//	return 0;
+//}
 
 
