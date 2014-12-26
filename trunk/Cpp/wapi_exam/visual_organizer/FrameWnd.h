@@ -1,16 +1,20 @@
 #pragma once
 #include "Header.h"
 
+typedef IOrganizer*(*PluginMaker)();
+typedef void(*PluginReleaser)(IOrganizer*);
 
 
 class FrameWnd
 {
+	static const int mPluginsCount=3;
 	HINSTANCE mhInst;
 	HWND mhWnd;	
 	wchar_t szChildWindow[12];
 
-	std::vector<HMODULE> mModules;
-
+	std::wstring mModuleName[mPluginsCount];
+	HMODULE mModules[mPluginsCount];
+	IOrganizer* mpPlugins[mPluginsCount];
 
 	HWND CreateChildWindow(wchar_t* title);
 public:
@@ -38,6 +42,5 @@ public:
 	HWND GetClient() const { return mhMdiClient; }
 	const wchar_t* GetChildClassName()const { return szChildWindow; }
 
-	bool LoadPlugins();
 };
 

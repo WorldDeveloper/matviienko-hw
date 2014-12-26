@@ -6,7 +6,7 @@
 class Alarm : public IOrganizer
 {
 private:
-	std::wstring GetPluginName() const { return L"Alarm"; }
+	std::wstring GetPluginName() const { return L"Alarms"; }
 	void SetWindow(HWND destWindow);
 	bool AddItem();
 	bool EditItem(const int id);

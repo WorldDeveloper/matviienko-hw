@@ -6,7 +6,7 @@
 class Note : public IOrganizer
 {
 private:
-	std::wstring GetPluginName() const { return L"Note"; }
+	std::wstring GetPluginName() const { return L"Notes"; }
 	void SetWindow(HWND destWindow);
 	bool AddItem();
 	bool EditItem(const int id);

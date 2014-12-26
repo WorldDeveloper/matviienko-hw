@@ -1,8 +1,5 @@
 #include "FrameWnd.h"
-#include "IOrganizer.h"
 
-typedef IOrganizer*(*PluginMaker)();
-typedef void(*PluginReleaser)(IOrganizer*);
 
 
 FrameWnd* FrameWnd::handler = nullptr;
@@ -11,10 +8,13 @@ HWND FrameWnd:: mhCalendar = NULL;
 HWND FrameWnd:: mhNote = NULL;
 HWND FrameWnd:: mhAlarm = NULL;
 
-FrameWnd::FrameWnd() 
+FrameWnd::FrameWnd()
 {
 	handler = this;
 	wcscpy(szChildWindow,  L"ChildWindow");
+	mModuleName[0] = L"Calendar";
+	mModuleName[1] = L"Notes";
+	mModuleName[2] = L"Alarms";
 }
 
 LRESULT CALLBACK FrameWnd::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -34,9 +34,20 @@ LRESULT CALLBACK FrameWnd::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 }
 
 void FrameWnd::Cls_OnClose(HWND hWnd)
-{
-	for (HINSTANCE hInst : mModules)
-		FreeLibrary(hInst); 
+{	
+	for (int i = 0; i < mPluginsCount; ++i)
+	{
+		if (mpPlugins[i])
+		{
+			PluginReleaser ReleaserFunc = (PluginReleaser)GetProcAddress(mModules[i], "FreePlugin");
+			ReleaserFunc(mpPlugins[i]);
+			FreeLibrary(mModules[i]);
+		}
+		else
+		{
+
+		}
+	}
 	
 	PostQuitMessage(0);
 }
@@ -59,6 +70,38 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 				WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE, 0, 50, 500, 500,
 				hWnd, NULL, mhInst, (LPVOID)&ccs);
 	ShowWindow(mhMdiClient, SW_SHOW);
+
+
+	try
+	{
+		for (int i = 0; i <mPluginsCount; ++i)
+		{
+			mModules[i] = LoadLibrary((mModuleName[i] + L"Dll.dll").c_str());
+			if (!mModules[i])
+			{
+				MessageBox(hWnd, (mModuleName[i] + L" plugin was not loaded!").c_str(), L"Error", MB_OK | MB_ICONERROR);
+				continue;
+			}
+
+			PluginMaker MakerFunc = (PluginMaker)GetProcAddress(mModules[i], "CreatePlugin");
+			PluginReleaser ReleaserFunc = (PluginReleaser)GetProcAddress(mModules[i], "FreePlugin");
+			IOrganizer* tmpPlugin = MakerFunc();
+
+			if (!mpPlugins[i] && tmpPlugin->GetPluginName() == mModuleName[i])
+			{
+				mpPlugins[i] = tmpPlugin;
+			}
+			else
+			{
+				MessageBox(hWnd, (mModuleName[i] + L" plugin was not loaded!").c_str(), L"Error", MB_OK | MB_ICONERROR);
+
+				ReleaserFunc(tmpPlugin);
+				FreeLibrary(mModules[i]);
+			}
+		}
+	}
+	catch (wchar_t* err)	{ MessageBox(hWnd, err, NULL, MB_OK | MB_ICONERROR); }
+	catch (...)	{ MessageBox(hWnd, L"Unknown dll", L"Error", MB_OK | MB_ICONERROR); }
 
 	return TRUE;
 }
@@ -93,26 +136,7 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
 		break;
 	case ID_ACTION_ADD:
-		try
-		{
-			if (LoadPlugins()) MessageBox(hWnd, std::to_wstring(mModules.size()).c_str(), NULL, MB_OK);
-			else MessageBox(hWnd, L"There is no plugins!", NULL, MB_OK);
-
-			for (int i = 0; i < mModules.size(); ++i)
-			{
-				PluginMaker MakerFunc = (PluginMaker)GetProcAddress(mModules[i], "CreatePlugin");
-				PluginReleaser ReleaserFunc = (PluginReleaser)GetProcAddress(mModules[i], "FreePlugin");
-
-				IOrganizer* pCalendar = MakerFunc();
-				MessageBox(hWnd, pCalendar->GetPluginName().c_str(), NULL, MB_OK);
-
-			}
-
-		}
-		catch (wchar_t* err)
-		{
-			MessageBox(hWnd, err, NULL, MB_OK|MB_ICONERROR);
-		}
+		
 		break;
 	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
 	}
@@ -232,36 +256,4 @@ HWND FrameWnd::CreateChildWindow(wchar_t* title)
 	return CreateMDIWindow(szChildWindow, title, WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }
 
-
-bool FrameWnd::LoadPlugins()
-{
-	mModules.clear();
-
-	wchar_t buffer[MAX_PATH];
-	GetModuleFileName(NULL, buffer, MAX_PATH);
-	std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
-	
-	std::wstring pluginDir = std::wstring(buffer).substr(0, pos) + L"\\";	
-	std::wstring mask = pluginDir+L"*.dll";
-
-	_wfinddata_t fileinfo;
-	long result = _wfindfirst(mask.c_str(), &fileinfo);
-	long findNext = result;
-
-	while (findNext != -1)
-	{
-		HMODULE mod = LoadLibrary((pluginDir + std::wstring(fileinfo.name)).c_str());
-
-		if (!mod)
-		{
-			throw (L"Library " + std::wstring(fileinfo.name) + L" wasn't loaded successfully!").c_str();
-			continue;
-		}
-		mModules.push_back(mod);
-		findNext = _wfindnext(result, &fileinfo);
-	}
-	_findclose(result);
-	
-	return true;
-}
 
