@@ -2,12 +2,15 @@
 #include "IOrganizer.h"
 #include <string>
 
+using namespace std;
 
 class Alarms : public IOrganizer
 {
+	HWND mPluginWindow;
 
-	std::wstring GetPluginName() const { return L"Alarms"; }
+	wstring GetPluginName() const { return L"Alarms"; }
 	void SetWindow(HWND destWindow);
+	HWND GetPluginWindow() const { return mPluginWindow; }
 	bool AddItem();
 	bool EditItem(const int id);
 	bool DeleteItem(const int id);

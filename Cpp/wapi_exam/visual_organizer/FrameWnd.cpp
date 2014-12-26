@@ -106,13 +106,31 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 {
+	if (id >= ID_PAGE_CALENDAR && id <= ID_PAGE_ALARM)
+	{
+		const int index = id - ID_PAGE_CALENDAR;
+		HWND hChild = mpPlugins[index]->GetPluginWindow();
+
+		if (IsWindowVisible(hChild))
+		{
+			if (hChild==GetFocus())
+				ShowWindow(hChild, SW_HIDE);
+			else
+				SetFocus(hChild);
+		}
+		else
+		{
+			ShowWindow(hChild, SW_SHOW);
+			SetFocus(hChild);
+		}
+	}
+	
+	
 	switch (id)
 	{
+
 	case ID_PAGE_CALENDAR:
-		/*if (IsWindowVisible(hWnd))
-			ShowWindow(hWnd, SW_HIDE);
-		else
-			ShowWindow(hWnd, SW_SHOW); */
+		
 		
 		/*if (!mhCalendar) mhCalendar = CreateChildWindow(L"Calendar");
 		else
@@ -124,19 +142,19 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		break;
 	case ID_PAGE_NOTE:
 	{
-		if (!mhNote) mhNote = CreateChildWindow(L"Notes");
+		/*if (!mhNote) mhNote = CreateChildWindow(L"Notes");
 		else
 		{
 			SetFocus(mhNote);
-		}
+		}*/
 		break;
 	}
 	case ID_PAGE_ALARM:
-		if (!mhAlarm) mhAlarm = CreateChildWindow(L"Alarms");
+		/*if (!mhAlarm) mhAlarm = CreateChildWindow(L"Alarms");
 		else
 		{			
 			SetFocus(mhAlarm);
-		}
+		}*/
 		break;
 	case ID_ACTION_ADD:
 		

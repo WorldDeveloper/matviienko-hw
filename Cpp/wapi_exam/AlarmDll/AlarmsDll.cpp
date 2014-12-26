@@ -2,7 +2,7 @@
 
 Alarms::Alarms(HWND pluginWindow)
 {
-
+	mPluginWindow = pluginWindow;
 }
 
 void Alarms::SetWindow(HWND destWindow)
@@ -34,6 +34,7 @@ void Alarms::ShowAllItems() const
 {
 
 }
+
 
 
 extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
