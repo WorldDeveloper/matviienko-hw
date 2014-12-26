@@ -43,10 +43,6 @@ void FrameWnd::Cls_OnClose(HWND hWnd)
 			ReleaserFunc(mpPlugins[i]);
 			FreeLibrary(mModules[i]);
 		}
-		else
-		{
-
-		}
 	}
 	
 	PostQuitMessage(0);
@@ -74,7 +70,7 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	try
 	{
-		for (int i = 0; i <mPluginsCount; ++i)
+		for (int i = mPluginsCount-1; i >=0; --i)
 		{
 			mModules[i] = LoadLibrary((mModuleName[i] + L"Dll.dll").c_str());
 			if (!mModules[i])
@@ -85,7 +81,9 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 			PluginMaker MakerFunc = (PluginMaker)GetProcAddress(mModules[i], "CreatePlugin");
 			PluginReleaser ReleaserFunc = (PluginReleaser)GetProcAddress(mModules[i], "FreePlugin");
-			IOrganizer* tmpPlugin = MakerFunc();
+			HWND childWindow = CreateChildWindow(mModuleName[i].c_str());
+			
+			IOrganizer* tmpPlugin = MakerFunc(childWindow);
 
 			if (!mpPlugins[i] && tmpPlugin->GetPluginName() == mModuleName[i])
 			{
@@ -101,7 +99,7 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 		}
 	}
 	catch (wchar_t* err)	{ MessageBox(hWnd, err, NULL, MB_OK | MB_ICONERROR); }
-	catch (...)	{ MessageBox(hWnd, L"Unknown dll", L"Error", MB_OK | MB_ICONERROR); }
+	catch (...)	{ MessageBox(hWnd, L"Load time error!", L"Error", MB_OK | MB_ICONERROR); }
 
 	return TRUE;
 }
@@ -111,13 +109,18 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 	switch (id)
 	{
 	case ID_PAGE_CALENDAR:
-		if (!mhCalendar) mhCalendar = CreateChildWindow(L"Calendar");
+		/*if (IsWindowVisible(hWnd))
+			ShowWindow(hWnd, SW_HIDE);
+		else
+			ShowWindow(hWnd, SW_SHOW); */
+		
+		/*if (!mhCalendar) mhCalendar = CreateChildWindow(L"Calendar");
 		else
 		{
 			SetFocus(mhCalendar);
 			HWND butt = CreateWindowEx(WS_EX_CLIENTEDGE, L"Button", L"Button",
 				WS_CHILD | WS_VISIBLE, 50, 50, 100, 50, mhCalendar, 0, mhInst, 0);
-		}
+		}*/
 		break;
 	case ID_PAGE_NOTE:
 	{
@@ -251,7 +254,7 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);	
 }
 
-HWND FrameWnd::CreateChildWindow(wchar_t* title)
+HWND FrameWnd::CreateChildWindow(const wchar_t* title)
 {
 	return CreateMDIWindow(szChildWindow, title, WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }

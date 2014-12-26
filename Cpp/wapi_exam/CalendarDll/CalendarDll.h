@@ -6,7 +6,6 @@
 
 class Calendar : public IOrganizer
 {
-private:
 	std::wstring GetPluginName() const { return L"Calendar"; }
 	void SetWindow(HWND destWindow);
 	bool AddItem();
@@ -15,4 +14,6 @@ private:
 
 	void ShowSingleItem(const int id) const;
 	void ShowAllItems() const;
+public:
+	Calendar(HWND pluginWindow);
 };

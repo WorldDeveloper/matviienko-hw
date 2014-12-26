@@ -3,9 +3,9 @@
 #include <string>
 
 
-class Alarm : public IOrganizer
+class Alarms : public IOrganizer
 {
-private:
+
 	std::wstring GetPluginName() const { return L"Alarms"; }
 	void SetWindow(HWND destWindow);
 	bool AddItem();
@@ -14,4 +14,6 @@ private:
 
 	void ShowSingleItem(const int id) const;
 	void ShowAllItems() const;
+public:
+	Alarms(HWND pluginWindow);
 };

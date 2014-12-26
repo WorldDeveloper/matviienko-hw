@@ -23,16 +23,19 @@ LRESULT CALLBACK ChildWnd::MdiChildWinProc(HWND hWnd, UINT message, WPARAM wPara
 
 void ChildWnd::Cls_OnClose(HWND hWnd)
 {
-	if (hWnd == mhCalendar) mhCalendar = NULL;
-	else if (hWnd == mhNote) mhNote = NULL;
-	else if (hWnd == mhAlarm) mhAlarm = NULL;
+		ShowWindow(hWnd, SW_HIDE);
 
-	FORWARD_WM_CLOSE(hWnd, DefMDIChildProc);
+
+	/*if (hWnd == mhCalendar) mhCalendar = NULL;
+	else if (hWnd == mhNote) mhNote = NULL;
+	else if (hWnd == mhAlarm) mhAlarm = NULL;*/
+
+	//FORWARD_WM_CLOSE(hWnd, DefMDIChildProc);
 }
 
 void ChildWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	MessageBox(hWnd, L"Button", NULL, MB_OK);
+	//MessageBox(hWnd, L"Button", NULL, MB_OK);
 }
 
 
