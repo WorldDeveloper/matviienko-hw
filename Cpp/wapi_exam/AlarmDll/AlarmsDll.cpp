@@ -1,4 +1,4 @@
-#include "AlarmDll.h"
+#include "AlarmsDll.h"
 
 void Alarm::SetWindow(HWND destWindow)
 {
@@ -7,7 +7,7 @@ void Alarm::SetWindow(HWND destWindow)
 
 bool Alarm::AddItem()
 {
-	MessageBoxA(NULL, "This is calculator plugin", "About plugin", MB_OK | MB_ICONINFORMATION);
+
 	return true;
 }
 

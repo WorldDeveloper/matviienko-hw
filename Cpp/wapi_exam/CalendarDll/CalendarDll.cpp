@@ -7,7 +7,7 @@ void Calendar::SetWindow(HWND destWindow)
 
 bool Calendar::AddItem()
 {
-	MessageBoxA(NULL, "This is calculator plugin", "About plugin", MB_OK | MB_ICONINFORMATION);
+
 	return true;
 }
 

@@ -6,6 +6,10 @@
 #include <vector>
 #include <string>
 
+#include "IOrganizer.h"
+
+
+
 
 
 #include <CommCtrl.h>

@@ -1,4 +1,4 @@
-#include "NoteDll.h"
+#include "NotesDll.h"
 
 void Note::SetWindow(HWND destWindow)
 {
@@ -7,7 +7,7 @@ void Note::SetWindow(HWND destWindow)
 
 bool Note::AddItem()
 {
-	MessageBoxA(NULL, "This is calculator plugin", "About plugin", MB_OK | MB_ICONINFORMATION);
+
 	return true;
 }
 
