@@ -1,14 +1,17 @@
 #pragma once
 #include "Header.h"
-#include "iOrganizer.h"
+
 
 
 class FrameWnd
 {
-	iOrganizer* miOrganizer;
 	HINSTANCE mhInst;
 	HWND mhWnd;	
 	wchar_t szChildWindow[12];
+
+	std::vector<HMODULE> mModules;
+
+
 	HWND CreateChildWindow(wchar_t* title);
 public:
 	FrameWnd();
@@ -20,7 +23,6 @@ public:
 	static HWND mhAlarm;
 
 	static LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	/*static LRESULT CALLBACK MdiChildWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);*/
 	
 	void Cls_OnClose(HWND hWnd);
 	BOOL Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct);
@@ -36,4 +38,6 @@ public:
 	HWND GetClient() const { return mhMdiClient; }
 	const wchar_t* GetChildClassName()const { return szChildWindow; }
 
+	bool LoadPlugins();
 };
+

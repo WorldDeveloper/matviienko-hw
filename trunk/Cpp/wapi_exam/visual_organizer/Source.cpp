@@ -1,12 +1,7 @@
 #include "FrameWnd.h"
 #include "ChildWnd.h"
 
-//LRESULT CALLBACK MDIChildWndProc(HWND, UINT, WPARAM, LPARAM);
-
-
-
 TCHAR szClassWindow[] = L"Organizer";
-
 
 FrameWnd frameWindow;
 ChildWnd childWindow;
@@ -60,21 +55,4 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 
 	return lpMsg.wParam;
 }
-
-
-//LRESULT CALLBACK MDIChildWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
-//{
-//	switch (uMessage)
-//	{
-//	case WM_CLOSE:
-//		MessageBox(hWnd, L"Close", NULL, MB_OK);
-//		break;
-//		
-//	default:
-//		return DefMDIChildProc(hWnd, uMessage, wParam, lParam);
-//	}
-//
-//	return 0;
-//}
-
 
