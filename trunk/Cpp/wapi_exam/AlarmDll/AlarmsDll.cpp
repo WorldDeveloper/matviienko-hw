@@ -1,39 +1,44 @@
 #include "AlarmsDll.h"
 
-void Alarm::SetWindow(HWND destWindow)
+Alarms::Alarms(HWND pluginWindow)
 {
 
 }
 
-bool Alarm::AddItem()
+void Alarms::SetWindow(HWND destWindow)
+{
+
+}
+
+bool Alarms::AddItem()
 {
 
 	return true;
 }
 
-bool Alarm::EditItem(const int id)
+bool Alarms::EditItem(const int id)
 {
 	return true;
 }
-bool Alarm::DeleteItem(const int id)
+bool Alarms::DeleteItem(const int id)
 {
 	return true;
 }
 
-void Alarm::ShowSingleItem(const int id) const
+void Alarms::ShowSingleItem(const int id) const
 {
 	
 }
 
-void Alarm::ShowAllItems() const
+void Alarms::ShowAllItems() const
 {
 
 }
 
 
-extern "C" __declspec(dllexport) IOrganizer* CreatePlugin()
+extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
 {
-	return new Alarm;
+	return new Alarms(pluginWindow);
 }
 
 extern "C" __declspec(dllexport) void FreePlugin(IOrganizer* pPlugin)

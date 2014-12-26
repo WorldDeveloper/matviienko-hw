@@ -1,12 +1,22 @@
 #include <Windows.h>
 #include "IOrganizer.h"
-#include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <codecvt>
+
+using namespace std;
+
+class Notes : public IOrganizer
+{	
+	HWND mPluginWindow;
+	vector<wstring> mNotes;
+	int mId;
+	char* mDBname = "notes";
 
 
-class Note : public IOrganizer
-{
-private:
-	std::wstring GetPluginName() const { return L"Notes"; }
+
+	wstring GetPluginName() const { return L"Notes"; }
 	void SetWindow(HWND destWindow);
 	bool AddItem();
 	bool EditItem(const int id);
@@ -14,4 +24,9 @@ private:
 
 	void ShowSingleItem(const int id) const;
 	void ShowAllItems() const;
+
+	void OpenDB();
+	void SaveDB();
+public:
+	Notes(HWND pluginWindow);
 };

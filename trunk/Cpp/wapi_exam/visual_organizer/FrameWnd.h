@@ -1,7 +1,7 @@
 #pragma once
 #include "Header.h"
 
-typedef IOrganizer*(*PluginMaker)();
+typedef IOrganizer*(*PluginMaker)(HWND);
 typedef void(*PluginReleaser)(IOrganizer*);
 
 
@@ -16,7 +16,7 @@ class FrameWnd
 	HMODULE mModules[mPluginsCount];
 	IOrganizer* mpPlugins[mPluginsCount];
 
-	HWND CreateChildWindow(wchar_t* title);
+	HWND CreateChildWindow(const wchar_t* title);
 public:
 	FrameWnd();
 
