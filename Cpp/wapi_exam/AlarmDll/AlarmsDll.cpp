@@ -3,6 +3,11 @@
 Alarms::Alarms(HWND pluginWindow)
 {
 	mPluginWindow = pluginWindow;
+
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
+		WS_CHILD | WS_VISIBLE, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 }
 
 void Alarms::SetWindow(HWND destWindow)

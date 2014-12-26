@@ -10,9 +10,13 @@ using namespace std;
 class Notes : public IOrganizer
 {	
 	HWND mPluginWindow;
+	HWND mhList;
+
 	vector<wstring> mNotes;
-	int mId;
 	char* mDBname = "notes";
+
+
+	//ResizePlugin();
 
 
 
