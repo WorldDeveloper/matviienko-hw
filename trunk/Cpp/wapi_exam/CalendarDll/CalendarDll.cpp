@@ -1,7 +1,7 @@
 #include "CalendarDll.h"
 Calendar::Calendar(HWND pluginWindow)
 {
-
+	mPluginWindow = pluginWindow;
 }
 
 void Calendar::SetWindow(HWND destWindow)
@@ -33,6 +33,8 @@ void Calendar::ShowAllItems() const
 {
 
 }
+
+
 
 
 extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
