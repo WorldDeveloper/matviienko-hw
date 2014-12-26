@@ -1,5 +1,17 @@
 ﻿#include "NotesDll.h"
 
+Notes::Notes(HWND pluginWindow)
+{
+	mPluginWindow = pluginWindow;
+
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
+		WS_CHILD | WS_VISIBLE, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+
+	OpenDB();
+}
+
 void Notes::SetWindow(HWND destWindow)
 {
 	//remove
@@ -60,9 +72,16 @@ void Notes::ShowSingleItem(const int id) const
 
 void Notes::ShowAllItems() const
 {
-	/*if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) throw "out of range";
+	if (mNotes.empty()) return;	
 
-	return mNotes[itemIndex];*/
+	SendMessage(mhList, LB_RESETCONTENT, 0, 0);
+
+	for (int i = 0; i < mNotes.size(); ++i)
+	{
+		int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(mNotes[i].c_str()));
+		SendMessage(mhList, LB_SETITEMDATA, index, i);
+	}
+
 }
 
 
@@ -81,11 +100,7 @@ extern "C" __declspec(dllexport) void FreePlugin(IOrganizer* pPlugin)
 //*********************
 
 
-Notes::Notes(HWND pluginWindow)
-{	
-	mPluginWindow = pluginWindow;
-	OpenDB();
-}
+
 
 
 

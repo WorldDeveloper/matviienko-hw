@@ -7,6 +7,7 @@ using namespace std;
 class Alarms : public IOrganizer
 {
 	HWND mPluginWindow;
+	HWND mhList;
 
 	wstring GetPluginName() const { return L"Alarms"; }
 	void SetWindow(HWND destWindow);

@@ -88,6 +88,7 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 			if (!mpPlugins[i] && tmpPlugin->GetPluginName() == mModuleName[i])
 			{
 				mpPlugins[i] = tmpPlugin;
+				tmpPlugin->ShowAllItems();
 			}
 			else
 			{

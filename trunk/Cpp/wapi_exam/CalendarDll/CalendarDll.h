@@ -7,6 +7,7 @@
 class Calendar : public IOrganizer
 {
 	HWND mPluginWindow;
+	HWND mhList;
 
 	std::wstring GetPluginName() const { return L"Calendar"; }
 	void SetWindow(HWND destWindow);
