@@ -13,4 +13,5 @@ public:
 
 	virtual void ShowSingleItem(const int id) const = 0;
 	virtual void ShowAllItems() const = 0;
+	virtual void ResizePlugin() const = 0;
 };
