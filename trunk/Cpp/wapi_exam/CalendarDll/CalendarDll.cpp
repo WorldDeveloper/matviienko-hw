@@ -1,4 +1,5 @@
 #include "CalendarDll.h"
+
 Calendar::Calendar(HWND pluginWindow)
 {
 	mPluginWindow = pluginWindow;
@@ -6,12 +7,7 @@ Calendar::Calendar(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
-}
-
-void Calendar::SetWindow(HWND destWindow)
-{
-
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 }
 
 bool Calendar::AddItem()
@@ -20,16 +16,16 @@ bool Calendar::AddItem()
 	return true;
 }
 
-bool Calendar::EditItem(const int id)
+bool Calendar::EditItem()
 {
 	return true;
 }
-bool Calendar::DeleteItem(const int id)
+bool Calendar::DeleteItem()
 {
 	return true;
 }
 
-void Calendar::ShowSingleItem(const int id) const
+void Calendar::ShowSingleItem() const
 {
 
 }
@@ -39,6 +35,12 @@ void Calendar::ShowAllItems() const
 
 }
 
+void Calendar::ResizePlugin() const
+{
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	SetWindowPos(mhList, NULL, 0, 0, rcClient.right, rcClient.bottom, SWP_NOZORDER);
+}
 
 
 

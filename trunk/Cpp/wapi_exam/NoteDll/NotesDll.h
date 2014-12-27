@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <codecvt>
+#include "DlgCracker.h"
 
 using namespace std;
 
@@ -15,20 +16,15 @@ class Notes : public IOrganizer
 	vector<wstring> mNotes;
 	char* mDBname = "notes";
 
-
-	//ResizePlugin();
-
-
-
 	wstring GetPluginName() const { return L"Notes"; }
-	void SetWindow(HWND destWindow);
 	HWND GetPluginWindow() const { return mPluginWindow; }
 	bool AddItem();
-	bool EditItem(const int id);
-	bool DeleteItem(const int id);
+	bool EditItem();
+	bool DeleteItem();
 
-	void ShowSingleItem(const int id) const;
+	void ShowSingleItem() const;
 	void ShowAllItems() const;
+	void ResizePlugin() const;
 
 	void OpenDB();
 	void SaveDB();

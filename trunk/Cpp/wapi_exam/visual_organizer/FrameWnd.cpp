@@ -143,10 +143,10 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		mpCurrentPlugin->AddItem();
 		break;
 	case ID_ACTION_EDIT:
-		//mpCurrentPlugin->EditItem();
+		mpCurrentPlugin->EditItem();
 		break;
 	case ID_ACTION_DELETE:
-		//mpCurrentPlugin->DeleteItem();
+		mpCurrentPlugin->DeleteItem();
 		break;
 	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
 	}
@@ -267,22 +267,4 @@ HWND FrameWnd::CreateChildWindow(const wchar_t* title)
 {
 	return CreateMDIWindow(szChildWindow, title, WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }
-
-//IOrganizer* FrameWnd::GetCurrentPlugin() const
-//{
-//	IOrganizer* currentPlugin = NULL; 
-//	for (int i = 0; i < mPluginsCount; ++i)
-//	{
-//		if (!mpPlugins[i]) continue;
-//
-//		HWND pluginWindow = mpPlugins[i]->GetPluginWindow();
-//		if (pluginWindow == GetFocus() && IsWindowVisible(pluginWindow))
-//		{
-//			currentPlugin = mpPlugins[i];
-//		}
-//	}
-//
-//	return currentPlugin;
-//}
-
 

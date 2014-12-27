@@ -1,6 +1,8 @@
-#define IDC_MAIN_EDIT 101
-#define IDC_MAIN_TOOL 102
-#define IDC_MAIN_STATUS 103
+#define IDC_MAIN_EDIT		101
+#define IDC_MAIN_TOOL		102
+#define IDC_MAIN_STATUS		103
+#define IDD_DIALOG1			104
+
 
 #define ID_PAGE_CALENDAR	 9000
 #define ID_PAGE_NOTE		 9001

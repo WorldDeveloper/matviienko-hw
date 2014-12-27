@@ -7,13 +7,9 @@ Alarms::Alarms(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 }
 
-void Alarms::SetWindow(HWND destWindow)
-{
-
-}
 
 bool Alarms::AddItem()
 {
@@ -21,16 +17,16 @@ bool Alarms::AddItem()
 	return true;
 }
 
-bool Alarms::EditItem(const int id)
+bool Alarms::EditItem()
 {
 	return true;
 }
-bool Alarms::DeleteItem(const int id)
+bool Alarms::DeleteItem()
 {
 	return true;
 }
 
-void Alarms::ShowSingleItem(const int id) const
+void Alarms::ShowSingleItem() const
 {
 	
 }
@@ -38,6 +34,13 @@ void Alarms::ShowSingleItem(const int id) const
 void Alarms::ShowAllItems() const
 {
 
+}
+
+void Alarms::ResizePlugin() const
+{
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	SetWindowPos(mhList, NULL, 0, 0, rcClient.right, rcClient.bottom, SWP_NOZORDER);
 }
 
 

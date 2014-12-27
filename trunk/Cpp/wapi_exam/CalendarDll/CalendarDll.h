@@ -10,14 +10,14 @@ class Calendar : public IOrganizer
 	HWND mhList;
 
 	std::wstring GetPluginName() const { return L"Calendar"; }
-	void SetWindow(HWND destWindow);
 	HWND GetPluginWindow() const { return mPluginWindow; }
 	bool AddItem();
-	bool EditItem(const int id);
-	bool DeleteItem(const int id);
+	bool EditItem();
+	bool DeleteItem();
 
-	void ShowSingleItem(const int id) const;
+	void ShowSingleItem() const;
 	void ShowAllItems() const;
+	void ResizePlugin() const;
 public:
 	Calendar(HWND pluginWindow);
 };
