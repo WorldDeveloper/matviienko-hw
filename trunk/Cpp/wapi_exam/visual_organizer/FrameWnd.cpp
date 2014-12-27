@@ -1,7 +1,6 @@
 #include "FrameWnd.h"
 
 
-
 FrameWnd* FrameWnd::handler = nullptr;
 HWND FrameWnd::mhMdiClient = NULL;
 HWND FrameWnd:: mhCalendar = NULL;
@@ -114,7 +113,7 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 
 		if (IsWindowVisible(hChild))
 		{
-			if (hChild==GetFocus())
+			if (hChild == GetFocus())
 				ShowWindow(hChild, SW_HIDE);
 			else
 				SetFocus(hChild);
@@ -124,45 +123,33 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 			ShowWindow(hChild, SW_SHOW);
 			SetFocus(hChild);
 		}
+
+		return; //????
 	}
-	
+
+
+
+	if (id >= ID_ACTION_ADD && id <= ID_ACTION_DELETE && !mpCurrentPlugin) return;
 	
 	switch (id)
 	{
-
 	case ID_PAGE_CALENDAR:
-		
-		
-		/*if (!mhCalendar) mhCalendar = CreateChildWindow(L"Calendar");
-		else
-		{
-			SetFocus(mhCalendar);
-			HWND butt = CreateWindowEx(WS_EX_CLIENTEDGE, L"Button", L"Button",
-				WS_CHILD | WS_VISIBLE, 50, 50, 100, 50, mhCalendar, 0, mhInst, 0);
-		}*/
 		break;
 	case ID_PAGE_NOTE:
-	{
-		/*if (!mhNote) mhNote = CreateChildWindow(L"Notes");
-		else
-		{
-			SetFocus(mhNote);
-		}*/
 		break;
-	}
-	case ID_PAGE_ALARM:
-		/*if (!mhAlarm) mhAlarm = CreateChildWindow(L"Alarms");
-		else
-		{			
-			SetFocus(mhAlarm);
-		}*/
+	case ID_PAGE_ALARM:		
 		break;
 	case ID_ACTION_ADD:
-		
+		mpCurrentPlugin->AddItem();
+		break;
+	case ID_ACTION_EDIT:
+		//mpCurrentPlugin->EditItem();
+		break;
+	case ID_ACTION_DELETE:
+		//mpCurrentPlugin->DeleteItem();
 		break;
 	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
 	}
-
 }
 
 void FrameWnd::Cls_OnSize(HWND hwnd, UINT state, int cx, int cy)
@@ -271,11 +258,31 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 
 
 	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);	
+	
+
+	if (mpCurrentPlugin) mpCurrentPlugin->ResizePlugin();
 }
 
 HWND FrameWnd::CreateChildWindow(const wchar_t* title)
 {
-	return CreateMDIWindow(szChildWindow, title, WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+	return CreateMDIWindow(szChildWindow, title, WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }
+
+//IOrganizer* FrameWnd::GetCurrentPlugin() const
+//{
+//	IOrganizer* currentPlugin = NULL; 
+//	for (int i = 0; i < mPluginsCount; ++i)
+//	{
+//		if (!mpPlugins[i]) continue;
+//
+//		HWND pluginWindow = mpPlugins[i]->GetPluginWindow();
+//		if (pluginWindow == GetFocus() && IsWindowVisible(pluginWindow))
+//		{
+//			currentPlugin = mpPlugins[i];
+//		}
+//	}
+//
+//	return currentPlugin;
+//}
 
 

@@ -15,7 +15,7 @@ class FrameWnd
 	std::wstring mModuleName[mPluginsCount];
 	HMODULE mModules[mPluginsCount];
 	IOrganizer* mpPlugins[mPluginsCount];
-
+	IOrganizer* mpCurrentPlugin;
 	HWND CreateChildWindow(const wchar_t* title);
 public:
 	FrameWnd();
@@ -41,6 +41,8 @@ public:
 	
 	HWND GetClient() const { return mhMdiClient; }
 	const wchar_t* GetChildClassName()const { return szChildWindow; }
+	//IOrganizer* GetCurrentPlugin() const;
 
+	friend class ChildWnd; ///????
 };
 
