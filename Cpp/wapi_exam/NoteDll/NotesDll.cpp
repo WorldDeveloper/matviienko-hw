@@ -134,7 +134,11 @@ void Notes::OpenDB()
 {
 
 	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
+	
+
 	wifstream in(mDBname);
+	if (!in) return;
+
 	in.imbue(utf8_locale);
 
 	if (in.is_open())
@@ -146,10 +150,10 @@ void Notes::OpenDB()
 			mNotes.push_back(note);
 		}
 	}
-	else
-	{
-		throw L"Error: unable to open file.";
-	}
+	//else
+	//{
+	//	throw L"Error: unable to open file.";
+	//}
 
 	in.close();
 }
