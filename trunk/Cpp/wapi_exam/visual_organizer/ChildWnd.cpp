@@ -43,7 +43,11 @@ void ChildWnd::Cls_OnClose(HWND hWnd)
 
 void ChildWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	
+	if (codeNotify == LBN_DBLCLK)
+	{
+		mpCurrentPlugin->ShowSingleItem();
+		return;
+	}
 }
 
 

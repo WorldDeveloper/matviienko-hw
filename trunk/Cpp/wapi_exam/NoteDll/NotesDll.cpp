@@ -24,7 +24,7 @@ Notes::Notes(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL|LBS_NOTIFY, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 
 	OpenDB();
 }
@@ -92,7 +92,17 @@ bool Notes::DeleteItem()
 
 void Notes::ShowSingleItem() const
 {
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return;
 
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return;
+
+	if (id < 0 || id >= mNotes.size()) return;
+
+	DlgCracker dlg(L"View");
+	if (!dlg.SetNote(mNotes[id])) return;
+
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
 }
 
 void Notes::ShowAllItems() const
@@ -150,10 +160,10 @@ void Notes::OpenDB()
 			mNotes.push_back(note);
 		}
 	}
-	//else
-	//{
-	//	throw L"Error: unable to open file.";
-	//}
+	else
+	{
+		throw L"Error: unable to open file.";
+	}
 
 	in.close();
 }

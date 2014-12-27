@@ -126,8 +126,6 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		return;
 	}
 
-
-
 	if (id >= ID_ACTION_ADD && id <= ID_ACTION_DELETE && !mpCurrentPlugin) return;
 
 	switch (id)
