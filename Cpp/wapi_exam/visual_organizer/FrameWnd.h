@@ -37,11 +37,12 @@ public:
 	void CreateMainMenu(HWND hWnd);
 	void CreateToolbar(HWND hWnd);
 	void CreateStatusbar(HWND hWnd);
+
 	void ReSize(HWND hWnd, HWND hClient); //remove parameters?
 	
 	HWND GetClient() const { return mhMdiClient; }
 	const wchar_t* GetChildClassName()const { return szChildWindow; }
-	//IOrganizer* GetCurrentPlugin() const;
+
 
 	friend class ChildWnd; ///????
 };

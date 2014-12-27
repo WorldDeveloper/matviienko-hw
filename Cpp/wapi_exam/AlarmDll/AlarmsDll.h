@@ -10,14 +10,14 @@ class Alarms : public IOrganizer
 	HWND mhList;
 
 	wstring GetPluginName() const { return L"Alarms"; }
-	void SetWindow(HWND destWindow);
 	HWND GetPluginWindow() const { return mPluginWindow; }
 	bool AddItem();
-	bool EditItem(const int id);
-	bool DeleteItem(const int id);
+	bool EditItem();
+	bool DeleteItem();
 
-	void ShowSingleItem(const int id) const;
+	void ShowSingleItem() const;
 	void ShowAllItems() const;
+	void ResizePlugin() const;
 public:
 	Alarms(HWND pluginWindow);
 };

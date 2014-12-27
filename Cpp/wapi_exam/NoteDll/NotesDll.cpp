@@ -1,4 +1,21 @@
-﻿#include "NotesDll.h"
+#include "NotesDll.h"
+
+HINSTANCE hInst;
+
+BOOL APIENTRY DllMain(HMODULE hModule, 	DWORD  ul_reason_for_call, 	LPVOID lpReserved 	)
+{
+	hInst = (HINSTANCE)hModule;
+
+	switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+	case DLL_PROCESS_DETACH:
+		break;
+	}
+	return TRUE;
+}
 
 Notes::Notes(HWND pluginWindow)
 {
@@ -7,63 +24,73 @@ Notes::Notes(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 
 	OpenDB();
 }
 
-void Notes::SetWindow(HWND destWindow)
-{
-	//remove
-
-}
-
 bool Notes::AddItem()
 {
+	DlgCracker dlg(L"Add");
+	DialogBox(hInst,  MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
 
-	//cout << " Add note: ";
-	//string tmp;
-	//fflush(stdin);
-	//getline(cin, tmp);
+	const std::wstring newNote = dlg.GetNote();
+	if (newNote.empty()) return false;
 
-	//if (tmp.empty()) return false;
-	//mNotes.push_back(tmp);
-	//mSelectedNote = --mNotes.end();
+	mNotes.push_back(newNote);
+	SaveDB();
 
-	//SaveDB();
-
+	int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(newNote.c_str()));
+	SendMessage(mhList, LB_SETITEMDATA, index, mNotes.size()-1);
 
 	return true;
 }
 
-bool Notes::EditItem(const int id)
+bool Notes::EditItem()
 {
-	//if (mNotes.empty()) return false;
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
+	
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return false;
 
-	//cout << " Edit note:";
-	//string tmp;
-	//fflush(stdin);
-	//getline(cin, tmp);
+	if (id < 0 || id >= mNotes.size()) return false;
 
-	//if (tmp.empty()) return false;
-	//*mSelectedNote = tmp;
+	DlgCracker dlg(L"Edit");
+	if (!dlg.SetNote(mNotes[id])) return false;
 
-	//SaveDB();
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+
+	const std::wstring newNote = dlg.GetNote();
+	if (newNote.empty()) return false;
+
+	mNotes.erase(mNotes.begin() + id);
+	mNotes.push_back(newNote);
+	SaveDB();
+
+	ShowAllItems();
 
 	return true;
 }
-bool Notes::DeleteItem(const int id)
+
+bool Notes::DeleteItem()
 {
-	//if (mNotes.empty()) return false;
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
 
-	//mSelectedNote = mNotes.erase(mSelectedNote);
-	//if (mSelectedNote == mNotes.end() && !mNotes.empty()) mSelectedNote--;
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return false;
 
-	//SaveDB();
+	if (id < 0 || id >= mNotes.size()) return false;
+
+	mNotes.erase(mNotes.begin()+id);
+
+	SaveDB();
+
+	ShowAllItems();
+
 	return true;
 }
 
-void Notes::ShowSingleItem(const int id) const
+void Notes::ShowSingleItem() const
 {
 	//if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) throw "out of range";
 
@@ -72,7 +99,7 @@ void Notes::ShowSingleItem(const int id) const
 
 void Notes::ShowAllItems() const
 {
-	if (mNotes.empty()) return;	
+	if (mNotes.empty()) return;
 
 	SendMessage(mhList, LB_RESETCONTENT, 0, 0);
 
@@ -84,30 +111,9 @@ void Notes::ShowAllItems() const
 
 }
 
-
-extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
-{
-	return new Notes(pluginWindow);
-}
-
-extern "C" __declspec(dllexport) void FreePlugin(IOrganizer* pPlugin)
-{
-	delete pPlugin;
-}
-
-
-
-//*********************
-
-
-
-
-
-
-
 void Notes::SaveDB()
 {
-	
+
 	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
 	wofstream out(mDBname);
 	out.imbue(utf8_locale);
@@ -128,8 +134,8 @@ void Notes::SaveDB()
 
 void Notes::OpenDB()
 {
-	
-	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>()); 
+
+	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
 	wifstream in(mDBname);
 	in.imbue(utf8_locale);
 
@@ -148,4 +154,22 @@ void Notes::OpenDB()
 	}
 
 	in.close();
+}
+
+void Notes::ResizePlugin() const
+{
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	SetWindowPos(mhList, NULL, 0, 0, rcClient.right, rcClient.bottom, SWP_NOZORDER);
+}
+
+
+extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
+{
+	return new Notes(pluginWindow);
+}
+
+extern "C" __declspec(dllexport) void FreePlugin(IOrganizer* pPlugin)
+{
+	delete pPlugin;
 }
