@@ -3,14 +3,14 @@
 
 FrameWnd* FrameWnd::handler = nullptr;
 HWND FrameWnd::mhMdiClient = NULL;
-HWND FrameWnd:: mhCalendar = NULL;
-HWND FrameWnd:: mhNote = NULL;
-HWND FrameWnd:: mhAlarm = NULL;
+HWND FrameWnd::mhCalendar = NULL;
+HWND FrameWnd::mhNote = NULL;
+HWND FrameWnd::mhAlarm = NULL;
 
 FrameWnd::FrameWnd()
 {
 	handler = this;
-	wcscpy(szChildWindow,  L"ChildWindow");
+	wcscpy(szChildWindow, L"ChildWindow");
 	mModuleName[0] = L"Calendar";
 	mModuleName[1] = L"Notes";
 	mModuleName[2] = L"Alarms";
@@ -33,7 +33,7 @@ LRESULT CALLBACK FrameWnd::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 }
 
 void FrameWnd::Cls_OnClose(HWND hWnd)
-{	
+{
 	for (int i = 0; i < mPluginsCount; ++i)
 	{
 		if (mpPlugins[i])
@@ -43,7 +43,7 @@ void FrameWnd::Cls_OnClose(HWND hWnd)
 			FreeLibrary(mModules[i]);
 		}
 	}
-	
+
 	PostQuitMessage(0);
 }
 
@@ -57,19 +57,18 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	CreateMainMenu(hWnd);
 	CreateToolbar(hWnd);
 	CreateStatusbar(hWnd);
-	
+
 	CLIENTCREATESTRUCT ccs;
 	memset(&ccs, 0, sizeof(CLIENTCREATESTRUCT));
 	ccs.idFirstChild = ID_MDI_FIRSTCHILD;
 	mhMdiClient = CreateWindowEx(WS_EX_CLIENTEDGE, L"mdiclient", 0,
-				WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE, 0, 50, 500, 500,
-				hWnd, NULL, mhInst, (LPVOID)&ccs);
+		WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL | WS_VISIBLE, 0, 50, 500, 500,
+		hWnd, NULL, mhInst, (LPVOID)&ccs);
 	ShowWindow(mhMdiClient, SW_SHOW);
-
 
 	try
 	{
-		for (int i = mPluginsCount-1; i >=0; --i)
+		for (int i = mPluginsCount - 1; i >= 0; --i)
 		{
 			mModules[i] = LoadLibrary((mModuleName[i] + L"Dll.dll").c_str());
 			if (!mModules[i])
@@ -81,7 +80,7 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 			PluginMaker MakerFunc = (PluginMaker)GetProcAddress(mModules[i], "CreatePlugin");
 			PluginReleaser ReleaserFunc = (PluginReleaser)GetProcAddress(mModules[i], "FreePlugin");
 			HWND childWindow = CreateChildWindow(mModuleName[i].c_str());
-			
+
 			IOrganizer* tmpPlugin = MakerFunc(childWindow);
 
 			if (!mpPlugins[i] && tmpPlugin->GetPluginName() == mModuleName[i])
@@ -124,21 +123,15 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 			SetFocus(hChild);
 		}
 
-		return; //????
+		return;
 	}
 
 
 
 	if (id >= ID_ACTION_ADD && id <= ID_ACTION_DELETE && !mpCurrentPlugin) return;
-	
+
 	switch (id)
 	{
-	case ID_PAGE_CALENDAR:
-		break;
-	case ID_PAGE_NOTE:
-		break;
-	case ID_PAGE_ALARM:		
-		break;
 	case ID_ACTION_ADD:
 		mpCurrentPlugin->AddItem();
 		break;
@@ -148,7 +141,7 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 	case ID_ACTION_DELETE:
 		mpCurrentPlugin->DeleteItem();
 		break;
-	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id,codeNotify) , (LPARAM)hwndCtl);
+	default: return (void)DefFrameProc(hWnd, mhMdiClient, WM_COMMAND, MAKEWPARAM(id, codeNotify), (LPARAM)hwndCtl);
 	}
 }
 
@@ -161,31 +154,31 @@ void FrameWnd::CreateMainMenu(HWND hWnd)
 {
 	HMENU hMenu, hSubMenu;
 	hMenu = CreateMenu();
-		   hSubMenu = CreatePopupMenu();
-		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_CALENDAR, L"&Calendar");
-		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_NOTE, L"&Notes");
-		   AppendMenu(hSubMenu, MF_STRING, ID_PAGE_ALARM, L"&Alarms");
-		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, L"&Navigation");
-		   
-		   hSubMenu = CreatePopupMenu();
-		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_ADD, L"&Add");
-		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_EDIT, L"&Edit");
-		   AppendMenu(hSubMenu, MF_STRING, ID_ACTION_DELETE, L"&Delete");
-		   AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, L"&Action");
-		   SetMenu(hWnd, hMenu);
+	hSubMenu = CreatePopupMenu();
+	AppendMenu(hSubMenu, MF_STRING, ID_PAGE_CALENDAR, L"&Calendar");
+	AppendMenu(hSubMenu, MF_STRING, ID_PAGE_NOTE, L"&Notes");
+	AppendMenu(hSubMenu, MF_STRING, ID_PAGE_ALARM, L"&Alarms");
+	AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, L"&Navigation");
+
+	hSubMenu = CreatePopupMenu();
+	AppendMenu(hSubMenu, MF_STRING, ID_ACTION_ADD, L"&Add");
+	AppendMenu(hSubMenu, MF_STRING, ID_ACTION_EDIT, L"&Edit");
+	AppendMenu(hSubMenu, MF_STRING, ID_ACTION_DELETE, L"&Delete");
+	AppendMenu(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, L"&Action");
+	SetMenu(hWnd, hMenu);
 }
 
 void FrameWnd::CreateToolbar(HWND hWnd)
 {
 	InitCommonControls();
-	HWND hTool = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT,  0, 0, 0, 0, hWnd, (HMENU)IDC_MAIN_TOOL, GetModuleHandle(NULL), NULL);
+	HWND hTool = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT, 0, 0, 0, 0, hWnd, (HMENU)IDC_MAIN_TOOL, GetModuleHandle(NULL), NULL);
 
 	SendMessage(hTool, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
-	
+
 	HIMAGELIST hImg = ImageList_Create(64, 64, ILC_COLOR32 | ILC_MASK, 10, 10);
 	for (int i = 0; i < 6; ++i)
 	{
-		ImageList_AddIcon(hImg, LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_CALENDAR+i)));
+		ImageList_AddIcon(hImg, LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_CALENDAR + i)));
 	}
 
 	SendMessage(hTool, TB_SETIMAGELIST, (WPARAM)0, (LPARAM)hImg);
@@ -205,10 +198,10 @@ void FrameWnd::CreateToolbar(HWND hWnd)
 			tbb[3].idCommand = 0;
 			continue;
 		}
-		tbb[i].iBitmap = bitmap;// ++
+		tbb[i].iBitmap = bitmap;
 		tbb[i].fsState = TBSTATE_ENABLED;
 		tbb[i].fsStyle = TBSTYLE_BUTTON;
-		tbb[i].idCommand = ID_PAGE_CALENDAR+bitmap;
+		tbb[i].idCommand = ID_PAGE_CALENDAR + bitmap;
 		tbb[i].iString = (INT_PTR)toolTip[bitmap++];
 	}
 
@@ -217,11 +210,11 @@ void FrameWnd::CreateToolbar(HWND hWnd)
 
 void FrameWnd::CreateStatusbar(HWND hWnd)
 {
-	InitCommonControls(); 
+	InitCommonControls();
 	HWND hStatus = CreateWindowEx(0, STATUSCLASSNAME, NULL, WS_CHILD | WS_VISIBLE | SBARS_SIZEGRIP, 0, 0, 0, 0,
 		hWnd, (HMENU)IDC_MAIN_STATUS, GetModuleHandle(NULL), NULL);
 
-	int statWidths[] = { 100,200, -1};
+	int statWidths[] = { 100, 200, -1 };
 
 	SendMessage(hStatus, SB_SETPARTS, sizeof(statWidths) / sizeof(int), (LPARAM)statWidths);
 	SendMessage(hStatus, SB_SETTEXT, 1, (LPARAM)TEXT("Hi there"));
@@ -237,8 +230,7 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 	RECT rcStatus;
 	int iStatusHeight;
 
-
-	RECT rcClient; 
+	RECT rcClient;
 	int iClientHeight;
 
 	hTool = GetDlgItem(hWnd, IDC_MAIN_TOOL);
@@ -256,9 +248,7 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 	GetClientRect(hWnd, &rcClient);
 	iClientHeight = rcClient.bottom - iToolHeight - iStatusHeight;
 
-
-	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);	
-	
+	SetWindowPos(hClient, NULL, 0, iToolHeight, rcClient.right, iClientHeight, SWP_NOZORDER);
 
 	if (mpCurrentPlugin) mpCurrentPlugin->ResizePlugin();
 }
@@ -267,4 +257,3 @@ HWND FrameWnd::CreateChildWindow(const wchar_t* title)
 {
 	return CreateMDIWindow(szChildWindow, title, WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }
-

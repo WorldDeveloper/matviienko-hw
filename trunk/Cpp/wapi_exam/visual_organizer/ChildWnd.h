@@ -1,9 +1,9 @@
 #pragma once
 #include "FrameWnd.h"
 
-class ChildWnd: public FrameWnd
+class ChildWnd : public FrameWnd
 {
-	
+
 public:
 	ChildWnd();
 	static ChildWnd* handler;
