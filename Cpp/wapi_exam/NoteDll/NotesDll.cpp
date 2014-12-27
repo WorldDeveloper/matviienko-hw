@@ -2,7 +2,7 @@
 
 HINSTANCE hInst;
 
-BOOL APIENTRY DllMain(HMODULE hModule, 	DWORD  ul_reason_for_call, 	LPVOID lpReserved 	)
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 	hInst = (HINSTANCE)hModule;
 
@@ -32,7 +32,7 @@ Notes::Notes(HWND pluginWindow)
 bool Notes::AddItem()
 {
 	DlgCracker dlg(L"Add");
-	DialogBox(hInst,  MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
 
 	const std::wstring newNote = dlg.GetNote();
 	if (newNote.empty()) return false;
@@ -41,7 +41,7 @@ bool Notes::AddItem()
 	SaveDB();
 
 	int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(newNote.c_str()));
-	SendMessage(mhList, LB_SETITEMDATA, index, mNotes.size()-1);
+	SendMessage(mhList, LB_SETITEMDATA, index, mNotes.size() - 1);
 
 	return true;
 }
@@ -49,7 +49,7 @@ bool Notes::AddItem()
 bool Notes::EditItem()
 {
 	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
-	
+
 	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
 	if (id == LB_ERR) return false;
 
@@ -81,7 +81,7 @@ bool Notes::DeleteItem()
 
 	if (id < 0 || id >= mNotes.size()) return false;
 
-	mNotes.erase(mNotes.begin()+id);
+	mNotes.erase(mNotes.begin() + id);
 
 	SaveDB();
 
@@ -92,9 +92,7 @@ bool Notes::DeleteItem()
 
 void Notes::ShowSingleItem() const
 {
-	//if (mNotes.empty() || itemIndex < 0 || itemIndex >= mNotes.size()) throw "out of range";
 
-	//return mNotes[itemIndex];
 }
 
 void Notes::ShowAllItems() const

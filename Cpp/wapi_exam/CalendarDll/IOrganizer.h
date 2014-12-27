@@ -4,7 +4,7 @@
 class IOrganizer
 {
 public:
-	virtual std::wstring GetPluginName() const = 0; 
+	virtual std::wstring GetPluginName() const = 0;
 	virtual HWND GetPluginWindow() const = 0;
 	virtual bool AddItem() = 0;
 	virtual bool EditItem() = 0;
@@ -12,5 +12,5 @@ public:
 
 	virtual void ShowSingleItem() const = 0;
 	virtual void ShowAllItems() const = 0;
-	virtual void ResizePlugin() const=0;
+	virtual void ResizePlugin() const = 0;
 };

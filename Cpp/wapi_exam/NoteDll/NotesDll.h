@@ -9,7 +9,7 @@
 using namespace std;
 
 class Notes : public IOrganizer
-{	
+{
 	HWND mPluginWindow;
 	HWND mhList;
 

@@ -8,7 +8,7 @@ ChildWnd childWindow;
 
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int nCmdShow)
 {
-	
+
 	HINSTANCE hInstance = hInst;
 	HWND hWnd;
 	MSG lpMsg;
@@ -17,7 +17,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 	wcl.style = CS_HREDRAW | CS_VREDRAW;
 
 
-	
+
 	wcl.lpfnWndProc = FrameWnd::WinProc;
 	wcl.cbClsExtra = 0;
 	wcl.cbWndExtra = 0;
