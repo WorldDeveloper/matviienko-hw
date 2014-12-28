@@ -1,10 +1,13 @@
 #include "AlarmsDll.h"
 
+HINSTANCE hInst = NULL;
+
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
 	LPVOID lpReserved
 	)
 {
+	hInst = (HINSTANCE)hModule;
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
@@ -30,6 +33,8 @@ Alarms::Alarms(HWND pluginWindow)
 
 bool Alarms::AddItem()
 {
+	DlgCracker dlg(L"Add");
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
 
 	return true;
 }
