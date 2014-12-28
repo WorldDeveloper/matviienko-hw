@@ -68,7 +68,8 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	try
 	{
-		for (int i = mPluginsCount - 1; i >= 0; --i)
+		//for (int i = mPluginsCount - 1; i >= 0; --i)
+		for (int i=0; i<mPluginsCount; ++i)
 		{
 			mModules[i] = LoadLibrary((mModuleName[i] + L"Dll.dll").c_str());
 			if (!mModules[i])
