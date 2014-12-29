@@ -6,7 +6,7 @@
 #include "IOrganizer.h"
 #include "Event.h"
 #include "resource.h"
-#include "DlgCracker.h"
+#include "CalendarDlg.h"
 
 
 
