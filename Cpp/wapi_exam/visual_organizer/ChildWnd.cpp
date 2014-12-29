@@ -25,20 +25,10 @@ LRESULT CALLBACK ChildWnd::MdiChildWinProc(HWND hWnd, UINT message, WPARAM wPara
 
 void ChildWnd::Cls_OnClose(HWND hWnd)
 {
-	ShowWindow(hWnd, SW_HIDE);
+	if (mpCurrentPlugin) mpCurrentPlugin->SetPluginWindow(NULL);
+	mpCurrentPlugin = NULL;
 
-	HWND hNextWindow = NULL;
-	for (int i = 0; i < mPluginsCount; ++i)
-	{
-		HWND tmp = mpPlugins[i]->GetPluginWindow();
-		if (tmp != hWnd && IsWindowVisible(tmp))
-		{
-			hNextWindow = tmp;
-			break;
-		}
-	}
-
-	if (hNextWindow) SetFocus(hNextWindow);
+	FORWARD_WM_CLOSE(hWnd, DefMDIChildProc);
 }
 
 void ChildWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
@@ -53,21 +43,22 @@ void ChildWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 
 void ChildWnd::Cls_OnSize(HWND hWnd, UINT state, int cx, int cy)
 {
-	if (mpCurrentPlugin) mpCurrentPlugin->ResizePlugin();
-
+	for (int i = 0; i < mPluginsCount; ++i)
+	{
+		if (mpPlugins[i]) mpPlugins[i]->ResizePlugin();
+	}
 
 	FORWARD_WM_SIZE(hWnd, state, cx, cy, DefMDIChildProc);
 }
 
 void ChildWnd::Cls_OnSetFocus(HWND hWnd, HWND hwndOldFocus)
 {
-	mpCurrentPlugin = NULL;
 	for (int i = 0; i < mPluginsCount; ++i)
 	{
 		if (!mpPlugins[i]) continue;
 
 		HWND pluginWindow = mpPlugins[i]->GetPluginWindow();
-		if (pluginWindow == hWnd && IsWindowVisible(pluginWindow))
+		if (pluginWindow == hWnd)
 		{
 			mpCurrentPlugin = mpPlugins[i];
 			break;
@@ -78,16 +69,12 @@ void ChildWnd::Cls_OnSetFocus(HWND hWnd, HWND hwndOldFocus)
 
 void ChildWnd::Cls_OnKillFocus(HWND hWnd, HWND hwndNewFocus)
 {
-	for (int i = 0; i < mPluginsCount; ++i)
-	{
-		if (!mpPlugins[i]) continue;
+	if (!mpCurrentPlugin) return;
 
-		HWND pluginWindow = mpPlugins[i]->GetPluginWindow();
-		if (pluginWindow == hwndNewFocus)
-		{
-			mpCurrentPlugin = NULL;
-			break;
-		}
+	HWND pluginWindow = mpCurrentPlugin->GetPluginWindow(); 
+	if (hwndNewFocus == GetParent(pluginWindow))
+	{
+		mpCurrentPlugin = NULL;
 	}
 
 	FORWARD_WM_KILLFOCUS(hWnd, hwndNewFocus, DefMDIChildProc);

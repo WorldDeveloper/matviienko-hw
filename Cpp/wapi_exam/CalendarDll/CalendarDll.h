@@ -21,6 +21,7 @@ class Calendar : public IOrganizer
 
 	std::wstring GetPluginName() const { return L"Calendar"; }
 	HWND GetPluginWindow() const { return mPluginWindow; }
+	void SetPluginWindow(HWND hWnd);
 	bool AddItem();
 	bool EditItem();
 	bool DeleteItem();

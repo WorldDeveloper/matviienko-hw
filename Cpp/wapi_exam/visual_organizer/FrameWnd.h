@@ -43,6 +43,8 @@ public:
 	HWND GetClient() const { return mhMdiClient; }
 	const wchar_t* GetChildClassName()const { return szChildWindow; }
 
+	void DetectActivePlugin();
+
 
 	friend class ChildWnd; ///????
 };

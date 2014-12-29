@@ -68,8 +68,7 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	try
 	{
-		//for (int i = mPluginsCount - 1; i >= 0; --i)
-		for (int i=0; i<mPluginsCount; ++i)
+		for (int i = mPluginsCount - 1; i >= 0; --i)
 		{
 			mModules[i] = LoadLibrary((mModuleName[i] + L"Dll.dll").c_str());
 			if (!mModules[i])
@@ -111,23 +110,43 @@ void FrameWnd::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		const int index = id - ID_PAGE_CALENDAR;
 		HWND hChild = mpPlugins[index]->GetPluginWindow();
 
+		if (!hChild)
+		{
+			hChild= CreateChildWindow(mModuleName[index].c_str());
+
+			if (hChild)
+			{
+				mpCurrentPlugin = mpPlugins[index];
+				mpCurrentPlugin->SetPluginWindow(hChild);
+				mpCurrentPlugin->ShowAllItems();
+			}
+			return;
+		}
+
 		if (IsWindowVisible(hChild))
 		{
 			if (hChild == GetFocus())
+			{
 				ShowWindow(hChild, SW_HIDE);
+				mpCurrentPlugin = NULL;
+			}
 			else
+			{
 				SetFocus(hChild);
+				mpCurrentPlugin = mpPlugins[index];
+			}			
 		}
 		else
 		{
 			ShowWindow(hChild, SW_SHOW);
 			SetFocus(hChild);
+			mpCurrentPlugin = mpPlugins[index];
 		}
 
 		return;
 	}
 
-	if (id >= ID_ACTION_ADD && id <= ID_ACTION_DELETE && !mpCurrentPlugin) return;
+	if ((id < ID_ACTION_ADD && id > ID_ACTION_DELETE) || !mpCurrentPlugin) return;
 
 	switch (id)
 	{

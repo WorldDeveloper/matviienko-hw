@@ -30,6 +30,16 @@ Alarms::Alarms(HWND pluginWindow)
 		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 }
 
+void Alarms::SetPluginWindow(HWND hWnd)
+{
+	mPluginWindow = hWnd;
+
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+}
+
 
 bool Alarms::AddItem()
 {

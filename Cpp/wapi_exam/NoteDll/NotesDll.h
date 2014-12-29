@@ -18,6 +18,7 @@ class Notes : public IOrganizer
 
 	wstring GetPluginName() const { return L"Notes"; }
 	HWND GetPluginWindow() const { return mPluginWindow; }
+	void SetPluginWindow(HWND hWnd);
 	bool AddItem();
 	bool EditItem();
 	bool DeleteItem();
