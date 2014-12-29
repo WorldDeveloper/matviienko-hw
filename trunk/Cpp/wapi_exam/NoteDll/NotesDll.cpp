@@ -29,6 +29,17 @@ Notes::Notes(HWND pluginWindow)
 	OpenDB();
 }
 
+void Notes::SetPluginWindow(HWND hWnd)
+{
+	mPluginWindow = hWnd;
+
+	RECT rcClient;
+	GetClientRect(mPluginWindow, &rcClient);
+	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_NOTIFY, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+
+}
+
 bool Notes::AddItem()
 {
 	DlgCracker dlg(L"Add");
