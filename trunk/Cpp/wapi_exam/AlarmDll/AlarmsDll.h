@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "IOrganizer.h"
 #include "resource.h"
-#include "DlgCracker.h"
+#include "AlarmDlg.h"
 #include <string>
 
 using namespace std;

@@ -1,15 +1,22 @@
 #pragma once
 #include <windowsx.h>
 #include <Windows.h>
-#include "resource.h"
 #include <string>
 #include <vector>
+#include <ctime>
+
+#include "resource.h"
 
 class DlgCracker
 {
 	HWND mhDlg;
-	HWND mhEdit;
+	HWND mhYear;
+	HWND mhMonth;
+	HWND mhDay;
+	HWND mhHour;
+	HWND mhMin;
 
+	time_t mAlarm;
 	std::wstring mAction;
 public:
 	DlgCracker(std::wstring action);

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <codecvt>
-#include "DlgCracker.h"
+#include "NoteDlg.h"
 
 using namespace std;
 
