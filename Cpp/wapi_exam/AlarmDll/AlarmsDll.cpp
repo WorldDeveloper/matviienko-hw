@@ -43,8 +43,8 @@ void Alarms::SetPluginWindow(HWND hWnd)
 
 bool Alarms::AddItem()
 {
-	DlgCracker dlg(L"Add");
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	AlarmDlg dlg(L"Add");
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, AlarmDlg::DlgProc);
 
 	return true;
 }
