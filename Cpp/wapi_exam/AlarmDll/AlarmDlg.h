@@ -3,29 +3,29 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
-#include <ctime>
 
 #include "resource.h"
+#include "DateTime.h"
 
 class AlarmDlg
 {
 	HWND mhDlg;
-	HWND mhYear;
-	HWND mhMonth;
-	HWND mhDay;
-	HWND mhHour;
-	HWND mhMin;
+	DateTime* mAlarmTime;
 
 	time_t mAlarm;
 	std::wstring mAction;
 
-	int LastDayInMonth(const int year, const int month) const;
-	bool  SetMonth(const int month);
-	bool  SetDay(const int year,  const int month, const int curDay);
-	void SetDateTime(const time_t dateTime=0);
+	//int LastDayInMonth(const int year, const int month) const;
+	//bool  SetMonth(const int month);
+	//bool  SetDay(const int year,  const int month, const int curDay);
+	//void SetDateTime(const time_t dateTime=0);
 
 public:
 	AlarmDlg(std::wstring action);
+	~AlarmDlg()
+	{
+		delete mAlarmTime;
+	}
 
 	static AlarmDlg* ptr;
 	static BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
