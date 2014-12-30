@@ -1,10 +1,11 @@
 #pragma once
 #include <windowsx.h>
 #include <Windows.h>
-#include "resource.h"
 #include <string>
 #include <vector>
-#include <ctime>
+
+#include "resource.h"
+#include "DateTime.h"
 
 class CalendarDlg
 {
@@ -12,27 +13,18 @@ class CalendarDlg
 	HWND mhTitle;
 	HWND mhDescription;
 	HWND mhWhere;
-	HWND mhFromYear;
-	HWND mhFromMonth;
-	HWND mhFromDay;
-	HWND mhFromHour;
-	HWND mhFromMin;
-	HWND mhToYear;
-	HWND mhToMonth;
-	HWND mhToDay;
-	HWND mhToHour;
-	HWND mhToMin;	
+	DateTime* mFromTime;
+	DateTime* mToTime;
 
 	std::wstring mAction;
 
-	int LastDayInMonth(const int year, const int month) const;
-	bool  SetMonth(const int month);
-	bool  SetDay(const int year, const int month, const int curDay);
-	void SetDateTime(const time_t dateTime = 0);
-
 public:
 	CalendarDlg(std::wstring action);
-
+	~CalendarDlg()
+	{
+		delete mFromTime;
+		delete mToTime;
+	}
 	static CalendarDlg* ptr;
 	static BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
