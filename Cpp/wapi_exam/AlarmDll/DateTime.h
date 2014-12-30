@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <ctime>
 #include <string>
+#include <sstream>
 
 class DateTime
 {
@@ -11,7 +12,7 @@ class DateTime
 	HWND mhHour;
 	HWND mhMin;
 
-
+	std::wstring Format2Digit(const int number) const;
 public:
 	DateTime(HWND hYear, HWND hMonth, HWND hDay, HWND hHour, HWND hMin, const time_t time=0);
 
@@ -21,6 +22,7 @@ public:
 	void SetDateTime(const time_t dateTime = 0);
 	bool CheckLastDay();
 	time_t GetTime() const;
+	std::wstring GetTimeString() const;
 	int GetIntFromEdit(HWND hEdit) const;
 
 	~DateTime();

@@ -77,15 +77,15 @@ void DateTime::SetDateTime(const time_t dateTime/*=0*/)
 	SetMonth(moment->tm_mon + 1);
 	SetDay(moment->tm_year + 1900, moment->tm_mon + 1, moment->tm_mday);
 
-	std::wstring hour;
-	if (moment->tm_hour < 10) hour = L"0";
-	hour += std::to_wstring(moment->tm_hour);
-	SetWindowText(mhHour, hour.c_str());
+	//std::wstring hour;
+	//if (moment->tm_hour < 10) hour = L"0";
+	//hour += std::to_wstring(moment->tm_hour);
+	SetWindowText(mhHour, Format2Digit(moment->tm_hour).c_str());
 
-	std::wstring min;
-	if (moment->tm_min < 10) min = L"0";
-	min += std::to_wstring(moment->tm_min);
-	SetWindowText(mhMin, min.c_str());
+	//std::wstring min;
+	//if (moment->tm_min < 10) min = L"0";
+	//min += std::to_wstring(moment->tm_min);
+	SetWindowText(mhMin, Format2Digit(moment->tm_min).c_str());
 }
 
 bool DateTime::CheckLastDay()
@@ -112,7 +112,7 @@ time_t DateTime::GetTime() const
 
 	if (year < 0 || month<0 || month>11 || day<1 || day>LastDayInMonth(year, month)
 		|| hour<0 || hour>23 || min<0 || min>59) 
-		throw; "Incorrect date/time was inputed!";
+		throw  L"Incorrect date/time was inputed!";
 
 	retTime.tm_year = year;
 	retTime.tm_mon = month;
@@ -140,4 +140,28 @@ int DateTime::GetIntFromEdit(HWND hEdit) const
 	}
 
 	return ret;
+}
+
+std::wstring DateTime::GetTimeString() const
+{
+	time_t result = GetTime();
+	if (!result) throw L"Incorrect time";
+
+	struct tm * moment;
+	moment = localtime(&result);
+
+	std::wstringstream buf;
+	buf << moment->tm_year + 1900<<L".";
+	buf<< Format2Digit(moment->tm_mon+1)<<L".";
+	buf << Format2Digit(moment->tm_mday) << L" ";
+	buf << Format2Digit(moment->tm_hour) << L":";
+	buf << Format2Digit(moment->tm_min);
+
+	return buf.str().c_str();
+}
+
+std::wstring DateTime::Format2Digit(const int number) const
+{
+	if (number < 10) return L"0" + std::to_wstring(number);
+	else return std::to_wstring(number);
 }

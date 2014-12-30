@@ -153,9 +153,7 @@ void Notes::SaveDB()
 
 void Notes::OpenDB()
 {
-
 	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
-	
 
 	wifstream in(mDBname);
 	if (!in) return;

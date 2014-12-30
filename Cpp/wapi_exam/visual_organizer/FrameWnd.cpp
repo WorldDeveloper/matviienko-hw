@@ -97,8 +97,14 @@ BOOL FrameWnd::Cls_OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 			}
 		}
 	}
-	catch (wchar_t* err)	{ MessageBox(hWnd, err, NULL, MB_OK | MB_ICONERROR); }
-	catch (...)	{ MessageBox(hWnd, L"Load time error!", L"Error", MB_OK | MB_ICONERROR); }
+	catch (wchar_t* err)	{
+		PostQuitMessage(0); 
+		MessageBox(hWnd, err, NULL, MB_OK | MB_ICONERROR);
+	}
+	catch (...)	{ 
+		MessageBox(hWnd, L"Load time error!", L"Error", MB_OK | MB_ICONERROR); 
+		PostQuitMessage(0);
+	}
 
 	return TRUE;
 }

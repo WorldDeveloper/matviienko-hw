@@ -14,7 +14,7 @@ class Notes : public IOrganizer
 	HWND mhList;
 
 	vector<wstring> mNotes;
-	char* mDBname = "notes";
+	wchar_t* mDBname = L"notes";
 
 	wstring GetPluginName() const { return L"Notes"; }
 	HWND GetPluginWindow() const { return mPluginWindow; }

@@ -15,13 +15,8 @@ class AlarmDlg
 	time_t mAlarm;
 	std::wstring mAction;
 
-	//int LastDayInMonth(const int year, const int month) const;
-	//bool  SetMonth(const int month);
-	//bool  SetDay(const int year,  const int month, const int curDay);
-	//void SetDateTime(const time_t dateTime=0);
-
 public:
-	AlarmDlg(std::wstring action);
+	AlarmDlg(std::wstring action, const time_t alarmTime);
 	~AlarmDlg()
 	{
 		delete mAlarmTime;
@@ -33,4 +28,6 @@ public:
 	void Cls_OnClose(HWND hWnd);
 	BOOL Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam);
 	void Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify);
+	
+	time_t GetAlarm() const { return mAlarm; }
 };

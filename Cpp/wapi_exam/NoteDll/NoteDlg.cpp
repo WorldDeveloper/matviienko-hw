@@ -27,13 +27,12 @@ BOOL NoteDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 	mhDlg = hWnd;
 	mhEdit = GetDlgItem(hWnd, IDC_NOTECONTENT);
 
-	if (mNote.size())
+	if (mAction==L"Edit")
 	{
 		SetWindowText(mhDlg, L"Edit note");
 		SetWindowText(mhEdit, mNote.c_str());
 	}
-
-	if (mAction == L"View")
+	else if (mAction == L"View")
 	{
 		SetWindowText(mhDlg, L"View note");
 		EnableWindow(mhEdit, FALSE);
