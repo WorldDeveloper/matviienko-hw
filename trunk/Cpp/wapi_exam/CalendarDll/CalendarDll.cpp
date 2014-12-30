@@ -105,7 +105,7 @@ void Calendar::SaveDB(const char* name)
 	}
 	else
 	{
-		throw "unable to open file";
+		throw L"unable to open file";
 	}
 	out.close();
 }
@@ -141,7 +141,7 @@ void Calendar::OpenDB(const char* name)
 	}
 	else
 	{
-		throw "unable to open file.";
+		throw L"unable to open file.";
 	}
 
 	in.close();

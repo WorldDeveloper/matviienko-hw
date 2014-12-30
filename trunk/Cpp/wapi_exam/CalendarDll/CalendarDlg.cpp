@@ -45,6 +45,17 @@ BOOL CalendarDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 	}
 	mToTime = new DateTime(hTmp[0], hTmp[1], hTmp[2], hTmp[3], hTmp[4], today+60*60);
 
+	if (mAction==L"Edit")
+	{
+		SetWindowText(mhDlg, L"Edit event");
+		//SetWindowText(mhEdit, mNote.c_str());
+	}
+	else if (mAction == L"View")
+	{
+		SetWindowText(mhDlg, L"View event");
+		//EnableWindow(mhEdit, FALSE);
+	}
+
 
 	return TRUE;
 }

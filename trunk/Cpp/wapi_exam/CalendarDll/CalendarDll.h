@@ -17,7 +17,7 @@ class Calendar : public IOrganizer
 	HWND mhList;
 
 	std::vector<Event> mEvents;
-	char* mDBname = "events";
+	wchar_t* mDBname = L"events";
 
 	std::wstring GetPluginName() const { return L"Calendar"; }
 	HWND GetPluginWindow() const { return mPluginWindow; }

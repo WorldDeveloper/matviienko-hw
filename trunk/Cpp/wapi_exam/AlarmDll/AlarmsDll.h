@@ -1,8 +1,11 @@
 #include <Windows.h>
+#include <string>
+#include <fstream>
+#include <codecvt>
+
 #include "IOrganizer.h"
 #include "resource.h"
 #include "AlarmDlg.h"
-#include <string>
 
 using namespace std;
 
@@ -10,7 +13,9 @@ class Alarms : public IOrganizer
 {
 	HWND mPluginWindow;
 	HWND mhList;
-
+	vector<time_t> mAlarms;
+	wchar_t* mDBname = L"alarms";
+	
 	wstring GetPluginName() const { return L"Alarms"; }
 	HWND GetPluginWindow() const { return mPluginWindow; }
 	void SetPluginWindow(HWND hWnd);
@@ -21,6 +26,12 @@ class Alarms : public IOrganizer
 	void ShowSingleItem() const;
 	void ShowAllItems() const;
 	void ResizePlugin() const;
+
+	void OpenDB();
+	void SaveDB();
+
+	std::wstring Format2Digit(const int number) const;
+	std::wstring GetTimeString(const time_t alarm) const;
 public:
 	Alarms(HWND pluginWindow);
 };
