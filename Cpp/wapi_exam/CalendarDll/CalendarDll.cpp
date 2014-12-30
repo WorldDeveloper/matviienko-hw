@@ -43,8 +43,8 @@ void Calendar::SetPluginWindow(HWND hWnd)
 
 bool Calendar::AddItem()
 {
-	DlgCracker dlg(L"Add");
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	CalendarDlg dlg(L"Add");
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, CalendarDlg::DlgProc);
 
 	/*const std::wstring newNote = dlg.GetNote();
 	if (newNote.empty()) return false;

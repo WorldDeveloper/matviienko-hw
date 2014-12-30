@@ -42,8 +42,8 @@ void Notes::SetPluginWindow(HWND hWnd)
 
 bool Notes::AddItem()
 {
-	DlgCracker dlg(L"Add");
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	NoteDlg dlg(L"Add");
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, NoteDlg::DlgProc);
 
 	const std::wstring newNote = dlg.GetNote();
 	if (newNote.empty()) return false;
@@ -66,10 +66,10 @@ bool Notes::EditItem()
 
 	if (id < 0 || id >= mNotes.size()) return false;
 
-	DlgCracker dlg(L"Edit");
+	NoteDlg dlg(L"Edit");
 	if (!dlg.SetNote(mNotes[id])) return false;
 
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, NoteDlg::DlgProc);
 
 	const std::wstring newNote = dlg.GetNote();
 	if (newNote.empty()) return false;
@@ -110,10 +110,10 @@ void Notes::ShowSingleItem() const
 
 	if (id < 0 || id >= mNotes.size()) return;
 
-	DlgCracker dlg(L"View");
+	NoteDlg dlg(L"View");
 	if (!dlg.SetNote(mNotes[id])) return;
 
-	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, DlgCracker::DlgProc);
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, NoteDlg::DlgProc);
 }
 
 void Notes::ShowAllItems() const

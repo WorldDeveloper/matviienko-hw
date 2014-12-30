@@ -1,15 +1,15 @@
 #include "NoteDlg.h"
 
-DlgCracker* DlgCracker::ptr = nullptr;
+NoteDlg* NoteDlg::ptr = nullptr;
 
-DlgCracker::DlgCracker(std::wstring action)
+NoteDlg::NoteDlg(std::wstring action)
 {
 	ptr = this;
 	mAction = action;
 	mNote.clear();
 }
 
-BOOL CALLBACK DlgCracker::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK NoteDlg::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
@@ -22,7 +22,7 @@ BOOL CALLBACK DlgCracker::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 }
 
 
-BOOL DlgCracker::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
+BOOL NoteDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 {
 	mhDlg = hWnd;
 	mhEdit = GetDlgItem(hWnd, IDC_NOTECONTENT);
@@ -41,7 +41,7 @@ BOOL DlgCracker::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 	return TRUE;
 }
 
-void DlgCracker::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
+void NoteDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 {
 	if (id == IDC_OK)
 	{
@@ -65,13 +65,13 @@ void DlgCracker::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 
 }
 
-void DlgCracker::Cls_OnClose(HWND hWnd)
+void NoteDlg::Cls_OnClose(HWND hWnd)
 {
 	mNote.clear();
 	EndDialog(mhDlg, 0);
 }
 
-bool DlgCracker::SetNote(std::wstring note)
+bool NoteDlg::SetNote(std::wstring note)
 {
 	if (note.empty()) return false;
 
