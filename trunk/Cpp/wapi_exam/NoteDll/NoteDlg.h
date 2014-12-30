@@ -5,16 +5,16 @@
 #include <string>
 #include <vector>
 
-class DlgCracker
+class NoteDlg
 {
 	HWND mhDlg;
 	HWND mhEdit;
 	std::wstring mNote;
 	std::wstring mAction;
 public:
-	DlgCracker(std::wstring action);
+	NoteDlg(std::wstring action);
 
-	static DlgCracker* ptr;
+	static NoteDlg* ptr;
 	static BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	void Cls_OnClose(HWND hWnd);

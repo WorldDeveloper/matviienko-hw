@@ -44,9 +44,12 @@ BOOL AlarmDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 
 void AlarmDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	if (codeNotify == CBN_SELCHANGE)
+	if (codeNotify == CBN_SELCHANGE || codeNotify == EN_KILLFOCUS)
 	{
-		//SetDay(2014, 12, 1);
+		const int year = GetDlgItemInt(mhDlg, IDC_YEAR, 0, FALSE);
+		const int month = SendMessage(mhMonth, CB_GETCURSEL, 0, 0)+1;
+		const int day = SendMessage(mhDay, CB_GETCURSEL, 0, 0) + 1;
+		if (!SetDay(year, month, day)) SetDay(year, month, 1);
 	}
 }
 
@@ -95,9 +98,10 @@ bool  AlarmDlg::SetDay(const int year, const int month, const int curDay)
 	if (year <= 0 || month<1 || month>12 || curDay<1) return false;
 
 	const int daysInMonth = LastDayInMonth(year, month);
+	SendMessage(mhDay, CB_RESETCONTENT, 0, 0); 
 	if (curDay>daysInMonth) return false;
 
-	for (int i = 1; i < daysInMonth + 1; ++i)
+	for (int i = 1; i <= daysInMonth; ++i)
 	{
 		const int ind = SendMessage(mhDay, CB_ADDSTRING, 0, (LPARAM)(std::to_wstring(i).c_str()));
 		SendMessage(mhDay, CB_SETITEMDATA, ind, i);
@@ -130,3 +134,4 @@ void AlarmDlg::SetDateTime(const time_t dateTime/*=0*/)
 	min += std::to_wstring(moment->tm_min);
 	SetWindowText(mhMin, min.c_str());
 }
+

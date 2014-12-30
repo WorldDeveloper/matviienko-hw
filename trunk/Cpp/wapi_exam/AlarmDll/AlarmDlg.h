@@ -33,5 +33,4 @@ public:
 	void Cls_OnClose(HWND hWnd);
 	BOOL Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam);
 	void Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify);
-
 };
