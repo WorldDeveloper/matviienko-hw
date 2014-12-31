@@ -7,11 +7,6 @@ mhYear(hYear), mhMonth(hMonth), mhDay(hDay), mhHour(hHour), mhMin(hMin)
 	SetDateTime(time);
 }
 
-
-DateTime::~DateTime()
-{
-}
-
 int DateTime::LastDayInMonth(const int year, const int month) const
 {
 	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
@@ -77,14 +72,7 @@ void DateTime::SetDateTime(const time_t dateTime/*=0*/)
 	SetMonth(moment->tm_mon + 1);
 	SetDay(moment->tm_year + 1900, moment->tm_mon + 1, moment->tm_mday);
 
-	//std::wstring hour;
-	//if (moment->tm_hour < 10) hour = L"0";
-	//hour += std::to_wstring(moment->tm_hour);
 	SetWindowText(mhHour, Format2Digit(moment->tm_hour).c_str());
-
-	//std::wstring min;
-	//if (moment->tm_min < 10) min = L"0";
-	//min += std::to_wstring(moment->tm_min);
 	SetWindowText(mhMin, Format2Digit(moment->tm_min).c_str());
 }
 
@@ -110,7 +98,7 @@ time_t DateTime::GetTime() const
 	const int hour = GetIntFromEdit(mhHour);
 	const int min = GetIntFromEdit(mhMin);
 
-	if (year < 0 || month<0 || month>11 || day<1 || day>LastDayInMonth(year, month)
+	if (year < 0 || month<0 || month>11 || day<1 || day>LastDayInMonth(year, month+1)
 		|| hour<0 || hour>23 || min<0 || min>59) 
 		throw  L"Incorrect date/time was inputed!";
 

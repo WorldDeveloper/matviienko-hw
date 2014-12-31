@@ -24,7 +24,5 @@ public:
 	time_t GetTime() const;
 	std::wstring GetTimeString() const;
 	int GetIntFromEdit(HWND hEdit) const;
-
-	~DateTime();
 };
 

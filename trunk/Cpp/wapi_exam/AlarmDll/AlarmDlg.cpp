@@ -47,7 +47,7 @@ BOOL AlarmDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 		mAlarmTime = new DateTime(hYear, hMonth, hDay, hHour, hMin, mAlarm);
 		for (int i = 0; i < 5; ++i)
 		{
-			EnableWindow(GetDlgItem(mhDlg, IDC_YEAR), FALSE);
+			EnableWindow(GetDlgItem(mhDlg, IDC_YEAR+i), FALSE);
 		}
 	}
 
@@ -69,6 +69,14 @@ void AlarmDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 		try
 		{
 			mAlarm = mAlarmTime->GetTime();
+
+			time_t now;
+			time(&now);
+			if (mAlarm <= now)
+			{
+				MessageBox(hWnd, L"Time is up!", L"Correct record", MB_OK | MB_ICONEXCLAMATION);
+					return;
+			}
 		}
 		catch (wchar_t* err)
 		{

@@ -1,7 +1,7 @@
 #include <string>
 #include <ctime>
 
-struct Event
+struct CalendarEvent
 {
 	std::wstring mName;
 	std::wstring mDescription;
@@ -9,7 +9,10 @@ struct Event
 	time_t mFromDate;
 	time_t mToDate;
 
-	Event(std::wstring name, std::wstring description, std::wstring where, time_t fromDate, time_t toDate)
+	CalendarEvent() : mFromDate(0), mToDate(0)
+	{}
+
+	CalendarEvent(std::wstring name, std::wstring description, std::wstring where, time_t fromDate, time_t toDate)
 	{
 		mFromDate = { 0 };
 		mToDate = { 0 };
@@ -23,5 +26,14 @@ struct Event
 		mWhere = where;
 		mFromDate = fromDate;
 		mToDate = toDate;
+	}
+	bool Empty() const { return mName.empty() || mFromDate <= 0 || mToDate <= 0; }
+	void Clear()
+	{
+		mName.clear();
+		mDescription.clear();
+		mWhere.clear();
+		mFromDate = 0;
+		mToDate = 0;
 	}
 };
