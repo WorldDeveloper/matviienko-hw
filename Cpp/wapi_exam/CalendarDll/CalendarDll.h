@@ -2,9 +2,9 @@
 #include <Windows.h>
 #include <fstream>
 #include <codecvt>
+#include <algorithm>
 
 #include "IOrganizer.h"
-#include "Event.h"
 #include "resource.h"
 #include "CalendarDlg.h"
 
@@ -16,7 +16,7 @@ class Calendar : public IOrganizer
 	HWND mPluginWindow;
 	HWND mhList;
 
-	std::vector<Event> mEvents;
+	std::vector<CalendarEvent> mEvents;
 	wchar_t* mDBname = L"events";
 
 	std::wstring GetPluginName() const { return L"Calendar"; }
@@ -30,10 +30,12 @@ class Calendar : public IOrganizer
 	void ShowAllItems() const;
 	void ResizePlugin() const;
 
-	void OpenDB(const char* name);
-	void SaveDB(const char* name);
+	void OpenDB();
+	void SaveDB();
+
+	std::wstring GetEventString(const CalendarEvent& event) const;
+	std::wstring Format2Digit(const int number) const;
 
 public:
 	Calendar(HWND pluginWindow);
-	//static BOOL CALLBACK CalendarDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };

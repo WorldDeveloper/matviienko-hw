@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <codecvt>
+#include <algorithm>
 
 #include "IOrganizer.h"
 #include "resource.h"

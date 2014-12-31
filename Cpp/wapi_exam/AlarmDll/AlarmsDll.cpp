@@ -27,10 +27,9 @@ Alarms::Alarms(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_NOTIFY, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
 
 	OpenDB();
-
 }
 
 void Alarms::SetPluginWindow(HWND hWnd)
@@ -53,6 +52,7 @@ bool Alarms::AddItem()
 	if (!result) return false;
 
 	mAlarms.push_back(result);
+	std::sort(mAlarms.begin(), mAlarms.end());
 	SaveDB();
 
 	ShowAllItems();
@@ -78,6 +78,7 @@ bool Alarms::EditItem()
 
 	mAlarms.erase(mAlarms.begin() + id);
 	mAlarms.push_back(result);
+	std::sort(mAlarms.begin(), mAlarms.end());
 	SaveDB();
 
 	ShowAllItems();
@@ -94,7 +95,7 @@ bool Alarms::DeleteItem()
 	if (id < 0 || id >= mAlarms.size()) return false;
 
 	mAlarms.erase(mAlarms.begin() + id);
-
+	std::sort(mAlarms.begin(), mAlarms.end());
 	SaveDB();
 
 	ShowAllItems(); 
@@ -137,11 +138,12 @@ std::wstring Alarms::GetTimeString(const time_t alarm) const
 	moment = localtime(&alarm);
 
 	std::wstringstream buf;
+	buf << Format2Digit(moment->tm_hour) << L":";
+	buf << Format2Digit(moment->tm_min)<<L"   "; 
 	buf << moment->tm_year + 1900 << L".";
 	buf << Format2Digit(moment->tm_mon + 1) << L".";
-	buf << Format2Digit(moment->tm_mday) << L" ";
-	buf << Format2Digit(moment->tm_hour) << L":";
-	buf << Format2Digit(moment->tm_min);
+	buf << Format2Digit(moment->tm_mday);
+	
 
 	return buf.str().c_str();
 }

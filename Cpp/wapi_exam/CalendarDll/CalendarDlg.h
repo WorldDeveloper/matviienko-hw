@@ -6,6 +6,7 @@
 
 #include "resource.h"
 #include "DateTime.h"
+#include "Event.h"
 
 class CalendarDlg
 {
@@ -16,10 +17,12 @@ class CalendarDlg
 	DateTime* mFromTime;
 	DateTime* mToTime;
 
+	CalendarEvent mEvent;
 	std::wstring mAction;
 
+	std::wstring GetStringFromEdit(HWND hEdit) const;
 public:
-	CalendarDlg(std::wstring action);
+	CalendarDlg(std::wstring action, CalendarEvent newEvent);
 	~CalendarDlg()
 	{
 		delete mFromTime;
@@ -32,6 +35,5 @@ public:
 	BOOL Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam);
 	void Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify);
 
-	/*std::wstring GetNote() const { return mNote; }
-	bool SetNote(std::wstring note);*/
+	CalendarEvent GetEvent() { return mEvent; }
 };

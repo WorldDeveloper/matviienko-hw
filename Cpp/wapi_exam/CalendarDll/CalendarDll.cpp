@@ -2,7 +2,7 @@
 
 
 	HINSTANCE hInst = NULL;
-	BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 	{
 		hInst = (HINSTANCE)hModule;
 		
@@ -19,7 +19,6 @@
 	}
 
 
-
 Calendar::Calendar(HWND pluginWindow)
 {
 	mPluginWindow = pluginWindow;
@@ -27,7 +26,9 @@ Calendar::Calendar(HWND pluginWindow)
 	RECT rcClient;
 	GetClientRect(mPluginWindow, &rcClient);
 	mhList = CreateWindowEx(WS_EX_CLIENTEDGE, L"LISTBOX", NULL,
-		WS_CHILD | WS_VISIBLE | WS_VSCROLL, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+		WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_NOTIFY, 0, 0, rcClient.right, rcClient.bottom, mPluginWindow, 0, GetModuleHandle(0), 0);
+
+	OpenDB();
 }
 
 void Calendar::SetPluginWindow(HWND hWnd)
@@ -43,39 +44,115 @@ void Calendar::SetPluginWindow(HWND hWnd)
 
 bool Calendar::AddItem()
 {
-	CalendarDlg dlg(L"Add");
+	CalendarEvent newEvent;
+	CalendarDlg dlg(L"Add", newEvent);
 	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, CalendarDlg::DlgProc);
 
-	/*const std::wstring newNote = dlg.GetNote();
-	if (newNote.empty()) return false;
+	CalendarEvent result = dlg.GetEvent();
+	if (result.Empty()) return false;
 
-	mNotes.push_back(newNote);
+	mEvents.push_back(result);
+	//std::sort(mEvents.begin(), mEvents.end());
 	SaveDB();
 
-	int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(newNote.c_str()));
-	SendMessage(mhList, LB_SETITEMDATA, index, mNotes.size() - 1);*/
+	ShowAllItems();
 
 	return true;
 }
 
 bool Calendar::EditItem()
 {
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
+
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return false;
+
+	if (id < 0 || id >= mEvents.size()) return false;
+
+	CalendarDlg dlg(L"Edit", mEvents[id]);
+
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, CalendarDlg::DlgProc);
+
+	CalendarEvent result = dlg.GetEvent();
+	if (result.Empty()) return false;
+
+	mEvents.erase(mEvents.begin() + id);
+	mEvents.push_back(result);
+	//std::sort(mEvents.begin(), mEvents.end());
+	SaveDB();
+
+	ShowAllItems();
+
 	return true;
 }
 bool Calendar::DeleteItem()
 {
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
+
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return false;
+
+	if (id < 0 || id >= mEvents.size()) return false;
+
+	mEvents.erase(mEvents.begin() + id);
+	//std::sort(mEvents.begin(), mEvents.end());
+	SaveDB();
+	ShowAllItems(); 
+
 	return true;
 }
 
 void Calendar::ShowSingleItem() const
 {
+	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return;
 
+	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
+	if (id == LB_ERR) return;
+
+	if (id < 0 || id >= mEvents.size()) return;
+
+	CalendarDlg dlg(L"View", mEvents[id]);
+
+	DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), mPluginWindow, CalendarDlg::DlgProc);
 }
 
 void Calendar::ShowAllItems() const
 {
+	if (mEvents.empty()) return;
 
+	SendMessage(mhList, LB_RESETCONTENT, 0, 0);
+
+	for (int i = 0; i < mEvents.size(); ++i)
+	{
+		int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(GetEventString(mEvents[i]).c_str()));
+		SendMessage(mhList, LB_SETITEMDATA, index, i);
+	}
 }
+
+std::wstring Calendar::GetEventString(const CalendarEvent& event) const
+{
+	if (event.mName.empty() || !event.mFromDate || event.mToDate<event.mToDate) throw L"Incorrect event";
+
+	struct tm * moment;
+	moment = localtime(&event.mFromDate);
+
+	std::wstringstream buf;
+	buf << moment->tm_year + 1900 << L".";
+	buf << Format2Digit(moment->tm_mon + 1) << L".";
+	buf << Format2Digit(moment->tm_mday)<<L"   ";
+	buf << Format2Digit(moment->tm_hour) << L":";
+	buf << Format2Digit(moment->tm_min) << L"   ";
+	buf << event.mName;
+
+	return buf.str().c_str();
+}
+
+std::wstring Calendar::Format2Digit(const int number) const
+{
+	if (number < 10) return L"0" + std::to_wstring(number);
+	else return std::to_wstring(number);
+}
+
 
 void Calendar::ResizePlugin() const
 {
@@ -84,23 +161,22 @@ void Calendar::ResizePlugin() const
 	SetWindowPos(mhList, NULL, 0, 0, rcClient.right, rcClient.bottom, SWP_NOZORDER);
 }
 
-//*******************
-void Calendar::SaveDB(const char* name)
+void Calendar::SaveDB()
 {
 	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
 
-	std::wofstream out(name);
+	std::wofstream out(mDBname);
 	out.imbue(utf8_locale);
 
 	if (out.is_open())
 	{
-		for (std::vector<Event>::iterator event = mEvents.begin(); event != mEvents.end(); ++event)
+		for (std::vector<CalendarEvent>::iterator calendarEvent = mEvents.begin(); calendarEvent != mEvents.end(); ++calendarEvent)
 		{
-			out << event->mName << L"\n";
-			out << event->mDescription << L"\n";
-			out << event->mWhere << L"\n";
-			out << std::to_wstring(event->mFromDate) << L"\n";
-			out << std::to_wstring(event->mToDate) << L"\n";
+			out << calendarEvent->mName << L"\n";
+			out << calendarEvent->mDescription << L"\n";
+			out << calendarEvent->mWhere << L"\n";
+			out << std::to_wstring(calendarEvent->mFromDate) << L"\n";
+			out << std::to_wstring(calendarEvent->mToDate) << L"\n";
 		}
 	}
 	else
@@ -110,11 +186,11 @@ void Calendar::SaveDB(const char* name)
 	out.close();
 }
 
-void Calendar::OpenDB(const char* name)
+void Calendar::OpenDB()
 {
 	const std::locale utf8_locale = std::locale(std::locale(), new std::codecvt_utf8<wchar_t>());
 
-	std::wifstream in(name);
+	std::wifstream in(mDBname);
 	in.imbue(utf8_locale);
 
 	if (!in) return;
@@ -126,8 +202,9 @@ void Calendar::OpenDB(const char* name)
 			std::vector<std::wstring> field;
 			std::wstring tmp;
 			if (!getline(in, tmp)) break;
-			
-			for (int i = 0; i < 5; ++i)
+			field.push_back(tmp);
+
+			for (int i = 0; i < 4; ++i)
 			{
 				getline(in, tmp);
 				field.push_back(tmp);
@@ -135,7 +212,7 @@ void Calendar::OpenDB(const char* name)
 
 			if (field.size() != 5) break;
 
-			Event newEvent(field[0], field[1], field[2], std::stoi(field[3]), std::stoi(field[4]));
+			CalendarEvent newEvent(field[0], field[1], field[2], std::stoi(field[3]), std::stoi(field[4]));
 			mEvents.push_back(newEvent);
 		}
 	}
@@ -146,18 +223,6 @@ void Calendar::OpenDB(const char* name)
 
 	in.close();
 }
-
-//****************
-
-//BOOL CALLBACK Calendar::CalendarDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//	switch (message)
-//	{
-//		
-//	}
-//
-//	return FALSE;
-//}
 
 
 extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
