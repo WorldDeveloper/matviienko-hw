@@ -130,23 +130,6 @@ int DateTime::GetIntFromEdit(HWND hEdit) const
 	return ret;
 }
 
-std::wstring DateTime::GetTimeString() const
-{
-	time_t result = GetDateTime();
-	if (!result) throw L"Incorrect time";
-
-	struct tm * moment;
-	moment = localtime(&result);
-
-	std::wstringstream buf;
-	buf << moment->tm_year + 1900 << L".";
-	buf << Format2Digit(moment->tm_mon + 1) << L".";
-	buf << Format2Digit(moment->tm_mday) << L" ";
-	buf << Format2Digit(moment->tm_hour) << L":";
-	buf << Format2Digit(moment->tm_min);
-
-	return buf.str().c_str();
-}
 
 std::wstring DateTime::Format2Digit(const int number) const
 {

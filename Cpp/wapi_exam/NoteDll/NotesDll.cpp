@@ -118,6 +118,8 @@ void Notes::ShowSingleItem() const
 
 void Notes::ShowAllItems() const
 {
+	SendMessage(mhList, LB_RESETCONTENT, 0, 0); 
+	
 	if (mNotes.empty()) return;
 
 	SendMessage(mhList, LB_RESETCONTENT, 0, 0);

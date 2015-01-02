@@ -33,9 +33,6 @@ class Calendar : public IOrganizer
 	void OpenDB();
 	void SaveDB();
 
-	std::wstring GetEventString(const CalendarEvent& event) const;
-	std::wstring GetEventShortString(const CalendarEvent& event) const;
-	std::wstring Format2Digit(const int number) const;
 	int Today() const;
 
 public:
