@@ -21,7 +21,7 @@ public:
 	bool  SetDay(const int year, const int month, const int curDay);
 	void SetDateTime(const time_t dateTime = 0);
 	bool CheckLastDay();
-	time_t GetTime() const;
+	time_t GetDateTime() const;
 	std::wstring GetTimeString() const;
 	int GetIntFromEdit(HWND hEdit) const;
 };

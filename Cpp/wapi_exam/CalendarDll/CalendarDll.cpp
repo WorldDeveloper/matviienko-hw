@@ -52,7 +52,7 @@ bool Calendar::AddItem()
 	if (result.Empty()) return false;
 
 	mEvents.push_back(result);
-	//std::sort(mEvents.begin(), mEvents.end());
+	std::sort(mEvents.begin(), mEvents.end());
 	SaveDB();
 
 	ShowAllItems();
@@ -78,7 +78,7 @@ bool Calendar::EditItem()
 
 	mEvents.erase(mEvents.begin() + id);
 	mEvents.push_back(result);
-	//std::sort(mEvents.begin(), mEvents.end());
+	std::sort(mEvents.begin(), mEvents.end());
 	SaveDB();
 
 	ShowAllItems();
@@ -95,7 +95,7 @@ bool Calendar::DeleteItem()
 	if (id < 0 || id >= mEvents.size()) return false;
 
 	mEvents.erase(mEvents.begin() + id);
-	//std::sort(mEvents.begin(), mEvents.end());
+	std::sort(mEvents.begin(), mEvents.end());
 	SaveDB();
 	ShowAllItems(); 
 
@@ -127,6 +127,13 @@ void Calendar::ShowAllItems() const
 		int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(GetEventString(mEvents[i]).c_str()));
 		SendMessage(mhList, LB_SETITEMDATA, index, i);
 	}
+
+	const int todayIndex = Today();
+	if (todayIndex >= 0)
+	{
+		SendMessage(mhList, LB_SETCURSEL, todayIndex, 0);
+	}
+	else SendMessage(mhList, LB_SETCURSEL, mEvents.size()-1, 0);
 }
 
 std::wstring Calendar::GetEventString(const CalendarEvent& event) const
@@ -139,13 +146,30 @@ std::wstring Calendar::GetEventString(const CalendarEvent& event) const
 	std::wstringstream buf;
 	buf << moment->tm_year + 1900 << L".";
 	buf << Format2Digit(moment->tm_mon + 1) << L".";
-	buf << Format2Digit(moment->tm_mday)<<L"   ";
+	buf << Format2Digit(moment->tm_mday)<<L"     ";
 	buf << Format2Digit(moment->tm_hour) << L":";
-	buf << Format2Digit(moment->tm_min) << L"   ";
+	buf << Format2Digit(moment->tm_min) << L"     ";
 	buf << event.mName;
 
 	return buf.str().c_str();
 }
+
+std::wstring Calendar::GetEventShortString(const CalendarEvent& event) const
+{
+	if (event.mName.empty() || !event.mFromDate || event.mToDate<event.mToDate) throw L"Incorrect event";
+
+	struct tm * moment;
+	moment = localtime(&event.mFromDate);
+
+	std::wstringstream buf;
+	buf << L"             ";
+	buf << Format2Digit(moment->tm_hour) << L":";
+	buf << Format2Digit(moment->tm_min) << L"     ";
+	buf << event.mName;
+
+	return buf.str().c_str();
+}
+
 
 std::wstring Calendar::Format2Digit(const int number) const
 {
@@ -224,6 +248,24 @@ void Calendar::OpenDB()
 	in.close();
 }
 
+int Calendar::Today() const
+{
+	time_t now;
+	time(&now);
+	CalendarEvent today(L"today", L"", L"", now, now);
+	int curItem = -1;
+
+	for (int i = 0; i < mEvents.size(); ++i)
+	{
+		if (mEvents[i] >= today)
+		{
+			curItem = i;
+			break;
+		}
+	}
+
+	return curItem;
+}
 
 extern "C" __declspec(dllexport) IOrganizer* CreatePlugin(HWND pluginWindow)
 {
