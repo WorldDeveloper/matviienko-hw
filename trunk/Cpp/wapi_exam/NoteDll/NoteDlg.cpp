@@ -30,7 +30,7 @@ BOOL NoteDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 	if (mAction==L"Edit")
 	{
 		SetWindowText(mhDlg, L"Edit note");
-		SetWindowText(mhEdit, mNote.c_str());
+		SetWindowText(mhEdit, mNote.c_str());		
 	}
 	else if (mAction == L"View")
 	{
@@ -38,6 +38,7 @@ BOOL NoteDlg::Cls_OnInitDialog(HWND hWnd, HWND hwndFocus, LPARAM lParam)
 		SetWindowText(mhEdit, mNote.c_str());
 		EnableWindow(mhEdit, FALSE);
 	}
+
 	return TRUE;
 }
 

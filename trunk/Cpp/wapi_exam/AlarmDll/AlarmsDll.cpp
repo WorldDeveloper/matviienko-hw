@@ -86,7 +86,7 @@ bool Alarms::EditItem()
 	return true;
 }
 bool Alarms::DeleteItem()
-{
+{	
 	if (!SendMessage(mhList, LB_GETCOUNT, 0, 0)) return false;
 
 	const int id = SendMessage(mhList, LB_GETCURSEL, 0, 0);
@@ -119,9 +119,9 @@ void Alarms::ShowSingleItem() const
 
 void Alarms::ShowAllItems() const
 {
-	if (mAlarms.empty()) return;
-
-	SendMessage(mhList, LB_RESETCONTENT, 0, 0);
+	SendMessage(mhList, LB_RESETCONTENT, 0, 0); 
+	
+	if (mAlarms.empty()) return;	
 
 	for (int i = 0; i < mAlarms.size(); ++i)
 	{

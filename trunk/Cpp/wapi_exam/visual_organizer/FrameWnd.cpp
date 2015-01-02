@@ -279,5 +279,5 @@ void FrameWnd::ReSize(HWND hWnd, HWND hClient)
 
 HWND FrameWnd::CreateChildWindow(const wchar_t* title)
 {
-	return CreateMDIWindow(szChildWindow, title, WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
+	return CreateMDIWindow(szChildWindow, title, WS_VSCROLL | WS_MAXIMIZE, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, mhMdiClient, mhInst, 0);
 }

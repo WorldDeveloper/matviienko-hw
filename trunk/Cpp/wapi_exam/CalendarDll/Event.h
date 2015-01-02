@@ -1,5 +1,6 @@
 #include <string>
 #include <ctime>
+#include <sstream>
 
 struct CalendarEvent
 {
@@ -9,41 +10,15 @@ struct CalendarEvent
 	time_t mFromDate;
 	time_t mToDate;
 
-	CalendarEvent() : mFromDate(0), mToDate(0)
-	{}
-
-	CalendarEvent(std::wstring name, std::wstring description, std::wstring where, time_t fromDate, time_t toDate)
-	{
-		mFromDate = { 0 };
-		mToDate = { 0 };
-
-		if (name.empty()) throw L"empty event name";
-
-		if (!fromDate || !toDate) throw L"incorrect date/time";
-
-		mName = name;
-		mDescription = description;
-		mWhere = where;
-		mFromDate = fromDate;
-		mToDate = toDate;
-	}
+	CalendarEvent();
+	CalendarEvent(std::wstring name, std::wstring description, std::wstring where, time_t fromDate, time_t toDate);
 	bool Empty() const { return mName.empty() || mFromDate <= 0 || mToDate <= 0; }
-	void Clear()
-	{
-		mName.clear();
-		mDescription.clear();
-		mWhere.clear();
-		mFromDate = 0;
-		mToDate = 0;
-	}
+	void Clear();
+	bool operator<(const CalendarEvent& operand2) const;
+	bool operator>=(const CalendarEvent& operand2) const;
 
-	bool operator<(const CalendarEvent& operand2) const
-	{
-		if (mFromDate != operand2.mFromDate) return mFromDate < operand2.mFromDate;
-		else return mToDate < operand2.mToDate;
-	}
-	bool operator>=(const CalendarEvent& operand2) const
-	{
-		return !(*this < operand2);
-	}
+	time_t GetFromDate() const;
+	std::wstring CalendarEvent::GetEventString() const;
+	std::wstring CalendarEvent::GetEventShortString() const;
+	std::wstring CalendarEvent::Format2Digit(const int number) const;
 };

@@ -118,13 +118,18 @@ void Calendar::ShowSingleItem() const
 
 void Calendar::ShowAllItems() const
 {
-	if (mEvents.empty()) return;
-
-	SendMessage(mhList, LB_RESETCONTENT, 0, 0);
+	SendMessage(mhList, LB_RESETCONTENT, 0, 0); 
+	
+	if (mEvents.empty()) return;	
 
 	for (int i = 0; i < mEvents.size(); ++i)
 	{
-		int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(GetEventString(mEvents[i]).c_str()));
+		int index = 0;
+		if (i==0 || mEvents[i].GetFromDate()!=mEvents[i-1].GetFromDate())
+			int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(mEvents[i].GetEventString().c_str()));
+		else
+			int index = SendMessage(mhList, LB_ADDSTRING, 0, LPARAM(mEvents[i].GetEventShortString().c_str()));
+
 		SendMessage(mhList, LB_SETITEMDATA, index, i);
 	}
 
@@ -134,47 +139,6 @@ void Calendar::ShowAllItems() const
 		SendMessage(mhList, LB_SETCURSEL, todayIndex, 0);
 	}
 	else SendMessage(mhList, LB_SETCURSEL, mEvents.size()-1, 0);
-}
-
-std::wstring Calendar::GetEventString(const CalendarEvent& event) const
-{
-	if (event.mName.empty() || !event.mFromDate || event.mToDate<event.mToDate) throw L"Incorrect event";
-
-	struct tm * moment;
-	moment = localtime(&event.mFromDate);
-
-	std::wstringstream buf;
-	buf << moment->tm_year + 1900 << L".";
-	buf << Format2Digit(moment->tm_mon + 1) << L".";
-	buf << Format2Digit(moment->tm_mday)<<L"     ";
-	buf << Format2Digit(moment->tm_hour) << L":";
-	buf << Format2Digit(moment->tm_min) << L"     ";
-	buf << event.mName;
-
-	return buf.str().c_str();
-}
-
-std::wstring Calendar::GetEventShortString(const CalendarEvent& event) const
-{
-	if (event.mName.empty() || !event.mFromDate || event.mToDate<event.mToDate) throw L"Incorrect event";
-
-	struct tm * moment;
-	moment = localtime(&event.mFromDate);
-
-	std::wstringstream buf;
-	buf << L"             ";
-	buf << Format2Digit(moment->tm_hour) << L":";
-	buf << Format2Digit(moment->tm_min) << L"     ";
-	buf << event.mName;
-
-	return buf.str().c_str();
-}
-
-
-std::wstring Calendar::Format2Digit(const int number) const
-{
-	if (number < 10) return L"0" + std::to_wstring(number);
-	else return std::to_wstring(number);
 }
 
 
