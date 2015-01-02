@@ -19,7 +19,7 @@ struct CalendarEvent
 
 		if (name.empty()) throw L"empty event name";
 
-		if (!fromDate || !toDate || toDate - fromDate<0) throw L"incorrect date/time";
+		if (!fromDate || !toDate) throw L"incorrect date/time";
 
 		mName = name;
 		mDescription = description;
@@ -35,5 +35,15 @@ struct CalendarEvent
 		mWhere.clear();
 		mFromDate = 0;
 		mToDate = 0;
+	}
+
+	bool operator<(const CalendarEvent& operand2) const
+	{
+		if (mFromDate != operand2.mFromDate) return mFromDate < operand2.mFromDate;
+		else return mToDate < operand2.mToDate;
+	}
+	bool operator>=(const CalendarEvent& operand2) const
+	{
+		return !(*this < operand2);
 	}
 };

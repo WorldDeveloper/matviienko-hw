@@ -88,7 +88,7 @@ bool DateTime::CheckLastDay()
 	return true;
 }
 
-time_t DateTime::GetTime() const
+time_t DateTime::GetDateTime() const
 {
 	struct tm retTime = { 0 };
 
@@ -132,7 +132,7 @@ int DateTime::GetIntFromEdit(HWND hEdit) const
 
 std::wstring DateTime::GetTimeString() const
 {
-	time_t result = GetTime();
+	time_t result = GetDateTime();
 	if (!result) throw L"Incorrect time";
 
 	struct tm * moment;

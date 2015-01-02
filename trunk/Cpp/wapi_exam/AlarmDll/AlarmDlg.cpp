@@ -68,7 +68,7 @@ void AlarmDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify)
 
 		try
 		{
-			mAlarm = mAlarmTime->GetTime();
+			mAlarm = mAlarmTime->GetDateTime();
 
 			time_t now;
 			time(&now);

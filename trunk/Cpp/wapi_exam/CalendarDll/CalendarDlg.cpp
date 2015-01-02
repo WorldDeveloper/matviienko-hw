@@ -92,8 +92,8 @@ void CalendarDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify
 			mEvent.mName = GetStringFromEdit(mhTitle);
 			mEvent.mDescription = GetStringFromEdit(mhDescription);
 			mEvent.mWhere = GetStringFromEdit(mhWhere);
-			mEvent.mFromDate = mFromTime->GetTime();
-			mEvent.mToDate = mToTime->GetTime();
+			mEvent.mFromDate = mFromTime->GetDateTime();
+			mEvent.mToDate = mToTime->GetDateTime();
 
 			if (mEvent.mName.empty())
 			{
@@ -101,11 +101,9 @@ void CalendarDlg::Cls_OnCommand(HWND hWnd, int id, HWND hwndCtl, UINT codeNotify
 				return;
 			}
 
-			time_t now;
-			time(&now);
-			if (mEvent.mToDate <= now)
+			if(mEvent.mFromDate >mEvent.mToDate)
 			{
-				MessageBox(hWnd, L"Time is up!", L"Correct record", MB_OK | MB_ICONEXCLAMATION);
+				MessageBox(hWnd, L"Incorrect time duration!", L"Correct record", MB_OK | MB_ICONEXCLAMATION);
 				return;
 			}
 
