@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<railway>
+  <stations>
+    <station id="1">Odesa</station>
+    <station id="2">Kyiv</station>
+    <station id="3">Vapnyarka</station>
+    <station id="4">Vinnytsa</station>
+    <station id="5">Minsk</station>
+    <station id="6">Moscow</station>
+  </stations>
+  <trains>
+    <train>764</train>
+    <train>94</train>
+    <train>24</train>
+    <train>148</train>
+    <train>106</train>
+  </trains>
+  <routes>
+    <route>
+      <trainID>764</trainID>
+      <stations>
+        <station id="1" />
+        <station id="3" />
+        <station id="4" />
+        <station id="2" />
+      </stations> 
+	  <depatureTime>05:47</depatureTime>
+      <arrivalTime>12:41</arrivalTime>
+    </route>
+    <route>
+      <trainID>94</trainID>
+      <stations>
+	  <station id="1" />
+      <station id="3" />
+      <station id="4" />
+      <station id="2" />
+      <station id="5" />
+	  </stations>
+      <depatureTime>14:42</depatureTime>
+      <arrivalTime>00:47</arrivalTime>
+    </route>
+    <route>
+      <trainID>24</trainID>
+      <stations>
+	  <station id="1" />
+      <station id="3" />
+      <station id="4" />
+      <station id="2" />
+      <station id="6" />
+	  </stations>
+      <depatureTime>15:01</depatureTime>
+      <arrivalTime>00:54</arrivalTime>
+    </route>
+    <route>
+      <trainID>148</trainID>
+      <stations>
+	  <station id="1" />
+      <station id="2" />
+	  </stations>
+      <depatureTime>21:42</depatureTime>
+      <arrivalTime>10:28</arrivalTime>
+    </route>
+    <route>
+      <trainID>106</trainID>
+      <stations>
+	  <station id="1" />
+      <station id="3" />
+      <station id="4" />
+      <station id="2" />
+	  </stations>
+      <depatureTime>23:01</depatureTime>
+      <arrivalTime>08:11</arrivalTime>
+    </route>
+  </routes>
+</railway>
