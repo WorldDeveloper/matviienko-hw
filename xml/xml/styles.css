@@ -1,0 +1,17 @@
+table{
+    border:1px solid black;
+    border-collapse:collapse;
+    margin-bottom:30px;
+}
+td, th{
+    border:1px dotted black;
+    padding:5px 10px;
+}
+
+th{
+    background-color:#9acd32;
+}
+h2{
+    font-size:larger;
+}
+
