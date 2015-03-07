@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="styles.css"?>
+<!DOCTYPE railway [
+  <!ELEMENT railway (stationsNames, trains, routes)>
+  <!ELEMENT stationsNames (stationName+)>
+  <!ELEMENT stationName (#PCDATA)>
+  <!ATTLIST stationName id ID #REQUIRED>
+
+  <!ELEMENT trains (train+)>
+  <!ELEMENT train (#PCDATA)>
+  <!ATTLIST train id ID #REQUIRED>
+
+  <!ELEMENT routes (route+)>
+  <!ELEMENT route (name, stations, description)>
+  <!ATTLIST route id ID #REQUIRED>
+  <!ATTLIST route trainID IDREF #REQUIRED>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT stations (station+)>
+  <!ELEMENT station (arrivalTime, departureTime)>
+  <!ATTLIST station id IDREF #REQUIRED>
+  <!ELEMENT arrivalTime (#PCDATA)>
+  <!ELEMENT departureTime (#PCDATA)>
+  <!ELEMENT description (#PCDATA)>
+]>
+
+<railway>
+  <stationsNames>
+    <stationName id="s1">Odesa</stationName>
+    <stationName id="s2">Kyiv</stationName>
+    <stationName id="s4">Vinnytsa</stationName>
+    <stationName id="s5">Minsk</stationName>
+    <stationName id="s6">Moscow</stationName>
+  </stationsNames>
+
+  <trains>
+    <train id="t764">Intercity+</train>
+    <train id="t94"></train>
+    <train id="t24"></train>
+    <train id="t148">Hadjibey</train>
+    <train id="t106">Chornomorets</train>
+  </trains>
+
+  <routes>
+    <route id="r1" trainID="t764">
+      <name>Odesa-Kyiv</name>
+      <stations>
+        <station id="s1">
+          <arrivalTime></arrivalTime>
+          <departureTime>05:47</departureTime>
+        </station>
+        <station id="s4">
+          <arrivalTime>10:26</arrivalTime>
+          <departureTime>10:28</departureTime>
+        </station>
+        <station id="s2">
+          <arrivalTime>12:41</arrivalTime>
+          <departureTime></departureTime>
+        </station>
+      </stations>
+      <description>
+        everyday
+      </description>
+    </route>
+
+    <route id="r2" trainID="t94">
+      <name>Odesa-Minsk</name>
+      <stations>
+        <station id="s1">
+          <arrivalTime></arrivalTime>
+          <departureTime>14:42</departureTime>
+        </station>
+        <station id="s4">
+          <arrivalTime>21:42</arrivalTime>
+          <departureTime>21:46</departureTime>
+        </station>
+        <station id="s2">
+          <arrivalTime>00:47</arrivalTime>
+          <departureTime>01:15</departureTime>
+        </station>
+        <station id="s5">
+          <arrivalTime>13:30</arrivalTime>
+          <departureTime></departureTime>
+        </station>
+      </stations>
+      <description>
+        on Wednesdays and Satardays
+      </description>
+    </route>
+
+    <route id="r3" trainID="t24">
+      <name>Odesa-Moscow</name>
+      <stations>
+        <station id="s1">
+          <arrivalTime></arrivalTime>
+          <departureTime>15:56</departureTime>
+        </station>
+        <station id="s4">
+          <arrivalTime>22:48</arrivalTime>
+          <departureTime>22:53</departureTime>
+        </station>
+        <station id="s2">
+          <arrivalTime>01:54</arrivalTime>
+          <departureTime>02:09</departureTime>
+        </station>
+        <station id="s6">
+          <arrivalTime>15:16</arrivalTime>
+          <departureTime></departureTime>
+        </station>
+      </stations>
+      <description>
+        everyday
+      </description>
+    </route>
+
+    <route id="r4" trainID="t148">
+      <name>Odesa-Kyiv</name>
+      <stations>
+        <station id="s1">
+          <arrivalTime></arrivalTime>
+          <departureTime>21:42</departureTime>
+        </station>
+        <station id="s2">
+          <arrivalTime>10:49</arrivalTime>
+          <departureTime></departureTime>
+        </station>
+      </stations>
+      <description>
+        on odd days
+      </description>
+    </route>
+
+    <route id="r5" trainID="t106">
+      <name>Odesa-Kyiv</name>
+      <stations>
+        <station id="s1">
+          <arrivalTime></arrivalTime>
+          <departureTime>23:01</departureTime>
+        </station>
+        <station id="s4">
+          <arrivalTime>05:02</arrivalTime>
+          <departureTime>05:05</departureTime>
+        </station>
+        <station id="s2">
+          <arrivalTime>08:11</arrivalTime>
+          <departureTime></departureTime>
+        </station>
+      </stations>
+      <description>
+        everyday
+      </description>
+    </route>
+  </routes>
+</railway>

@@ -1,0 +1,85 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="railway">
+    <xs:complexType>
+      <xs:sequence>
+
+        <xs:element name="stationsNames">
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element name="stationName" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="id" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+                
+              
+            </xs:sequence>
+            
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="trains">
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element name="train" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                       <xs:attribute name="id" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              
+            </xs:sequence>           
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="routes">
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element name="route" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string"/>
+
+                    <xs:element name="stations">
+                      <xs:complexType>
+                        <xs:sequence>
+                          
+                          <xs:element name="station" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="arrivalTime" type="xs:string"/>
+                                <xs:element name="departureTime" type="xs:string"/>                                  
+                              </xs:sequence>
+                              <xs:attribute name="id" type="xs:string" use="required"/>  
+                            </xs:complexType>
+                          </xs:element>                          
+                                                
+                        </xs:sequence>                        
+                      </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="description" type="xs:string"/>                    
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" use="required"/>
+                  <xs:attribute name="trainID" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
