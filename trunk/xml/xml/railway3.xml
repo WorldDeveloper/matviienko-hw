@@ -10,10 +10,9 @@
   <!ATTLIST train id ID #REQUIRED>
 
   <!ELEMENT routes (route+)>
-  <!ELEMENT route (name, stations, description)>
+  <!ELEMENT route (stations, description)>
   <!ATTLIST route id ID #REQUIRED>
   <!ATTLIST route trainID IDREF #REQUIRED>
-  <!ELEMENT name (#PCDATA)>
   <!ELEMENT stations (station+)>
   <!ELEMENT station (arrivalTime, departureTime)>
   <!ATTLIST station id IDREF #REQUIRED>
@@ -21,6 +20,9 @@
   <!ELEMENT departureTime (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
 ]>
+
+<?xml-stylesheet type="text/xsl" href="railway.xsl"?>
+
 <railway xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="railway3.xsd">
   <stationsNames>
     <stationName id="s1">Odesa</stationName>
@@ -40,7 +42,6 @@
 
   <routes>
     <route id="r1" trainID="t764">
-      <name>Odesa-Kyiv</name>
       <stations>
         <station id="s1">
           <arrivalTime></arrivalTime>
@@ -61,7 +62,6 @@
     </route>
 
     <route id="r2" trainID="t94">
-      <name>Odesa-Minsk</name>
       <stations>
         <station id="s1">
           <arrivalTime></arrivalTime>
@@ -81,12 +81,11 @@
         </station>
       </stations>
       <description>
-        on Wednesdays and Satardays
+        on Wednesdays and Saturdays
       </description>
     </route>
 
     <route id="r3" trainID="t24">
-      <name>Odesa-Moscow</name>
       <stations>
         <station id="s1">
           <arrivalTime></arrivalTime>
@@ -111,7 +110,6 @@
     </route>
 
     <route id="r4" trainID="t148">
-      <name>Odesa-Kyiv</name>
       <stations>
         <station id="s1">
           <arrivalTime></arrivalTime>
@@ -128,7 +126,6 @@
     </route>
 
     <route id="r5" trainID="t106">
-      <name>Odesa-Kyiv</name>
       <stations>
         <station id="s1">
           <arrivalTime></arrivalTime>
