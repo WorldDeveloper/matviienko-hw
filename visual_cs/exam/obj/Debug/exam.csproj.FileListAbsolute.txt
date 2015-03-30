@@ -1,0 +1,9 @@
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\bin\Debug\exam.exe.config
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\bin\Debug\exam.exe
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\bin\Debug\exam.pdb
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.Form1.resources
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.Properties.Resources.resources
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.csproj.GenerateResource.Cache
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.exe
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.pdb
+D:\Мои документы\step\SVN\trunk\visual_cs\exam\obj\Debug\exam.csprojResolveAssemblyReference.cache
