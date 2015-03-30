@@ -1,0 +1,2 @@
+http://stream.kissfm.ua:8000/kiss.m3u
+http://www.hitfm.ua/HitFM.m3u

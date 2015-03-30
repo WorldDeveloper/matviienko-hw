@@ -1,0 +1,8 @@
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\bin\Debug\console_radio.exe.config
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\bin\Debug\console_radio.exe
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\bin\Debug\console_radio.pdb
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\obj\Debug\console_radio.csprojResolveAssemblyReference.cache
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\obj\Debug\Interop.WMPLib.dll
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\obj\Debug\console_radio.csproj.ResolveComReference.cache
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\obj\Debug\console_radio.exe
+D:\Мои документы\step\SVN\trunk\cs\cs_console_radio\console_radio\obj\Debug\console_radio.pdb

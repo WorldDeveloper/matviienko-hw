@@ -1,0 +1,3 @@
+http://www.hitfm.ua/HitFM.m3u
+http://www.prosto.fm/files/PRock128.m3u
+http://stream.kissfm.ua:8000/kiss.m3u
