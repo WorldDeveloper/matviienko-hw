@@ -1,0 +1,9 @@
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\bin\Debug\chess.exe.config
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\bin\Debug\chess.exe
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\bin\Debug\chess.pdb
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.csprojResolveAssemblyReference.cache
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.Properties.Resources.resources
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.csproj.GenerateResource.Cache
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.exe
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.pdb
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.ChessBoard.resources
