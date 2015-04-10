@@ -6,4 +6,4 @@ D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.Properties.Resources.re
 D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.csproj.GenerateResource.Cache
 D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.exe
 D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.pdb
-D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.ChessBoard.resources
+D:\GitHub\step-homeworks\gdi\gdi_1\chess\obj\Debug\chess.Form1.resources
