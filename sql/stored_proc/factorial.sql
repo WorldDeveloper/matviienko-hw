@@ -1,13 +1,6 @@
 use library;
 go
 
-EXEC sys.sp_addmessage
-			 @msgnum   = 60001
-			,@severity = 16
-			,@msgtext  = N'Error: number(%d) is not valid.'
-			,@lang = 'us_english'; 
-GO
-
 CREATE PROC factorial
 @f int
 AS
@@ -23,8 +16,8 @@ ELSE
 		RETURN 1;
 	ELSE
 		BEGIN
-			DECLARE @msg NVARCHAR(2048) = FORMATMESSAGE(60001, @f); 
-			THROW 60001, @msg, 1; 
+			DECLARE @msg NVARCHAR(100) = N'Error: number('+CAST(@f AS NVARCHAR)+N') is invalid.';
+			THROW 50001, @msg, 1; 
 		END
 RETURN
 GO
