@@ -15,15 +15,7 @@ namespace DataLayer
         public string Name { get; set; }
         public string PictureUrl { get; set; }
 
-        //public League(SqlDataReader reader)
-        //{
-        //    ID = (Guid)reader["Id"];
-        //    Name = reader["Name"].ToString();
-        //    PictureUrl = reader["PictureUrl"].ToString();
-        //}
-
-
-        public League(Guid id, string name, string pictureUrl="")
+        public League(Guid id, string name, string pictureUrl = "")
         {
             ID = id;
             Name = name;
@@ -35,7 +27,7 @@ namespace DataLayer
             return Name;
         }
 
-        
+
         public void GetFromDB()
         {
             using (SqlConnection conn = DataLayer.DB.GetSqlConnection())
@@ -60,7 +52,7 @@ namespace DataLayer
                 }
             }
         }
-        
+
         public int RemoveFromDB()
         {
             using (SqlConnection conn = DataLayer.DB.GetSqlConnection())
@@ -84,9 +76,6 @@ namespace DataLayer
                 }
             }
         }
-
-
-
 
         public int UpdateInDB()
         {
@@ -155,7 +144,7 @@ namespace DataLayer
 
     }
 
-    public class Leagues:IEnumerable
+    public class Leagues : IEnumerable
     {
         private List<CbItem> mLeaguesList;
 
@@ -178,7 +167,7 @@ namespace DataLayer
                             mLeaguesList.Add(league);
                         }
                     }
-                }           
+                }
 
             }
         }

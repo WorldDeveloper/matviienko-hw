@@ -19,17 +19,7 @@ namespace DataLayer
         public string PictureUrl { get; set; }
 
 
-        //public Team(SqlDataReader reader)
-        //{
-        //    ID = (Guid)reader["Id"];
-        //    Name = reader["Name"].ToString();
-        //    Wins = (short)reader["Wins"];
-        //    Losses = (short)reader["Losses"];
-        //    Draws = (short)reader["Draws"];
-        //    PictureUrl = reader["PictureUrl"].ToString();
-        //}
-
-        public Team(Guid guid, string name, short wins, short losses, short draws, string pictureUrl="")
+        public Team(Guid guid, string name, short wins, short losses, short draws, string pictureUrl = "")
         {
             ID = guid;
             Name = name;
@@ -86,7 +76,7 @@ namespace DataLayer
                     command.Parameters.Add(guid);
 
                     SqlParameter result = new SqlParameter("@Result", SqlDbType.Int);
-                    result.Direction=ParameterDirection.ReturnValue;
+                    result.Direction = ParameterDirection.ReturnValue;
                     command.Parameters.Add(result);
 
 
@@ -188,11 +178,10 @@ namespace DataLayer
                 }
             }
         }
-
     }
 
 
-    public class Teams:IEnumerable
+    public class Teams : IEnumerable
     {
         private List<CbItem> mTeamsList;
 
@@ -216,7 +205,6 @@ namespace DataLayer
                         }
                     }
                 }
-
             }
         }
 

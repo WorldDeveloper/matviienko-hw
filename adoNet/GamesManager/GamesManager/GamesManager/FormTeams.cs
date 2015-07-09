@@ -77,7 +77,6 @@ namespace GamesManager
 
             DataLayer.Team team = new DataLayer.Team(curItem.ID, curItem.Name, 0, 0, 0);
             MessageBox.Show(team.RemoveFromDB().ToString() + " row was removed", "Teams removing");
-            this.UpdateCBTeams();
             this.ClearForm();
         }
 
@@ -101,14 +100,12 @@ namespace GamesManager
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
-            }
-
-           
+            }           
         }
 
         private void btnAddTeam_Click(object sender, EventArgs e)
         {
-            if (cbTeams.Text == "")
+            if (txtGuid.Text == "" || cbTeams.Text == "" || txtWins.Text == "" || txtLosses.Text == "" || txtDraws.Text == "")
                 return;
 
             try
@@ -128,8 +125,7 @@ namespace GamesManager
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
-            }
-          
+            }          
         }
     }
 }

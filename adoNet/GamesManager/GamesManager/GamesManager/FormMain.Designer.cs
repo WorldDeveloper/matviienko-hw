@@ -236,6 +236,7 @@
             // 
             this.cbTeam2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbTeam2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTeam2.FormattingEnabled = true;
             this.cbTeam2.Location = new System.Drawing.Point(110, 189);
             this.cbTeam2.Name = "cbTeam2";
@@ -256,18 +257,19 @@
             // 
             this.cbTeam1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbTeam1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTeam1.FormattingEnabled = true;
             this.cbTeam1.Location = new System.Drawing.Point(110, 152);
             this.cbTeam1.Name = "cbTeam1";
             this.cbTeam1.Size = new System.Drawing.Size(250, 21);
             this.cbTeam1.TabIndex = 51;
             this.cbTeam1.DropDown += new System.EventHandler(this.cbTeam1_DropDown);
-            this.cbTeam1.SelectedIndexChanged += new System.EventHandler(this.cbTeam1_SelectedIndexChanged);
             // 
             // cbLeagues
             // 
             this.cbLeagues.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLeagues.FormattingEnabled = true;
             this.cbLeagues.Location = new System.Drawing.Point(110, 370);
             this.cbLeagues.Name = "cbLeagues";
@@ -284,6 +286,7 @@
             this.cbGames.Name = "cbGames";
             this.cbGames.Size = new System.Drawing.Size(250, 21);
             this.cbGames.TabIndex = 49;
+            this.cbGames.DropDown += new System.EventHandler(this.cbGames_DropDown);
             this.cbGames.SelectedIndexChanged += new System.EventHandler(this.cbGames_SelectedIndexChanged);
             // 
             // btnClose
@@ -304,6 +307,7 @@
             this.btnRemoveGame.TabIndex = 48;
             this.btnRemoveGame.Text = "Remove";
             this.btnRemoveGame.UseVisualStyleBackColor = true;
+            this.btnRemoveGame.Click += new System.EventHandler(this.btnRemoveGame_Click);
             // 
             // btnUpdateGame
             // 
@@ -313,6 +317,7 @@
             this.btnUpdateGame.TabIndex = 46;
             this.btnUpdateGame.Text = "Update";
             this.btnUpdateGame.UseVisualStyleBackColor = true;
+            this.btnUpdateGame.Click += new System.EventHandler(this.btnUpdateGame_Click);
             // 
             // btnAddGame
             // 
@@ -322,6 +327,7 @@
             this.btnAddGame.TabIndex = 45;
             this.btnAddGame.Text = "Add";
             this.btnAddGame.UseVisualStyleBackColor = true;
+            this.btnAddGame.Click += new System.EventHandler(this.btnAddGame_Click);
             // 
             // FormMain
             // 
@@ -358,7 +364,6 @@
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Games manager";
-            this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.ResumeLayout(false);

@@ -186,7 +186,7 @@
             this.txtDraws.Size = new System.Drawing.Size(256, 20);
             this.txtDraws.TabIndex = 24;
             // 
-            // Teams
+            // FormTeams
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -208,7 +208,7 @@
             this.Controls.Add(this.btnUpdateTeam);
             this.Controls.Add(this.btnAddTeam);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Teams";
+            this.Name = "FormTeams";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Teams";
             this.Load += new System.EventHandler(this.Teams_Load);

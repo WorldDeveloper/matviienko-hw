@@ -22,6 +22,24 @@ namespace DataLayer
         public CbItem League { get; set; }
         public bool IsFinished { get; set; }
 
+
+        public Game() { }
+
+        public Game(Guid id, int number, CbItem team1, CbItem team2, byte result, byte team1BidPercent,
+            byte team2BidPercent, DateTime date, CbItem league, bool isFinished)
+        {
+            ID = id;
+            Number = number;
+            Team1 = team1;
+            Team2 = team2;
+            Result = result;
+            Team1BidPercent = team1BidPercent;
+            Team2BidPercent = team2BidPercent;
+            Date = date;
+            League = league;
+            IsFinished = isFinished;
+        }
+
         public void GetFromDB(Guid id)
         {
             using (SqlConnection connection = DataLayer.DB.GetSqlConnection())
@@ -56,12 +74,161 @@ namespace DataLayer
         }
 
 
+        public int RemoveFromDB()
+        {
+            using (SqlConnection connection = DataLayer.DB.GetSqlConnection())
+            {
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "RemoveGame";
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter guid = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    guid.Value = ID;
+                    command.Parameters.Add(guid);
+
+                    SqlParameter result = new SqlParameter("@Result", SqlDbType.Int);
+                    result.Direction = ParameterDirection.ReturnValue;
+                    command.Parameters.Add(result);
+
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+
+                    return (int)result.Value;
+                }
+            }
+        }
+
+        public int AddToDB()
+        {
+            using (SqlConnection connection = DataLayer.DB.GetSqlConnection())
+            {
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "AddGame";
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter guid = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    guid.Value = ID;
+                    command.Parameters.Add(guid);
+
+                    SqlParameter number = new SqlParameter("@Number", SqlDbType.Int);
+                    number.Value = Number;
+                    command.Parameters.Add(number);
+
+                    SqlParameter team1 = new SqlParameter("@Team1", SqlDbType.UniqueIdentifier);
+                    team1.Value = Team1.ID;
+                    command.Parameters.Add(team1);
+
+                    SqlParameter team2 = new SqlParameter("@Team2", SqlDbType.UniqueIdentifier);
+                    team2.Value = Team2.ID;
+                    command.Parameters.Add(team2);
+
+                    SqlParameter result = new SqlParameter("@Result", SqlDbType.TinyInt);
+                    result.Value = Result;
+                    command.Parameters.Add(result);
+
+                    SqlParameter team1BidPercent = new SqlParameter("@Team1BidPercent", SqlDbType.TinyInt);
+                    team1BidPercent.Value = Team1BidPercent;
+                    command.Parameters.Add(team1BidPercent);
+
+                    SqlParameter team2BidPercent = new SqlParameter("@Team2BidPercent", SqlDbType.TinyInt);
+                    team2BidPercent.Value = Team2BidPercent;
+                    command.Parameters.Add(team2BidPercent);
+
+                    SqlParameter date = new SqlParameter("@Date", SqlDbType.DateTime2, 0);
+                    date.Value = Date;
+                    command.Parameters.Add(date);
+
+                    SqlParameter league = new SqlParameter("@League", SqlDbType.UniqueIdentifier);
+                    league.Value = League.ID;
+                    command.Parameters.Add(league);
+
+                    SqlParameter isFinished = new SqlParameter("@IsFinished", SqlDbType.Bit);
+                    isFinished.Value = IsFinished;
+                    command.Parameters.Add(isFinished);
+
+                    SqlParameter returnedValue = new SqlParameter("@ReturnedValue", SqlDbType.Int);
+                    returnedValue.Direction = ParameterDirection.ReturnValue;
+                    command.Parameters.Add(returnedValue);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    return (int)returnedValue.Value;
+                }
+            }
+        }
+
+        public int UpdateInDB()
+        {
+            using (SqlConnection connection = DataLayer.DB.GetSqlConnection())
+            {
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "UpdateGame";
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter guid = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    guid.Value = ID;
+                    command.Parameters.Add(guid);
+
+                    SqlParameter number = new SqlParameter("@Number", SqlDbType.Int);
+                    number.Value = Number;
+                    command.Parameters.Add(number);
+
+                    SqlParameter team1 = new SqlParameter("@Team1", SqlDbType.UniqueIdentifier);
+                    team1.Value = Team1.ID;
+                    command.Parameters.Add(team1);
+
+                    SqlParameter team2 = new SqlParameter("@Team2", SqlDbType.UniqueIdentifier);
+                    team2.Value = Team2.ID;
+                    command.Parameters.Add(team2);
+
+                    SqlParameter result = new SqlParameter("@Result", SqlDbType.TinyInt);
+                    result.Value = Result;
+                    command.Parameters.Add(result);
+
+                    SqlParameter team1BidPercent = new SqlParameter("@Team1BidPercent", SqlDbType.TinyInt);
+                    team1BidPercent.Value = Team1BidPercent;
+                    command.Parameters.Add(team1BidPercent);
+
+                    SqlParameter team2BidPercent = new SqlParameter("@Team2BidPercent", SqlDbType.TinyInt);
+                    team2BidPercent.Value = Team2BidPercent;
+                    command.Parameters.Add(team2BidPercent);
+
+                    SqlParameter date = new SqlParameter("@Date", SqlDbType.DateTime2, 0);
+                    date.Value = Date;
+                    command.Parameters.Add(date);
+
+                    SqlParameter league = new SqlParameter("@League", SqlDbType.UniqueIdentifier);
+                    league.Value = League.ID;
+                    command.Parameters.Add(league);
+
+                    SqlParameter isFinished = new SqlParameter("@IsFinished", SqlDbType.Bit);
+                    isFinished.Value = IsFinished;
+                    command.Parameters.Add(isFinished);
+
+                    SqlParameter returnedValue = new SqlParameter("@ReturnedValue", SqlDbType.Int);
+                    returnedValue.Direction = ParameterDirection.ReturnValue;
+                    command.Parameters.Add(returnedValue);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    return (int)returnedValue.Value;
+                }
+            }
+        }
+
 
     }
 
-    public class Games:IEnumerable
+    public class Games : IEnumerable
     {
-         private List<CbItem> mGamesItems;
+        private List<CbItem> mGamesItems;
 
         public Games()
         {
@@ -97,6 +264,4 @@ namespace DataLayer
             return mGamesItems.GetEnumerator();
         }
     }
-
-
 }

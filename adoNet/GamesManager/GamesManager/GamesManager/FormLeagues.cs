@@ -56,9 +56,7 @@ namespace GamesManager
 
             DataLayer.League league = new DataLayer.League(curItem.ID, curItem.Name);
             MessageBox.Show(league.RemoveFromDB().ToString()+" row was removed", "Leagues removing");
-            this.UpdateCBLeague();
-            this.ClearForm();
-            
+            this.ClearForm();            
         }
 
         private void UpdateCBLeague()
@@ -69,7 +67,6 @@ namespace GamesManager
             {
                 cbLeague.Items.Add(league);
             }
-
         }
 
         private void ClearForm()
