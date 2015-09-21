@@ -18,7 +18,7 @@ using Microsoft.Win32;
 
 namespace Paint
 {
-    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -31,6 +31,28 @@ namespace Paint
             InitializeComponent();
             mFileName = string.Empty;
             this.Title = "New painting";
+            UpdateCbPenSize();
+            cbPenSize.SelectedIndex = 1;
+        }
+
+        private void UpdateCbPenSize()
+        {
+            if (cbPenSize == null)
+                return;
+
+            int selectedIndex = cbPenSize.SelectedIndex;
+            cbPenSize.Items.Clear();
+            for (int i = 1; i < 20; ++i)
+            {
+
+                Ellipse el = new Ellipse();
+                el.Width = i;
+                el.Height = i;
+                el.Fill = new SolidColorBrush(icCanvas.DefaultDrawingAttributes.Color);
+                el.VerticalAlignment = VerticalAlignment.Center;
+                cbPenSize.Items.Add(el);
+            }
+            cbPenSize.SelectedIndex = selectedIndex;
         }
 
         private void btnErase_Click(object sender, RoutedEventArgs e)
@@ -41,6 +63,8 @@ namespace Paint
         private void btnDraw_Click(object sender, RoutedEventArgs e)
         {
             icCanvas.EditingMode = InkCanvasEditingMode.Ink;
+            icCanvas.DefaultDrawingAttributes.Width = 5;
+            icCanvas.DefaultDrawingAttributes.Height = 20;
         }
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
@@ -52,7 +76,7 @@ namespace Paint
         {
             string selectedColor = (cbColor.SelectedItem as Rectangle).Tag.ToString();
             icCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(selectedColor);
-
+            UpdateCbPenSize();
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -93,8 +117,8 @@ namespace Paint
                 if (saveFileDialog.ShowDialog() == false)
                     return;
 
-                 mFileName = saveFileDialog.FileName;
-            }            
+                mFileName = saveFileDialog.FileName;
+            }
 
             using (FileStream fs = new FileStream(mFileName, FileMode.Create))
             {
@@ -121,6 +145,16 @@ namespace Paint
 
             if (string.IsNullOrWhiteSpace(mFileName))
                 mFileName = prevFileName;
+        }
+
+        private void cbPenSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Ellipse penSize = cbPenSize.SelectedItem as Ellipse;
+            if (penSize == null)
+                return;
+
+            icCanvas.DefaultDrawingAttributes.Width = penSize.Width;
+            icCanvas.DefaultDrawingAttributes.Height = penSize.Height;
         }
     }
 }

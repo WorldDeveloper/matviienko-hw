@@ -21,10 +21,10 @@
 
             <Separator />
             <Button x:Name="btnDraw" Content="Draw" Click="btnDraw_Click" Style="{StaticResource toolbarButton}" />
-            <ComboBox Grid.Row="2" Width="13">
+            <ComboBox Grid.Row="2" Width="13" >
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Color: " />
-                    <ComboBox  x:Name="cbColor" SelectedIndex="5" SelectionChanged="cbColor_SelectionChanged">
+                    <Label Width="50" Content="Color: " />
+                    <ComboBox  x:Name="cbColor" SelectedIndex="5" VerticalAlignment="Center" SelectionChanged="cbColor_SelectionChanged">
                         <Rectangle Fill="Red"  Tag="Red" Style="{StaticResource colorPicker}"/>
                         <Rectangle Fill="Yellow" Tag="Yellow" Style="{StaticResource colorPicker}"/>
                         <Rectangle Fill="Green" Tag="Green" Style="{StaticResource colorPicker}"/>
@@ -33,8 +33,9 @@
                         <Rectangle Fill="Black" Tag="Black" Style="{StaticResource colorPicker}"/>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel>
-                    <Label Content="Size: " />
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="50" Content="Size: " />
+                    <ComboBox x:Name="cbPenSize"  MinHeight="20" SelectionChanged="cbPenSize_SelectionChanged"/>
                 </StackPanel>
             </ComboBox>
             <Separator />
