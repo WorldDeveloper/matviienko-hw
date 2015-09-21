@@ -20,7 +20,7 @@ namespace Paint
 {
     public partial class MainWindow
     {
-        //********************
+        //*******************
 
         private Point startPoint;
         private Rectangle rect;
