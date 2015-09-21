@@ -11,7 +11,7 @@
             <RowDefinition  Height="30"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <InkCanvas x:Name="icCanvas" Grid.Row="1"/>
+        <InkCanvas x:Name="icCanvas" Grid.Row="1" MouseDown="icCanvas_MouseDown" MouseMove="icCanvas_MouseMove" MouseUp="icCanvas_MouseUp"/>
 
         <ToolBar x:Name="toolbar">
             <Button x:Name="btnNew" Click="btnNew_Click" Content="New" Style="{StaticResource toolbarButton}" />
@@ -36,6 +36,16 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Width="50" Content="Size: " />
                     <ComboBox x:Name="cbPenSize"  MinHeight="20" SelectionChanged="cbPenSize_SelectionChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="50" Content="Tool: " />
+                    <ComboBox x:Name="cbTool"  SelectedIndex="0" SelectionChanged="cbTool_SelectionChanged">
+                        <ComboBoxItem Content="Pen"/>
+                        <ComboBoxItem Content="Line" />
+                        <ComboBoxItem Content="Rectangle" />
+                        <ComboBoxItem Content="Ellipse" />
+                        <ComboBoxItem Content="Polygon" />
+                    </ComboBox>
                 </StackPanel>
             </ComboBox>
             <Separator />

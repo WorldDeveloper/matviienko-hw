@@ -33,6 +33,8 @@ namespace Paint
             this.Title = "New painting";
             UpdateCbPenSize();
             cbPenSize.SelectedIndex = 1;
+
+            icCanvas.EditingMode = InkCanvasEditingMode.None;
         }
 
         private void UpdateCbPenSize()
@@ -82,6 +84,7 @@ namespace Paint
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             icCanvas.Strokes.Clear();
+            icCanvas.Children.Clear();
         }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
@@ -155,6 +158,11 @@ namespace Paint
 
             icCanvas.DefaultDrawingAttributes.Width = penSize.Width;
             icCanvas.DefaultDrawingAttributes.Height = penSize.Height;
+        }
+
+        private void cbTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
