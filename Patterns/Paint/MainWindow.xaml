@@ -1,0 +1,50 @@
+﻿<Window x:Class="Paint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Paint"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="500" MinHeight="200" MinWidth="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="30"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <InkCanvas x:Name="icCanvas" Grid.Row="1"/>
+
+        <ToolBar x:Name="toolbar">
+            <Button x:Name="btnNew" Click="btnNew_Click" Content="New" Style="{StaticResource toolbarButton}" />
+            <Button x:Name="btnOpen" Click="btnOpen_Click" Content="Open" Style="{StaticResource toolbarButton}" />
+            <Button x:Name="btnSave" Click="btnSave_Click" Content="Save" Style="{StaticResource toolbarButton}" />
+            <Button x:Name="btnSaveAs" Click="btnSaveAs_Click" Content="Save As" Style="{StaticResource toolbarButton}" />
+
+            <Separator />
+            <Button x:Name="btnDraw" Content="Draw" Click="btnDraw_Click" Style="{StaticResource toolbarButton}" />
+            <ComboBox Grid.Row="2" Width="13">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Color: " />
+                    <ComboBox  x:Name="cbColor" SelectedIndex="5" SelectionChanged="cbColor_SelectionChanged">
+                        <Rectangle Fill="Red"  Tag="Red" Style="{StaticResource colorPicker}"/>
+                        <Rectangle Fill="Yellow" Tag="Yellow" Style="{StaticResource colorPicker}"/>
+                        <Rectangle Fill="Green" Tag="Green" Style="{StaticResource colorPicker}"/>
+                        <Rectangle Fill="Blue" Tag="Blue" Style="{StaticResource colorPicker}"/>
+                        <Rectangle Fill="White" Tag="White" Style="{StaticResource colorPicker}"/>
+                        <Rectangle Fill="Black" Tag="Black" Style="{StaticResource colorPicker}"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Size: " />
+                </StackPanel>
+            </ComboBox>
+            <Separator />
+            <Button x:Name="btnErase" Click="btnErase_Click" Content="Erase" Style="{StaticResource toolbarButton}" />
+            <Separator />
+            <Button x:Name="btnSelect" Click="btnSelect_Click" Content="Select" Style="{StaticResource toolbarButton}" />
+            <Separator />
+            <Button x:Name="btnClear" Click="btnClear_Click" Content="Clear" Style="{StaticResource toolbarButton}" />
+    
+        </ToolBar>
+ 
+    </Grid>
+</Window>
