@@ -20,52 +20,34 @@ namespace Paint
 {
     public partial class MainWindow
     {
-        //*******************
-
-        private Point startPoint;
-        private Rectangle rect;
+        private IFigure mFigure;
+        private string mFigureType;
 
         private void icCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            startPoint = e.GetPosition(icCanvas);
-            this.Title = "x: " + startPoint.X.ToString() + " Y:" + startPoint.Y.ToString();
-            rect = new Rectangle
-            {
-                Stroke = new SolidColorBrush(icCanvas.DefaultDrawingAttributes.Color),
-                StrokeThickness = icCanvas.DefaultDrawingAttributes.Height
-            };
+            if (icCanvas.EditingMode == InkCanvasEditingMode.Ink)
+                return;
 
-            icCanvas.Children.Add(rect);
-            InkCanvas.SetLeft(rect, startPoint.X);
-            InkCanvas.SetTop(rect, startPoint.Y);
+            Point startPoint = e.GetPosition(icCanvas);
+
+            mFigure = FigureFactory.GetFigure(mFigureType);
+            mFigure.SetAttributes(icCanvas);
+            mFigure.StartPoint(startPoint.X, startPoint.Y);
         }
 
         private void icCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Released || rect == null)
+            if (e.LeftButton == MouseButtonState.Released || mFigure == null)
                 return;
 
             var pos = e.GetPosition(icCanvas);
 
-            //this.Title = "x: "+pos.X.ToString() + " Y:" + pos.Y.ToString();
-            var x = Math.Min(pos.X, startPoint.X);
-            var y = Math.Min(pos.Y, startPoint.Y);
-
-            var w = Math.Max(pos.X, startPoint.X) - x;
-            var h = Math.Max(pos.Y, startPoint.Y) - y;
-
-            rect.Width = w;
-            rect.Height = h;
-
-            InkCanvas.SetLeft(rect, x);
-            InkCanvas.SetTop(rect, y);
+            mFigure.EndPoint(pos.X, pos.Y);
         }
 
         private void icCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            rect = null;
+            mFigure = null;
         }
-    }
-
-   
+    }   
 }

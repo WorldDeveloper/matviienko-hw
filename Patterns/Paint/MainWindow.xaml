@@ -43,19 +43,17 @@
                         <ComboBoxItem Content="Pen"/>
                         <ComboBoxItem Content="Line" />
                         <ComboBoxItem Content="Rectangle" />
-                        <ComboBoxItem Content="Ellipse" />
-                        <ComboBoxItem Content="Polygon" />
+                        <!--<ComboBoxItem Content="Ellipse" />
+                        <ComboBoxItem Content="Polygon" />-->
                     </ComboBox>
                 </StackPanel>
             </ComboBox>
             <Separator />
-            <Button x:Name="btnErase" Click="btnErase_Click" Content="Erase" Style="{StaticResource toolbarButton}" />
-            <Separator />
-            <Button x:Name="btnSelect" Click="btnSelect_Click" Content="Select" Style="{StaticResource toolbarButton}" />
-            <Separator />
+            <!--<Button x:Name="btnErase" Click="btnErase_Click" Content="Erase" Style="{StaticResource toolbarButton}" />
+            <Separator />-->
+            <!--<Button x:Name="btnSelect" Click="btnSelect_Click" Content="Select" Style="{StaticResource toolbarButton}" />
+            <Separator />-->
             <Button x:Name="btnClear" Click="btnClear_Click" Content="Clear" Style="{StaticResource toolbarButton}" />
-    
         </ToolBar>
- 
     </Grid>
 </Window>

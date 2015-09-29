@@ -33,8 +33,9 @@ namespace Paint
             this.Title = "New painting";
             UpdateCbPenSize();
             cbPenSize.SelectedIndex = 1;
+            mFigureType = "Pen";
 
-            icCanvas.EditingMode = InkCanvasEditingMode.None;
+            //icCanvas.EditingMode = InkCanvasEditingMode.None;
         }
 
         private void UpdateCbPenSize()
@@ -48,6 +49,7 @@ namespace Paint
             {
 
                 Ellipse el = new Ellipse();
+                el.Tag = i;
                 el.Width = i;
                 el.Height = i;
                 el.Fill = new SolidColorBrush(icCanvas.DefaultDrawingAttributes.Color);
@@ -59,14 +61,12 @@ namespace Paint
 
         private void btnErase_Click(object sender, RoutedEventArgs e)
         {
-            icCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
+            icCanvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
         }
 
         private void btnDraw_Click(object sender, RoutedEventArgs e)
         {
-            icCanvas.EditingMode = InkCanvasEditingMode.Ink;
-            icCanvas.DefaultDrawingAttributes.Width = 5;
-            icCanvas.DefaultDrawingAttributes.Height = 20;
+            SetDrawMode();
         }
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
@@ -98,6 +98,7 @@ namespace Paint
             if (result == false)
                 return;
 
+            btnClear_Click(sender, e);
             mFileName = dlg.FileName;
 
             using (FileStream fs = new FileStream(mFileName, FileMode.Open, FileAccess.Read))
@@ -122,6 +123,7 @@ namespace Paint
 
                 mFileName = saveFileDialog.FileName;
             }
+            icCanvas.UpdateLayout();
 
             using (FileStream fs = new FileStream(mFileName, FileMode.Create))
             {
@@ -134,7 +136,7 @@ namespace Paint
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             mFileName = string.Empty;
-            icCanvas.Strokes.Clear();
+            btnClear_Click(sender, e);
             this.Title = "New painting";
 
         }
@@ -162,7 +164,25 @@ namespace Paint
 
         private void cbTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ComboBoxItem selectedTool = cbTool.SelectedItem as ComboBoxItem;
+            if (selectedTool== null)
+                return;
 
+            mFigureType= selectedTool.Content.ToString();
+            SetDrawMode();
+        }
+
+        private void SetDrawMode()
+        {
+            switch (mFigureType)
+            {
+                case "Pen":
+                    icCanvas.EditingMode = InkCanvasEditingMode.Ink;
+                    break;
+                default:
+                    icCanvas.EditingMode = InkCanvasEditingMode.None;
+                    break;
+            }
         }
     }
 }
