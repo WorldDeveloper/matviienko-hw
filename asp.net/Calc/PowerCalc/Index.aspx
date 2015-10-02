@@ -21,7 +21,8 @@
         <br />
         <asp:Button ID="btnCalc"  Text="Calculate" OnClick="btnCalc_Click" runat="server" />
         <br />
-        <asp:Label ID="lblResult" Text="" runat="server"></asp:Label>
+        <br />
+        <asp:Label ID="lblResult" Text="" style="font-weight:bold;" runat="server"></asp:Label>
     </div>
     </form>
 </body>
