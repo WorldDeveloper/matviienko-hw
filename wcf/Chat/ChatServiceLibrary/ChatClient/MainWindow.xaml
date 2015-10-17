@@ -1,0 +1,26 @@
+﻿<Window x:Class="Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+<TextBox x:Name="txtUserName" />
+        <Button x:Name="btnJoin" Content="Join" Grid.Column="1" Click="btnJoin_Click" />
+         <Label x:Name="lblReceivedMesages" Grid.Row="1" />
+        <ListBox x:Name="tbUsers"  Grid.Row="1" Grid.Column="1" />
+        <TextBox x:Name="txtNewMessage" TextWrapping="Wrap" Grid.Row="2"/>
+        <Button x:Name="btnSend" Content="Send" Grid.Row="2" Grid.Column="2" Click="btnSend_Click" />
+     </Grid>
+</Window>
