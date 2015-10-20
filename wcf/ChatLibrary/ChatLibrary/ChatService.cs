@@ -8,19 +8,20 @@ using System.ServiceModel;
 namespace ChatLibrary
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class ChatService
+    public class ChatService:IChatService
     {
-        Dictionary<string, IChatServiceCallback> mSubscribers;
+        private Dictionary<string, IChatServiceCallback> mSubscribers;
+        int i=0;
 
         public ChatService()
         {
             mSubscribers = new Dictionary<string, IChatServiceCallback>();
         }
-        public bool Join(string name)
+        public void Join(string name)
         {
             IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
             if (mSubscribers.ContainsKey(name))
-                return false;
+                return;
 
             mSubscribers.Add(name, registeredUser);
             foreach (IChatServiceCallback callback in mSubscribers.Values)
@@ -29,8 +30,6 @@ namespace ChatLibrary
             }
 
             Console.WriteLine(name + " has joined the conversation.");
-
-            return true;
         }
 
         public void Leave(string name)
@@ -50,19 +49,28 @@ namespace ChatLibrary
 
         public void Send(string from, string message)
         {
-            if (mSubscribers.Count == 0 || string.IsNullOrWhiteSpace(message))
-                return;
+            //if (mSubscribers.Count == 0 || string.IsNullOrWhiteSpace(message))
+            //    return;
 
-            IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
-            if (registeredUser != mSubscribers[from])
-                return;
+            //IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+            //if (registeredUser != mSubscribers[from])
+            //    return;
+
+            //foreach (IChatServiceCallback callback in mSubscribers.Values)
+            //{
+            //    callback.NewMessageCallback(from, message, false);
+            //}
+
+
+            //IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+            //if (!mSubscribers.ContainsKey(from))
+            //    mSubscribers.Add(from, registeredUser);
 
             foreach (IChatServiceCallback callback in mSubscribers.Values)
-            {
                 callback.NewMessageCallback(from, message, false);
-            }
 
-            Console.WriteLine(from + "has sent a message:" + message);
+
+            Console.WriteLine(from + " has sent a message:" + message + (i).ToString());
         }
 
         public void SendPrivate(string from, string to, string message)

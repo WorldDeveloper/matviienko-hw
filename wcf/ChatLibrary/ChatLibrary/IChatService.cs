@@ -7,20 +7,19 @@ using System.ServiceModel;
 
 namespace ChatLibrary
 {
-    [ServiceContract(SessionMode = SessionMode.Required,
-       CallbackContract = typeof(IChatServiceCallback))]
+    [ServiceContract(CallbackContract = typeof(IChatServiceCallback))]
     public interface IChatService
     {
-        [OperationContract]
-        bool Join(string name);
+        [OperationContract(IsOneWay = true)]
+        void Join(string name);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void Send(string from, string message);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void SendPrivate(string from, string to, string message);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void Leave(string name);
     }
 }

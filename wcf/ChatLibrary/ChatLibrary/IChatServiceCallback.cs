@@ -7,6 +7,7 @@ using System.ServiceModel;
 
 namespace ChatLibrary
 {
+
     public interface IChatServiceCallback
     {
         [OperationContract(IsOneWay = true)]

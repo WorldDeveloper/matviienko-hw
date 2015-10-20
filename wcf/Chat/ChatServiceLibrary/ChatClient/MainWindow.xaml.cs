@@ -20,7 +20,7 @@ namespace Client
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [CallbackBehavior(
-        ConcurrencyMode = ConcurrencyMode.Single,
+        ConcurrencyMode = ConcurrencyMode.Reentrant,
         UseSynchronizationContext = false)]
     public partial class MainWindow : Window, ChatClient.ChatRef.IChatCallback
     {
