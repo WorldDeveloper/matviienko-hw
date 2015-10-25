@@ -8,10 +8,9 @@ using System.ServiceModel;
 namespace ChatLibrary
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class ChatService:IChatService
+    public class ChatService : IChatService
     {
         private Dictionary<string, IChatServiceCallback> mSubscribers;
-        int i=0;
 
         public ChatService()
         {
@@ -23,54 +22,73 @@ namespace ChatLibrary
             if (mSubscribers.ContainsKey(name))
                 return;
 
+            if (mSubscribers != null)
+                registeredUser.ConnectedUsersCallback(mSubscribers.Keys.ToList<string>());
+
             mSubscribers.Add(name, registeredUser);
-            foreach (IChatServiceCallback callback in mSubscribers.Values)
+            List<string> disconnectedUsers = new List<string>();
+            foreach (var subscriber in mSubscribers)
             {
-                callback.NewUserCallback(name);
+                try
+                {
+                    subscriber.Value.NewUserCallback(name);
+                }
+                catch
+                {
+                    disconnectedUsers.Add(subscriber.Key);
+                }
             }
 
+            RemoveDisconnectedUsers(disconnectedUsers);
             Console.WriteLine(name + " has joined the conversation.");
         }
 
         public void Leave(string name)
         {
-            Console.WriteLine("Leave");
             IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
             if (!mSubscribers.ContainsKey(name))
                 return;
 
-            mSubscribers.Remove(name);
-            foreach (IChatServiceCallback callback in mSubscribers.Values)
+            List<string> disconnectedUsers = new List<string>();
+            foreach (var subscriber in mSubscribers)
             {
-                callback.UserUnjoinedCallBack(name);
+                try
+                {
+                    subscriber.Value.UserUnjoinedCallBack(name);
+                }
+                catch
+                {
+                    disconnectedUsers.Add(subscriber.Key);
+                }
             }
+            mSubscribers.Remove(name);
+            RemoveDisconnectedUsers(disconnectedUsers);
             Console.WriteLine(name + " has left the conversation.");
         }
 
         public void Send(string from, string message)
         {
-            //if (mSubscribers.Count == 0 || string.IsNullOrWhiteSpace(message))
-            //    return;
+            if (mSubscribers.Count == 0 || string.IsNullOrWhiteSpace(message))
+                return;
 
-            //IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
-            //if (registeredUser != mSubscribers[from])
-            //    return;
+            IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+            if (registeredUser != mSubscribers[from])
+                return;
 
-            //foreach (IChatServiceCallback callback in mSubscribers.Values)
-            //{
-            //    callback.NewMessageCallback(from, message, false);
-            //}
-
-
-            //IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
-            //if (!mSubscribers.ContainsKey(from))
-            //    mSubscribers.Add(from, registeredUser);
-
-            foreach (IChatServiceCallback callback in mSubscribers.Values)
-                callback.NewMessageCallback(from, message, false);
-
-
-            Console.WriteLine(from + " has sent a message:" + message + (i).ToString());
+            List<string> disconnectedUsers = new List<string>();
+            foreach (var subscriber in mSubscribers)
+            {
+                try
+                {
+                    subscriber.Value.NewMessageCallback(from, message);
+                }
+                catch
+                {
+                    disconnectedUsers.Add(subscriber.Key);
+                }
+            }
+            RemoveDisconnectedUsers(disconnectedUsers);
+            Console.WriteLine(from + " has sent a message: " + message);
         }
 
         public void SendPrivate(string from, string to, string message)
@@ -81,10 +99,42 @@ namespace ChatLibrary
             IChatServiceCallback registeredUser = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
             if (registeredUser != mSubscribers[from])
                 return;
+            List<string> disconnectedUsers = new List<string>();
+            try
+            {
+                mSubscribers[to].NewPrivateMessageCallback(from, to, message);
+            }
+            catch
+            {
+                disconnectedUsers.Add(to);
+            }
 
-            mSubscribers[to].NewMessageCallback(from, message, true);
-            mSubscribers[from].NewMessageCallback(from, message, true);
-            Console.WriteLine("{0} has sent a message to {1}: {2}", from, to, message);
+            try
+            {
+                mSubscribers[from].NewPrivateMessageCallback(from,to, message);
+                Console.WriteLine("{0} has sent a private message to {1}: {2}", from, to, message);
+            }
+            catch
+            {
+                disconnectedUsers.Add(from);
+            }
+            RemoveDisconnectedUsers(disconnectedUsers);
+        }
+
+        private void RemoveDisconnectedUsers(List<string> disconnectedUsers)
+        {
+
+            foreach (string user in disconnectedUsers)
+            {
+                try
+                {
+                    mSubscribers.Remove(user);
+                    foreach (IChatServiceCallback callback in mSubscribers.Values)
+                        callback.UserUnjoinedCallBack(user);
+                }
+                catch
+                { }
+            }
         }
     }
 }

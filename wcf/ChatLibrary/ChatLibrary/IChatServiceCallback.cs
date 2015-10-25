@@ -14,9 +14,15 @@ namespace ChatLibrary
         void NewUserCallback(string name);
 
         [OperationContract(IsOneWay = true)]
-        void NewMessageCallback(string from, string message, bool isPrivate);
+        void NewMessageCallback(string from, string message);
 
         [OperationContract(IsOneWay = true)]
-        void UserUnjoinedCallBack(string from);
+        void NewPrivateMessageCallback(string from, string to, string message);
+
+        [OperationContract(IsOneWay = true)]
+        void UserUnjoinedCallBack(string name);
+
+        [OperationContract(IsOneWay = true)]
+        void ConnectedUsersCallback(List<string> users);
     }
 }

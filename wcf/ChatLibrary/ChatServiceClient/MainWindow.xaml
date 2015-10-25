@@ -5,22 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatServiceClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Chat" Height="350" MinHeight="200" Width="525" MinWidth="450" Closed="Window_Closed" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="txtUserName" />
-        <Button x:Name="btnJoin" Content="Join" Grid.Column="1" Click="btnJoin_Click" />
-        <Label x:Name="lblReceivedMesages" Grid.Row="1" />
-        <ListBox x:Name="tbUsers"  Grid.Row="1" Grid.Column="1" />
-        <TextBox x:Name="txtNewMessage" TextWrapping="Wrap" IsEnabled="True" Grid.Row="2"/>
-        <Button x:Name="btnSend" Content="Send" IsEnabled="True" Grid.Row="2" Grid.Column="2" Click="btnSend_Click" />
+        <TextBox x:Name="txtUserName" TabIndex="0" />
+        <Button x:Name="btnJoin" Content="Join" IsDefault="True" Grid.Column="1" TabIndex="1" Click="btnJoin_Click" />
+        <ScrollViewer x:Name="svReceivedMessages" Grid.Row="1">
+            <TextBlock x:Name="lblReceivedMesages" TextWrapping="Wrap" Margin="5" />
+        </ScrollViewer>
+        <Expander Grid.Row="1" Grid.Column="1" ExpandDirection="Left" IsExpanded="True" Collapsed="Expander_Collapsed" Expanded="Expander_Expanded" >
+            <StackPanel Margin="10, 10,0,10" >
+                <RadioButton x:Name="rbPublic" IsChecked="True" Content="Public" />
+                <RadioButton x:Name="rbPrivate"  Content="Private" Height="Auto" />
+                <ScrollViewer x:Name="svUsers" >
+                    <ListBox x:Name="lstUsers" BorderThickness="0" GotFocus="lstUsers_GotFocus" />
+                </ScrollViewer>
+            </StackPanel>
+        </Expander>
+        <TextBox x:Name="txtNewMessage" TextWrapping="Wrap" IsEnabled="False" Height="Auto"  Grid.Row="2" TabIndex="2"/>
+        <Button x:Name="btnSend" Content="Send" IsEnabled="False" Grid.Row="2" Grid.Column="2" TabIndex="3" Click="btnSend_Click" />
     </Grid>
 </Window>
