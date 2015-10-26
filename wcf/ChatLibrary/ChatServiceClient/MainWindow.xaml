@@ -16,21 +16,44 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="txtUserName" TabIndex="0" />
+        <TextBox x:Name="txtUserName" Padding="5" TabIndex="0" />
+        <TextBlock x:Name="txtUserNameHint" IsHitTestVisible="False" Text="Enter your name" Margin="10, 0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=txtUserName}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        
         <Button x:Name="btnJoin" Content="Join" IsDefault="True" Grid.Column="1" TabIndex="1" Click="btnJoin_Click" />
-        <ScrollViewer x:Name="svReceivedMessages" Grid.Row="1">
+        <ScrollViewer x:Name="svReceivedMessages" VerticalScrollBarVisibility="Auto" Grid.Row="1">
             <TextBlock x:Name="lblReceivedMesages" TextWrapping="Wrap" Margin="5" />
         </ScrollViewer>
-        <Expander Grid.Row="1" Grid.Column="1" ExpandDirection="Left" IsExpanded="True" Collapsed="Expander_Collapsed" Expanded="Expander_Expanded" >
-            <StackPanel Margin="10, 10,0,10" >
-                <RadioButton x:Name="rbPublic" IsChecked="True" Content="Public" />
-                <RadioButton x:Name="rbPrivate"  Content="Private" Height="Auto" />
-                <ScrollViewer x:Name="svUsers" >
-                    <ListBox x:Name="lstUsers" BorderThickness="0" GotFocus="lstUsers_GotFocus" />
-                </ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="1">
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="10, 10,0,10" >
+                <RadioButton x:Name="rbPublic" Content="Public" Checked="rbPublic_Checked" />
+                <RadioButton x:Name="rbPrivate"  Content="Private" Height="Auto" Checked="rbPrivate_Checked"/>
+                    <ListBox x:Name="lstUsers" BorderThickness="0" GotFocus="lstUsers_GotFocus" SelectionChanged="lstUsers_SelectionChanged" />
             </StackPanel>
-        </Expander>
-        <TextBox x:Name="txtNewMessage" TextWrapping="Wrap" IsEnabled="False" Height="Auto"  Grid.Row="2" TabIndex="2"/>
+        </ScrollViewer>
+        <TextBox x:Name="txtNewMessage" TextWrapping="Wrap" IsEnabled="False" Height="Auto" Padding="5,0"  Grid.Row="2" TabIndex="2"/>
+        <TextBlock x:Name="txtNewMessageHint" IsHitTestVisible="False" Text="Message" Margin="10, 0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="DarkGray" Grid.Row="2">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=txtNewMessage}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
         <Button x:Name="btnSend" Content="Send" IsEnabled="False" Grid.Row="2" Grid.Column="2" TabIndex="3" Click="btnSend_Click" />
     </Grid>
 </Window>

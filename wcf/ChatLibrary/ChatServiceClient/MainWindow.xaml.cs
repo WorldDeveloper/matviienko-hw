@@ -35,11 +35,14 @@ namespace ChatServiceClient
             lstUsers.ItemsSource = mUsers;
             rbPublic.IsChecked = true;
 
-           
+
         }
 
         private void btnJoin_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtUserName.Text))
+                return;
+
             if (btnJoin.Content.ToString() == "Join")
             {
                 mClient = new ChatClient();
@@ -65,9 +68,13 @@ namespace ChatServiceClient
             {
                 mClient.SendMessage(txtUserName.Text, txtNewMessage.Text);
             }
-            else if(lstUsers.SelectedItem!=null)
+            else if (lstUsers.SelectedItem != null)
             {
                 mClient.SendPrivateMessage(txtUserName.Text, lstUsers.SelectedItem.ToString(), txtNewMessage.Text);
+            }
+            else if (lstUsers.SelectedItem == null && rbPrivate.IsChecked == true)
+            {
+                MessageBox.Show("Select a private user", "Chat", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
         }
 
@@ -81,17 +88,31 @@ namespace ChatServiceClient
 
         private void lstUsers_GotFocus(object sender, RoutedEventArgs e)
         {
+           
+        }
+
+        private void rbPublic_Checked(object sender, RoutedEventArgs e)
+        {
+            txtNewMessageHint.Text = "Public message";
+            txtNewMessage.Focus();
+        }
+
+        private void rbPrivate_Checked(object sender, RoutedEventArgs e)
+        {
+            if (lstUsers.SelectedItem != null)
+                txtNewMessageHint.Text = "Message to " + lstUsers.SelectedItem.ToString();
+
+            txtNewMessage.Focus();
+        }
+
+        private void lstUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstUsers.SelectedItem != null)
+                txtNewMessageHint.Text = "Message to " + lstUsers.SelectedItem.ToString();
+
             rbPrivate.IsChecked = true;
-        }
 
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            svReceivedMessages.SetValue(Grid.ColumnSpanProperty, 2);
-        }
-
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            svReceivedMessages.SetValue(Grid.ColumnSpanProperty, 1);
+            txtNewMessage.Focus();
         }
     }
 }

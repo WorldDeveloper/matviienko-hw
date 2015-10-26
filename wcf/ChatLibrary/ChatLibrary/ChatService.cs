@@ -111,7 +111,7 @@ namespace ChatLibrary
 
             try
             {
-                mSubscribers[from].NewPrivateMessageCallback(from,to, message);
+                mSubscribers[from].NewPrivateMessageCallback(from, to, message);
                 Console.WriteLine("{0} has sent a private message to {1}: {2}", from, to, message);
             }
             catch

@@ -9,6 +9,7 @@ using System.ServiceModel;
 using System.Threading;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Media;
 
 namespace ChatServiceClient
 {
@@ -29,40 +30,73 @@ namespace ChatServiceClient
 
         public void Start(ChatClient callback, string name, MainWindow window)
         {
-            mWindow = window;
-            mContext = new InstanceContext(callback);
-            DuplexChannelFactory<IChatService> factory = new DuplexChannelFactory<IChatService>(mContext, "ChatClientEndPoint");
-            mClient = factory.CreateChannel();
-            mCurrentUser = name;
+            try
+            {
+                mWindow = window;
+                mContext = new InstanceContext(callback);
+                DuplexChannelFactory<IChatService> factory = new DuplexChannelFactory<IChatService>(mContext, "ChatClientEndPoint");
+                mClient = factory.CreateChannel();
+                mCurrentUser = name;
 
-            mClient.Join(name);
+                mClient.Join(name);
+            }
+            catch
+            {
+                MessageBox.Show("Can't connect to the server", "Chat", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void SendMessage(string from, string message)
         {
-            mClient.Send(from, message);
+            try
+            {
+                mClient.Send(from, message);
+            }
+            catch
+            {
+                MessageBox.Show("Can't send a message", "Chat", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void SendPrivateMessage(string from, string to, string message)
         {
-            mClient.SendPrivate(from, to, message);
+            try
+            {
+                mClient.SendPrivate(from, to, message);
+            }
+            catch
+            {
+                MessageBox.Show("Can't send a message", "Chat", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void Leave(string name)
         {
-            mClient.Leave(name);
+            try
+            {
+                mClient.Leave(name);
+            }
+            catch
+            {
+                UserUnjoinedCallBack(mCurrentUser);
+            }
         }
 
         public void NewMessageCallback(string from, string message)
         {
             if (from == mCurrentUser)
             {
-                mWindow.lblReceivedMesages.Inlines.Add(new Run("-> "+message+"\n") { Foreground = Brushes.Green, FontWeight = FontWeights.Bold });
+                mWindow.lblReceivedMesages.Inlines.Add(new Run("-> " + message + "\n") { Foreground = Brushes.Green, FontWeight = FontWeights.Bold });
             }
             else
             {
                 mWindow.lblReceivedMesages.Inlines.Add(new Bold(new Run(from + ": ")));
                 mWindow.lblReceivedMesages.Inlines.Add(new Run(message + "\n"));
+
+                using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\chimes.wav"))
+                {
+                    soundPlayer.Play();
+                }
             }
             mWindow.svReceivedMessages.ScrollToBottom();
 
@@ -74,18 +108,25 @@ namespace ChatServiceClient
         {
             if (from == mCurrentUser)
             {
-                mWindow.lblReceivedMesages.Inlines.Add(new Run(from+" -> " + to + ": ") { Foreground = Brushes.Red, FontWeight = FontWeights.Bold });
-                mWindow.lblReceivedMesages.Inlines.Add(new Run(message + "\n") { Foreground=Brushes.Green, FontWeight = FontWeights.Bold });
+                mWindow.lblReceivedMesages.Inlines.Add(new Run(" -> " + to + ": ") { Foreground = Brushes.Red, FontWeight = FontWeights.Bold });
+                mWindow.lblReceivedMesages.Inlines.Add(new Run(message + "\n") { Foreground = Brushes.Green, FontWeight = FontWeights.Bold });
             }
             else
             {
-                mWindow.lblReceivedMesages.Inlines.Add(new Run(from+ ": ") { Foreground = Brushes.Red, FontWeight = FontWeights.Bold });
+                mWindow.lblReceivedMesages.Inlines.Add(new Run(from + ": ") { Foreground = Brushes.Red, FontWeight = FontWeights.Bold });
                 mWindow.lblReceivedMesages.Inlines.Add(new Run(message + "\n"));
+
+                using (var soundPlayer = new SoundPlayer(@"c:\Windows\Media\chimes.wav"))
+                {
+                    soundPlayer.Play();
+                }
             }
             mWindow.svReceivedMessages.ScrollToBottom();
 
             if (from == mCurrentUser)
                 mWindow.txtNewMessage.Text = "";
+
+           
         }
 
         public void NewUserCallback(string name)
@@ -131,6 +172,5 @@ namespace ChatServiceClient
             mWindow.mUsers.Clear();
             users.ForEach(mWindow.mUsers.Add);
         }
-
     }
 }
