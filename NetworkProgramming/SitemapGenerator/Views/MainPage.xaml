@@ -37,6 +37,7 @@
         <TextBox x:Name="txtAddress"
                  Grid.Row="0"
                  Grid.Column="1"
+                 IsEnabled="{Binding InputEnabled}"
                  Text="{Binding SiteUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Nesting level:"
@@ -49,6 +50,7 @@
                 Style="{StaticResource NewRow}"
                 Grid.Row="1"
                 Grid.Column="1"
+                IsEnabled="{Binding InputEnabled}"
                 Value="{Binding NestingLevel, Mode=TwoWay}"/>
 
         <Button x:Name="btnStart"
