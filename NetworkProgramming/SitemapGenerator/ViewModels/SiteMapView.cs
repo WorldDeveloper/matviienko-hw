@@ -29,7 +29,7 @@ namespace SitemapGenerator.ViewModels
             UpdateProperties();
             if (PagesInProcess == 0)
             {
-                mIsCancel = false;
+                IsCancel = false;
                 NotifyPropertyChanged("CurrentButtonTitle");
                 MessageDialog dialog = new MessageDialog("Parsing finished");
                 var res = dialog.ShowAsync();
@@ -120,12 +120,33 @@ namespace SitemapGenerator.ViewModels
             }
         }
 
-        private bool mIsCancel = false;
+        private bool mIsCancel;
+        private bool IsCancel
+        {
+            get
+            {
+                return mIsCancel;
+            }
+            set
+            {
+                mIsCancel = value;
+                NotifyPropertyChanged("InputEnabled");
+            }
+        }
+
+        public bool InputEnabled {
+        get
+            {
+                return !IsCancel;
+            }
+        }
+
+
         public string CurrentButtonTitle
         {
             get
             {
-                if (mIsCancel)
+                if (IsCancel)
                     return "Cancel";
                 else
                     return "Start";
@@ -158,7 +179,7 @@ namespace SitemapGenerator.ViewModels
                 {
                     if (p is string)
                     {
-                        if (mIsCancel)
+                        if (IsCancel)
                             CancelParsing();
                         else
                             BeginParsing();
@@ -168,7 +189,7 @@ namespace SitemapGenerator.ViewModels
                 },
                 (p) =>
                 {
-                    if (mIsCancel)
+                    if (IsCancel)
                         return PagesInProcess>0;
                     else
                         return (p is string) && (!string.IsNullOrWhiteSpace(p.ToString()));
@@ -186,14 +207,14 @@ namespace SitemapGenerator.ViewModels
                 mCancellationSource = new CancellationTokenSource();
                 SiteMap.Parse(mCancellationSource.Token);
                 ResultsVisibility = Visibility.Visible;
-                mIsCancel = true;
+                IsCancel = true;
                 UpdateProperties();
             }
             catch (Exception ex)
             {
                 MessageDialog dialog = new MessageDialog(ex.Message);
                 var result = dialog.ShowAsync();
-                mIsCancel = false;
+                IsCancel = false;
             }
         }
 
@@ -202,7 +223,7 @@ namespace SitemapGenerator.ViewModels
             try
             {
                 mCancellationSource.Cancel();
-                mIsCancel = false;
+                IsCancel = false;
 
             }
             finally
