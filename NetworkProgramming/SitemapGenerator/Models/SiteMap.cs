@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Windows.UI.Popups;
 using System.ComponentModel;
 using System.Threading;
+using System.Diagnostics;
 
 namespace SitemapGenerator.Models
 {
@@ -29,7 +30,7 @@ namespace SitemapGenerator.Models
             PagesDone = 0;
         }
         public SiteMap(string url, int nestingLevel)
-            :this()
+            : this()
         {
             SiteUrl = url;
             NestingLevel = nestingLevel;
@@ -44,26 +45,54 @@ namespace SitemapGenerator.Models
             GetPageAsync(mHostUri, 1, cancellationToken);
         }
 
+        struct PageToParse
+        {
+            public Uri Content;
+            public int NestingLevel;
+            public PageToParse(Uri content, int nestingLevel)
+            {
+                Content = content;
+                NestingLevel = nestingLevel;
+            }
+        }
+        private Stack<PageToParse> mPagesToParse = new Stack<PageToParse>();
+
         public async void GetPageAsync(Uri requestUri, int currentNestingLevel, CancellationToken cancellationToken)
         {
+            const int NumberOfParallelQuieries = 10;
+            mPagesToParse.Push(new PageToParse(requestUri, currentNestingLevel));
+            if (PagesInProcess > NumberOfParallelQuieries)
+                return;
+
             if (cancellationToken.IsCancellationRequested)
                 return;
 
             PagesInProcess++;
-            NotifyPropertiesUpdated(EventArgs.Empty);
+            //NotifyPropertiesUpdated(EventArgs.Empty);
 
+            PageToParse page = mPagesToParse.Pop();
             using (HttpClient httpClient = new HttpClient())
             {
                 try
                 {
-                    string pageContent = await httpClient.GetStringAsync(requestUri);
-                    FindLinks(pageContent, 1, cancellationToken);
+                    Debug.WriteLine("Connect: " + requestUri.ToString());
+                    string pageContent = await httpClient.GetStringAsync(page.Content);
+                    Debug.WriteLine("Parse");
+                    FindLinks(pageContent, page.NestingLevel, cancellationToken);
                 }
                 catch
-                {}               
+                { }
+
                 PagesInProcess--;
                 PagesDone++;
                 NotifyPropertiesUpdated(EventArgs.Empty);
+            }
+
+
+            while (mPagesToParse.Count > 0 && PagesInProcess <= NumberOfParallelQuieries)
+            {
+                page = mPagesToParse.Pop();
+                GetPageAsync(page.Content, page.NestingLevel, cancellationToken);
             }
 
         }
@@ -92,7 +121,7 @@ namespace SitemapGenerator.Models
                     if (!Links.Contains<Uri>(newUri))
                     {
                         Links.Add(newUri);
-                        if (newUri.ToString().StartsWith(SiteUrl) && (NestingLevel==0 ||NestingLevel>currentNestingLevel))
+                        if (newUri.ToString().StartsWith(SiteUrl) && (NestingLevel == 0 || NestingLevel > currentNestingLevel))
                         {
                             GetPageAsync(newUri, currentNestingLevel + 1, cancellationToken);
                         }
